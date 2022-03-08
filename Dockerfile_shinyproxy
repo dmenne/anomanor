@@ -1,0 +1,5 @@
+FROM openanalytics/shinyproxy:2.6.0
+
+ENV KEYCLOAK_IP=$KEYCLOAK_IP
+ENV ANOMANOR_DATA=$ANOMANOR_DATA
+COPY application.yml /opt/shinyproxy/application.yml

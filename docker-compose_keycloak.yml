@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  # Keycloak Standalone for local testing
+  keycloak:
+    build:
+      context: .
+      dockerfile: Dockerfile_keycloak
+    container_name: keycloak
+    restart: unless-stopped
+    ports:
+      - 8010:8080
+    volumes:
+      - anomanor_keycloak:/opt/jboss/keycloak/standalone/data
+    environment:
+      - KEYCLOAK_LOGLEVEL=ERROR
+      - ROOT_LOGLEVEL=ERROR
+      - PROXY_ADDRESS_FORWARDING=true
+      - TZ=Europe/Berlin
+    # https://stackoverflow.com/a/61071811
+      - KEYCLOAK_USER=${MASTER_ADMIN_USERNAME:-admin}
+      - KEYCLOAK_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
+
+
+volumes:
+  anomanor_keycloak:
+

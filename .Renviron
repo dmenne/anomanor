@@ -1,0 +1,12 @@
+# See valid values for R_CONFIG in config.yml
+# "sa_trainee", "sa_admin", "sa_expert", "test",
+# "test_expert", "keycloak_devel", "keycloak_production"
+# Restart R to activate after changes
+#R_CONFIG_ACTIVE="keycloak_production"
+#R_CONFIG_ACTIVE="keycloak_devel"
+R_CONFIG_ACTIVE="sa_admin"
+#R_CONFIG_ACTIVE="sa_trainee"
+#R_CONFIG_ACTIVE="sa_expert"
+#R_CONFIG_ACTIVE="test"
+#R_CONFIG_ACTIVE="sa_random_trainee"
+

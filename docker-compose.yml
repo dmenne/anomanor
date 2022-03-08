@@ -1,0 +1,163 @@
+version: '3.8'
+services:
+  traefik:
+    # https://community.hetzner.com/tutorials/letsencrypt-dns
+    # To use wildcards: (not implemented currently)
+    # echo <your dns token> > /etc/hetzner-dns-token
+    # certbot certonly --manual --preferred-challenges=dns --manual-auth-hook /usr/local/bin/certbot-hetzner-auth.sh --manual-cleanup-hook /usr/local/bin/certbot-hetzner-cleanup.sh -d hrmconsensus.org -d *.hrmconsensus.org
+    image: traefik:v2.6
+    container_name: traefik
+    restart: unless-stopped
+    # Enables the web UI and tells Traefik to listen to docker
+    # https://github.com/traefik/blog-posts/blob/master/2019_09_10-101_docker/docker-compose-06.yml
+    command:
+      - --api.insecure
+      - --log.level=DEBUG
+      - --providers.docker
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.hrmresolver.acme.httpchallenge=true
+#      - --certificatesresolvers.hrmresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.hrmresolver.acme.email=dieter.menne@menne-biomed.de
+      - --certificatesresolvers.hrmresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.hrmresolver.acme.httpchallenge.entryPoint=web
+      - --log.filePath=/log/traefik.log
+#      - --accesslog.filepath=/log/traefik.log
+    networks:
+      - anomanor-net
+    ports:
+      - 80:80
+      - 443:443
+      # The Web UI (enabled by --api.insecure=true)
+      - 8080:8080
+    labels:
+      # global redirect to https
+      - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
+      - traefik.http.routers.http-catchall.entrypoints=web
+      - traefik.http.routers.http-catchall.middlewares=redirect-to-https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+
+    volumes:
+      # Might require:
+      # sudo chown hrmconsensus:hrmconsensus letsencrypt/acme.json
+      # see chown_docker_sock.sh
+      - ./letsencrypt:/letsencrypt
+      - ./log:/log
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  shinyproxy:
+    build:
+      context: .
+      dockerfile: Dockerfile_shinyproxy
+    container_name: shinyproxy
+    depends_on:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.shinyproxy.rule=Host(`hrmconsensus.org`)
+      - traefik.http.routers.shinyproxy.entrypoints=websecure
+      - traefik.http.routers.shinyproxy.tls=true
+      - traefik.http.routers.shinyproxy.tls.certresolver=hrmresolver
+
+    environment:
+      # Defaults only used for compose down
+      - KEYCLOAK_IP=${KEYCLOAK_IP:-0.0.0.0}
+      - ANOMANOR_DATA=${ANOMANOR_DATA:-/root/anomanor_data/anomanor}
+    ports:
+      - 8020:8080
+    networks:
+      - anomanor-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  sqlpad:
+  # An explicit A-entry sqlpad.hrmconsensus.org must be in DSN, no *
+  # https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/
+    image: sqlpad/sqlpad:latest
+    depends_on:
+      - traefik
+    restart: unless-stopped
+    container_name: sqlpad
+    labels:
+      - traefik.http.routers.sqlpad.rule=Host(`sqlpad.hrmconsensus.org`)
+#      - traefik.http.services.sqlpad.loadbalancer.server.port=3000"
+      - traefik.http.routers.sqlpad.entrypoints=websecure
+      - traefik.http.routers.sqlpad.tls.certresolver=hrmresolver
+    ports:
+      - 3000:3000
+    networks:
+      - anomanor-net
+    environment:
+      # Defaults are set to avoid warning on docker compose down
+      - SQLPAD_ADMIN=${SQLPAD_ADMIN_USERNAME:-sqlpad_admin}
+      - SQLPAD_ADMIN_PASSWORD=${SQLPAD_ADMIN_PASSWORD:-sqlpad_admin_password}
+    volumes:
+      - sqlpad_data:/var/lib/sqlpad
+      # Use/root/anomanor_data/anomanor/db/anomanor.sqlite as Filename/path in sqlpad connection
+      - /home/hrmconsensus/anomanor_data/anomanor/db:${ANOMANOR_DATA:-/root/anomanor_data/anomanor}/db
+
+  # Keycloak
+  keycloak:
+    build:
+      context: .
+      dockerfile: Dockerfile_keycloak
+    container_name: keycloak
+    depends_on:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.keycloak.rule=Host(`keycloak.hrmconsensus.org`)
+#      - traefik.http.services.keycloak.loadbalancer.server.port=8010
+      - traefik.http.routers.keycloak.entrypoints=websecure
+      - traefik.http.routers.keycloak.tls.certresolver=hrmresolver
+    restart: unless-stopped
+    ports:
+      # nc -zv smtp.gmail.com 587
+      - 8010:8080
+    networks:
+      - anomanor-net
+    volumes:
+      - anomanor_keycloak:/opt/jboss/keycloak/standalone/data
+    environment:
+      - KEYCLOAK_LOGLEVEL=ERROR
+      - ROOT_LOGLEVEL=ERROR
+      - PROXY_ADDRESS_FORWARDING=true
+      - TZ=Europe/Berlin
+    # https://stackoverflow.com/a/61071811
+      - KEYCLOAK_USER=${MASTER_ADMIN_USERNAME:-admin}
+      - KEYCLOAK_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: unless-stopped
+    depends_on:
+      - traefik
+    labels:
+      - traefik.http.routers.portainer.rule=Host(`portainer.hrmconsensus.org`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls.certresolver=hrmresolver
+    networks:
+      - anomanor-net
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - anomanor_portainer:/data
+
+volumes:
+# This volume can be missing after a disk backup of the server is restore.
+# You will see an error message after a rebuild
+# Follow the recommendation to recreate it manually, it will re-connect to the
+# existing files on disk
+  anomanor_data_db:
+    external: true
+  anomanor_portainer:
+  anomanor_keycloak:
+  sqlpad_data:
+
+networks:
+   anomanor-net:
+     name: anomanor-net
+     driver: bridge

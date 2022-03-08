@@ -1,0 +1,105 @@
+FROM rocker/r-base:latest
+
+LABEL maintainer="dieter.menne@menne-biomed.de"
+
+RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+    libxml2-dev \
+    libcairo2-dev \
+    libsqlite3-dev \
+    libpq-dev \
+    libssh2-1-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libmagick++-dev \
+    pandoc \
+    net-tools \
+    gsfonts \
+    iputils-ping \
+    curl
+
+RUN install2.r --error --ncpus 4 --skipinstalled \
+    remotes \
+    shiny \
+    shinyjs \
+    shinyvalidate \
+    stinepack \
+    shinyWidgets \
+    corrplot \
+    xtable \
+    readr \
+    readxl \
+    dplyr \
+    checkmate \
+    DBI \
+    purrr \
+    stringr \
+    RSQLite \
+    magick \
+    markdown \
+    config \
+    tidyr \
+    httr \
+    R6 \
+    pingr \
+    DT \
+    visNetwork \
+    scales \
+    flextable \
+    icr \
+    withr \
+    rprojroot \
+    Rcpp \
+    digest \
+    png \
+    colorspace \
+    pool \
+    iptools \
+    later \
+    golem \
+    keys
+
+RUN R -e 'remotes::install_github("JohnCoene/tippy")'
+
+ARG R_CONFIG_ACTIVE
+ARG ANOMANOR_DATA
+ARG ANOMANOR_ADMIN_USERNAME
+ARG ANOMANOR_ADMIN_PASSWORD
+ARG DOCKER_ANOMANOR_STANDALONE
+
+ENV ANOMANOR_DOCKER=${DOCKER_ANOMANOR_STANDALONE:-FALSE}
+ENV DOCKER_ANOMANOR_STANDALONE=${DOCKER_ANOMANOR_STANDALONE}
+ENV ANOMANOR_DATA=${ANOMANOR_DATA}
+ENV R_CONFIG_ACTIVE=${R_CONFIG_ACTIVE}
+ENV ANOMANOR_ADMIN_USERNAME=${ANOMANOR_ADMIN_USERNAME:-anomanor_admin}
+ENV ANOMANOR_ADMIN_PASSWORD=${ANOMANOR_ADMIN_PASSWORD:-anomanor_admin}
+
+RUN mkdir -p /root/anomanor
+RUN mkdir -p ${ANOMANOR_DATA}/data
+RUN mkdir -p ${ANOMANOR_DATA}/cache
+RUN mkdir -p ${ANOMANOR_DATA}/db
+
+RUN mkdir /build_zone
+# The following line fails when RStudio IDE is active
+ADD . /build_zone
+WORKDIR /build_zone
+RUN R CMD INSTALL --preclean --no-multiarch --with-keep.source .
+RUN rm -rf /build_zone
+
+
+COPY  ./inst/config.yml /usr/local/lib/R/site-library/anomanor/
+COPY  ./inst/Renviron_production /usr/local/lib/R/site-library/anomanor/
+COPY  ./inst/Renviron_devel /usr/local/lib/R/site-library/anomanor/
+# Uncomment for test installations to copy all data
+# See also the files to copy to a volume in run_all.sh
+# COPY  ./inst/data_store/ ${ANOMANOR_DATA}/data/
+COPY  ./inst/data_store/md ${ANOMANOR_DATA}/data/md
+# Do not copy database!
+
+
+HEALTHCHECK --start-period=20s --interval=1m --timeout=5s \
+  CMD curl -I --fail http://localhost:3838 || exit 1
+
+EXPOSE 3838
+CMD R -e "anomanor::run_app()"
+# Debug
+#CMD ["bash"]

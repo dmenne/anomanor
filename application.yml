@@ -1,0 +1,44 @@
+proxy:
+  title: Anomanor Shinyproxy
+  logo-url: https://menne-biomed.de/images/mennebiomed48.gif
+  container-wait-time: 55000
+  port: 8080
+  heartbeat-timeout: 60000
+  authentication: keycloak
+  admin-groups: admins
+  landing-page: /app_direct/anomanor
+  # Only used for testing with authentication simple
+  users:
+  - name: jack
+    password: ps
+    groups: admins
+  keycloak:
+    realm: anomanor
+    auth-server-url: https://keycloak.hrmconsensus.org/auth
+    resource: anomanor
+    credentials-secret: 43ad9221-ccfd-4903-809f-ddec65c433ab
+    name-attribute: preferred_username
+    use-resource-role-mappings: true
+    ssl-required: external
+
+  docker:
+      internal-networking: true
+  specs:
+  # Only for testing. Requires openanalytics/shinyproxy-demo
+  - id: 01_hello
+    display-name: Hello Application
+    description: Application which demonstrates the basics of a Shiny app
+    container-cmd: ["R", "-e", "shinyproxy::run_01_hello()"]
+    container-image: openanalytics/shinyproxy-demo
+    container-network: anomanor-net
+
+  - id: anomanor
+    display-name: Anomanor with Keycloak
+    container-cmd: ["R", "-e", "anomanor::run_app()"]
+#    container-cmd: ["bash"]
+    container-volumes:
+    - /home/hrmconsensus/anomanor_data/anomanor/db:${ANOMANOR_DATA}/db
+    - anomanor_data:${ANOMANOR_DATA}/data
+    - anomanor_cache:${ANOMANOR_DATA}/cache
+    container-image: anomanor
+    container-network: anomanor-net

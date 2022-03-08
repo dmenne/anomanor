@@ -1,0 +1,21 @@
+# R_CONFIG_ACTIVE must be set in .Renviron or globally
+
+
+# Keycloak
+# When no keycloak available, simulated names are used
+# This user must have role mappings/client roles/realm-managment
+# with all available roles assigned to it in keycloak
+ANOMANOR_ADMIN_USERNAME=anomanor_admin
+ANOMANOR_ADMIN_PASSWORD=anomanor_admin
+# Do not use localhost here for development,
+# rather IP adress of development computer.
+KEYCLOAK_SITE=192.168.2.20
+ANOMANOR_DATA=~/anomanor_data/anomanor
+
+
+# SQLPad (optional)
+SQLPAD_ADMIN=dieter.menne@menne-biomed.de
+SQLPAD_ADMIN_PASSWORD=3450ab3et3
+
+# Used as email address when sample data for testing are generated
+TEST_EMAIL_URL=menne-biomed.de

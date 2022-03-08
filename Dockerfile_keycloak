@@ -1,0 +1,7 @@
+FROM jboss/keycloak
+
+ENV KEYCLOAK_USER=${MASTER_ADMIN_USERNAME:-admin}
+ENV KEYCLOAK_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
+COPY ./anomanortheme/ /opt/jboss/keycloak/themes/anomanortheme
+# Health check port is WITHIN container
+HEALTHCHECK --start-period=40s --interval=20s --timeout=10s CMD curl -H --fail http://localhost:8080 || exit 1
