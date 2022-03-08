@@ -23,3 +23,23 @@ The program uses [R](https://www.r-project.org/), [Shiny](https://shiny.rstudio.
     Emma Carrington, Henriette Heinrich, Mark Fox, Charles Knowles, Mark
     Scott Funding: United European Gastroenterology: Guideline
     Dissemination Activity Grant
+
+## Simple installation
+
+You can run the Shiny app locally on your Windows or Linux desktop as a simulated user `sa_admin`. Two sample records are included. Instructions for installation are given on the [Docker Hub site for anomanor](https://hub.docker.com/repository/docker/dmenne/anomanor).
+
+
+## Developer installation
+
+As a developer with background in R and Shiny, you can install the R-package and associated files with
+
+```
+devtools::install_github("dmenne/anomanor")
+```
+
+## Full Installation
+
+This app is part of a Docker-based web installation using [Keykloak](https://www.keycloak.org/) and [ShinyProxy](https://www.shinyproxy.io/) for user management. Scripts and templates for setting are included - see the comments in the `inst` folder and the configuration scripts, e.g. `run_all.sh`. Installation of the full system requires extensive knowledge and is not explained here.
+
+
+
