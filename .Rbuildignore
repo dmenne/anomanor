@@ -16,3 +16,4 @@ log
 ^.*\.sh$
 ^Dockerfile$
 ^\.dockerignore$
+^\.github$

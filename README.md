@@ -1,5 +1,9 @@
 # anomanor
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dmenne/anomanor/workflows/R-CMD-check/badge.svg)](https://github.com/dmenne/anomanor/actions)
+<!-- badges: end -->
+
 ## Overview
 
 EUGIM Hub Project: Educational training of physicians working with high-resolution anorectal manometry
