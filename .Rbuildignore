@@ -18,5 +18,10 @@ log
 ^\.dockerignore$
 ^\.github$
 anomanortheme/*
-^.*\.yml
 ^.*\.cmd
+tests/_snaps
+covr
+^.docker-.*.yml
+^application.yml$
+.gitignore
+^\.git

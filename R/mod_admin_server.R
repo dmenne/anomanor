@@ -66,7 +66,7 @@ mod_admin_server = function(id, app_user) {
        if (simul == "") {
          # Check if user is already in database
          if (!is.null(g$keycloak$get_userid_from_email(input$new_user_email))) {
-           showNotification(
+           shiny::showNotification(
              HTML(
                glue(
                  "User with email<br><code>{input$new_user_email}</code>",
@@ -82,7 +82,7 @@ mod_admin_server = function(id, app_user) {
          }
          added = g$keycloak$add_user(input$new_user_email, input$new_user_group)
          if (is.null(added)) {
-           showNotfication(
+           shiny::showNotification(
              glue("Invitation failed for {input$new_user_email}"),
              id = "invite",
              closeButton = FALSE,
@@ -95,7 +95,7 @@ mod_admin_server = function(id, app_user) {
                        "{input$new_user_group}"))
          }
        }
-       showNotification(
+       shiny::showNotification(
          HTML(
            glue("{simul} Invitation sent to {input$new_user_email}")
          ),
@@ -158,7 +158,7 @@ mod_admin_server = function(id, app_user) {
          unlink(destination)
        }
        if (file.exists(destination))
-         showNotification(HTML("Could not delete file to be overwritten"),
+         shiny::showNotification(HTML("Could not delete file to be overwritten"),
                           duration = 5,
                           session = session,
                           type = "error")
@@ -175,7 +175,7 @@ mod_admin_server = function(id, app_user) {
        disable("discard")
        rvalues$upload_file = NULL
        if (!file.exists(destination))
-         showNotification(HTML("Could not copy file to destination"),
+         shiny::showNotification(HTML("Could not copy file to destination"),
                           duration = 5,
                           session = session,
                           type = "error")
@@ -183,7 +183,7 @@ mod_admin_server = function(id, app_user) {
        checked_patients = check_patient_records()
        update_record_choices()
        if (checked_patients != "")
-         showNotification(HTML(checked_patients), type = "warning")
+         shiny::showNotification(HTML(checked_patients), type = "warning")
      }
 
 
@@ -321,7 +321,7 @@ mod_admin_server = function(id, app_user) {
       dbExecute(g$pool, glue_sql(
         "DELETE FROM classification where user = {app_user}", .con = g$pool))
       note = glue("Classifications for user {app_user} were erased")
-      showNotification(note )
+      shiny::showNotification(note )
       log_it(note)
       session$reload()
     })

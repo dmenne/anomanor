@@ -1,7 +1,3 @@
-#' @importFrom flextable flextable set_header_labels add_header_row
-#' @importFrom flextable set_caption add_footer merge_at bg set_table_properties
-#' @importFrom flextable htmltools_value
-#' @importFrom scales col_numeric
 classification_statistics = function(use_group = "all", method = "h" ) {
   stopifnot(is.list(g)) # requires global
   # groups: all, experts, trainees
@@ -49,6 +45,7 @@ classification_statistics_wide = function(use_group = "all",
   stopifnot(classification_name %in% c("short", "classification"))
   stopifnot(method %in% c("h", "l"))
   cs = classification_statistics(use_group = use_group, method = method)
+  . = NULL
   map(
     set_names(c("rair", "tone", "coord")), function(.x){
       cs  %>%
@@ -58,12 +55,12 @@ classification_statistics_wide = function(use_group = "all",
         names_from = c(all_of(classification_name), "group"),
         values_from = "n"
       ) %>%
-      replace(is.na(.data$.), 0) %>%
+      replace(is.na(.), 0) %>%
       mutate(
         sum_trainees = rowSums(select(., ends_with("_trainees"))),
         sum_experts = rowSums(select(., ends_with("_experts")))
       ) %>%
-      select( .data$record, sort(colnames(.)))
+      select(.data$record, sort(colnames(.)))
     }
   )
 }
@@ -85,8 +82,6 @@ alpha_text = function(alpha, classification_phase_sel){
      "CI 95% ({tr$lower} to {tr$upper})")
   alpha_ret
 }
-
-
 
 classification_statistics_html = function(method){
   cs_w = classification_statistics_wide(method = method)

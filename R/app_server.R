@@ -49,7 +49,7 @@ app_server = function(session, input, output) {
 
   # Display message
   if (g$checked_patients != "")
-    showNotification(
+    shiny::showNotification(
       HTML(g$checked_patients),
       duration = ifelse(str_starts(g$active_config, "keycloak"), 60, 10),
       closeButton = TRUE,
@@ -160,12 +160,12 @@ app_server = function(session, input, output) {
     } else {
       toggle_button_state(TRUE)
     }
-    showNotification("Saved")
+    shiny::showNotification("Saved")
   })
 
   # ----------- Cancel button action --------------------------------
   observeEvent(input$cancel, {
-    showNotification("Cancelled")
+    shiny::showNotification("Cancelled")
     clear_all(TRUE)
     visNetworkProxy(ns_ano("network")) %>%
       visSelectNodes(NULL, clickEvent = TRUE)
@@ -195,7 +195,7 @@ app_server = function(session, input, output) {
     if (input$confirm_finalize) {
       save_classification(TRUE)
       rvalues$finalized = TRUE
-      showNotification("Finalized")
+      shiny::showNotification("Finalized")
     } else {
       toggle_button_state(TRUE)
     }
@@ -628,7 +628,7 @@ app_server = function(session, input, output) {
 
   # classification_method() with ignoreInit
   observeEvent(classification_method(), {
-    showNotification(type = "warning", duration = 3,
+    shiny::showNotification(type = "warning", duration = 3,
       HTML("Switching between methods displays <b>a different</b> random record.")
     )},
     ignoreInit = TRUE

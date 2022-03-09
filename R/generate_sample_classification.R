@@ -33,7 +33,7 @@ generate_sample_classification = function(users, force = TRUE,
   })
   for (record in records) {
     for (phase1 in phases) {
-      classes = (end_nodes %>% filter(phase == phase1))$id
+      classes = (end_nodes %>% filter(.data$phase == phase1))$id
       correct_class = sample(classes, 1)
       if (add_consensus) {
         classification_to_database(

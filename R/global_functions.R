@@ -127,3 +127,45 @@ keycloak_available = function(){
                           count = 1, timeout = 0.1))
 }
 
+keycloak_users = function(){
+  stopifnot(is.list(g)) # requires global
+  # Without keycloak, get user surrogate from database
+  if (is.null(g$keycloak) || !keycloak_available() || !g$keycloak$active()) {
+    q = glue_sql("SELECT user, [group] from user", .con = g$pool)
+    users = dbGetQuery(g$pool, q)    %>%
+      transmute(
+        user = .data$user,
+        email = "none",
+        name = .data$user,
+        verified = TRUE,
+        group = .data$group
+      )
+    return(users)
+  }
+  # nocov start
+  users = g$keycloak$users()
+  if (is.null(users)) {
+    log_stop("Keycloak did not return users")
+    return(NULL)
+  }
+  # We prioritize groups, only the dominant is kept
+  users = g$keycloak$users() %>%
+    mutate(
+      group = case_when(
+        admins ~ 'admins',
+        experts ~ 'experts',
+        TRUE ~ 'trainees'
+      )
+    )
+  users %>%
+    transmute(
+      user = .data$username,
+      email = .data$email,
+      name = ifelse(is.na(.data$firstName) | is.na(.data$lastName),
+                    "", paste(.data$firstName, .data$lastName)),
+      verified = .data$emailVerified,
+      group = .data$group
+    )
+  # nocov end
+
+}

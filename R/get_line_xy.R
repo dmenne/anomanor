@@ -28,7 +28,7 @@ get_line_xy = function(dt, start_time, x1, y1, x2, y2, view, time_step, time_zoo
     pos = round(y_to_pos(id[,2]),2),
     press = round(press,1),
     where = where) %>%
-  dplyr::arrange(time, pos)
+  dplyr::arrange(.data$time, .data$pos)
   ret = ret[ret$where != "gap",]
   attr(ret, "balloon_press") = dt[id[1],1]/10
   ret

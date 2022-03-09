@@ -30,7 +30,12 @@
 #' @importFrom utils file_test read.delim zip
 #' @importFrom httr GET PUT POST DELETE status_code
 #' @importFrom shiny shinyApp showNotification
-#' @importFrom golem with_golem_options
+#' @importFrom flextable flextable set_header_labels add_header_row
+#' @importFrom flextable set_caption add_footer merge_at bg set_table_properties
+#' @importFrom flextable htmltools_value
+#' @importFrom flextable htmltools_value
+#' @importFrom scales col_numeric
+# @importFrom withr defer
 #' @useDynLib anomanor, .registration = TRUE
 ## usethis namespace: end
 NULL

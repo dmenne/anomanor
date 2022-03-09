@@ -166,7 +166,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         new_phase_index = which.min(abs(mk$index - phase_index)) + 1
         if (new_phase_index > nrow(mk) ) {
           if (nrow(mk) > 1)
-            showNotification("Jumped back", duration = 2)
+            shiny::showNotification("Jumped back", duration = 2)
           new_phase_index = 1
         }
         new_phase_index
@@ -178,7 +178,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         new_phase_index = which.min(abs(mk$index - phase_index)) - 1
         if (new_phase_index < 1) {
           if (nrow(mk) > 1)
-            showNotification("Jumped to last", duration = 2)
+            shiny::showNotification("Jumped to last", duration = 2)
           new_phase_index = nrow(mk)
         }
         new_phase_index
