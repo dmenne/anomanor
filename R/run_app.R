@@ -5,8 +5,6 @@
 #' @inheritParams shiny::shinyApp
 #'
 #' @export
-#' @importFrom shiny shinyApp
-#' @importFrom golem with_golem_options
 run_app = function(
   onStart = function(){
     g <<- globals() # g is defined in globals.R
@@ -34,3 +32,4 @@ run_app = function(
     golem_opts = list(...)
   )
 }
+

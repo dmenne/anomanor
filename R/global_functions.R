@@ -72,7 +72,7 @@ ano_modal = function(markdown_file){
 safe_create_dir = function(dir){
   # return NULL if exists, otherwise result of dir.create
   if (dir.exists(dir)) return(NULL)
-  ret = try(dir.create(dir))
+  try(dir.create(dir, recursive = TRUE))
   if (!dir.exists(dir)) {
     log_stop(glue("Could not create {dir}} \n"))
   } else {
@@ -81,7 +81,7 @@ safe_create_dir = function(dir){
 }
 
 save_file_rename = function(from, to){
-  if (!file.exists(from)) return (NULL)
+  if (!file.exists(from)) return(NULL)
   file.rename(from, to)
 }
 
@@ -91,5 +91,39 @@ y_to_pos = function(y){
 
 pos_to_y = function(pos){
   pos/g$image_y_to_position_fac + 2*g$balloon_size
+}
+
+log_it = function(msg, force_console = FALSE, severity = "info") {
+  if (!exists("g")) { # requires globals
+    if (force_console) cat("No globals log:\n ", msg, "\n")
+    return(invisible(NULL))
+  }
+  msg = as.character(msg)
+  tm = as.POSIXlt(Sys.time(), "UTC")
+  force_console = force_console || g$config$force_console
+  if (force_console || (!is.null(g$config) && is.list(g$config) && g$config$force_console))
+    cat(msg, "\n")
+  if (!is.null(g$pool) && DBI::dbIsValid(g$pool)) {
+    iso = strftime(tm , "%Y-%m-%d %H:%M:%S")
+    q = glue_sql("INSERT into ano_logs (time, severity, message) ",
+                 "values ({iso}, {severity}, {msg})", .con = g$pool)
+    dbExecute(g$pool, q)
+  }
+  invisible(NULL)
+}
+
+log_stop = function(...) {
+  msg = paste0(...)
+  log_it(msg = msg, force_console = FALSE, severity = "error")
+  stop(msg, call. = FALSE)
+}
+
+keycloak_available = function(){
+  stopifnot(exists("g") && is.list(g)) # globals
+  if (!g$config$use_keycloak) return(FALSE)
+  if (stringr::str_starts(g$config$keycloak_site, "keycloak"))
+    g$config$keycloak_port = 443
+  !is.na(pingr::ping_port(g$config$keycloak_site, g$config$keycloak_port,
+                          count = 1, timeout = 0.1))
 }
 

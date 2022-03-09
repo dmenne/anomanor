@@ -14,6 +14,9 @@ letsencrypt
 data_store
 log
 ^.*\.sh$
-^Dockerfile$
+^Dockerfile_.*$
 ^\.dockerignore$
 ^\.github$
+anomanortheme/*
+^.*\.yml
+^.*\.cmd

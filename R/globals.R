@@ -1,7 +1,7 @@
 # This is file globals(sic!).R, not Shiny special global.R
 # Variables in this function are can be accessed via g$,
 # as defined in run_app.R
-globalVariables("g")
+utils::globalVariables("g")
 globals = function(){
 #  options(warn = 2)
 #  options(shiny.error = browser)

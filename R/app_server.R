@@ -1,9 +1,3 @@
-#' The application server-side
-#'
-#' @param input,output,session Internal parameters for {shiny}.
-#'     DO NOT REMOVE.
-#' @import shiny
-#' @noRd
 app_server = function(session, input, output) {
 
   # ----------- Database ---------
@@ -478,9 +472,9 @@ app_server = function(session, input, output) {
     req(cp)
     # nodes are package-internal data
     vis_selected = nodes %>%
-      filter(phase == cp)  %>%
-      filter(id == node) %>%
-      filter(group != 'a')  # only terminal nodes
+      filter(.data$phase == cp)  %>%
+      filter(.data$id == node) %>%
+      filter(.data$group != 'a')  # only terminal nodes
     if (nrow(vis_selected) == 0) 0 else vis_selected$id[1]
   })
 
@@ -500,12 +494,12 @@ app_server = function(session, input, output) {
     cm = classification_method()
     req(cp, cm)
     ed = edges %>%
-      filter(phase == cp)
+      filter(.data$phase == cp)
     ec = expert_classification %>%
-      filter(classification_phase == cp) %>%
-      filter(record == str_replace(record(), '.txt', '')) %>%
-      filter(method == cm) %>%
-      select(classification, percent, expert_classification) %>%
+      filter(.data$classification_phase == cp) %>%
+      filter(.data$record == str_replace(record(), '.txt', '')) %>%
+      filter(.data$method == cm) %>%
+      select(.data$classification, .data$percent, .data$expert_classification) %>%
       left_join(ed, by = c("classification" = "to"))
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100
@@ -513,12 +507,12 @@ app_server = function(session, input, output) {
       mutate(
         label = glue("{label}\n{percent}%" ),
         color = case_when(
-          expert_classification ~ "green",
-          percent == max_percent ~ "orange",
+          .data$expert_classification ~ "green",
+          .data$percent == max_percent ~ "orange",
           TRUE ~ "darkgray"),
-        width = percent/12 + 1,
+        width = .data$percent/12 + 1,
       ) %>%
-      select(id, label, color, width)
+      select(.data$id, .data$label, .data$color, .data$width)
     req(nrow(ec) > 0)
     # Setting selection here does not work!
     # There is no event "update_finalized"
@@ -687,10 +681,11 @@ app_server = function(session, input, output) {
 
   session$onSessionEnded(function() {
     in_session_time = Sys.time() - login_time
-    log_it(glue("Session ended user {app_user} after {round(in_session_time,1)} ",
-                "{attr(in_session_time,'units')}"),
+    log_it(
+      glue("Session ended user {app_user} after {round(in_session_time,1)} ",
+           "{attr(in_session_time,'units')}"),
            force_console = FALSE)
     if (keycloak_available())
-      keycloak$logout_user_by_name(app_user)
+      g$keycloak$logout_user_by_name(app_user)
   })
 }

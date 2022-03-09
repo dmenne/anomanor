@@ -36,13 +36,13 @@ Imports:
     icr,
     magick,
     magrittr,
+    pingr,
     pool,
     purrr,
     rlang,
     keys,
     RSQLite,
     readr,
-    readxl,
     rpart,
     rmarkdown,
     rprojroot,
@@ -55,6 +55,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     tippy,
     tools,
     visNetwork,
@@ -66,7 +67,7 @@ Suggests:
     png,
     testthat (>= 3.0.0)
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.1.2.9000
 URL: https://github.com/dmenne/anomanor
 BugReports: https://github.com/dmenne/anomanor/issues
 Remotes: JohnCoene/tippy
@@ -75,4 +76,3 @@ Config/testthat/parallel: true
 Language: en-US
 LinkingTo: 
     Rcpp
-LazyData: true

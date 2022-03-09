@@ -52,18 +52,18 @@ classification_statistics_wide = function(use_group = "all",
   map(
     set_names(c("rair", "tone", "coord")), function(.x){
       cs  %>%
-      filter(phase == .x) %>%
+      filter(.data$phase == .x) %>%
       pivot_wider(
         id_cols = c("record"),
         names_from = c(all_of(classification_name), "group"),
         values_from = "n"
       ) %>%
-      replace(is.na(.), 0) %>%
+      replace(is.na(.data$.), 0) %>%
       mutate(
         sum_trainees = rowSums(select(., ends_with("_trainees"))),
         sum_experts = rowSums(select(., ends_with("_experts")))
       ) %>%
-      select( record, sort(colnames(.)))
+      select( .data$record, sort(colnames(.)))
     }
   )
 }

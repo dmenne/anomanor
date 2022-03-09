@@ -21,9 +21,15 @@ check_valid_record = function(file, source_file = NULL) {
   if (inherits(pm, "try-error"))
     return(pm[1])
 
-  required_markers =  g$mcp %>% filter(mtype == "r") %>% dplyr::pull(marker)
-  optional_markers =  g$mcp %>% filter(mtype == "o") %>% dplyr::pull(marker)
-  default_markers =  g$mcp %>% filter(mtype != "o") %>% dplyr::pull(marker)
+  required_markers =  g$mcp %>%
+    filter(.data$mtype == "r") %>%
+    dplyr::pull(.data$marker)
+  optional_markers =  g$mcp %>%
+    filter(.data$mtype == "o") %>%
+    dplyr::pull(.data$marker)
+  default_markers =  g$mcp %>%
+    filter(.data$mtype != "o") %>%
+    dplyr::pull(.data$marker)
 
   markers = pm$markers$annotation
   missing = setdiff(required_markers, markers)
