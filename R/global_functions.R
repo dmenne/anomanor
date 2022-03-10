@@ -169,3 +169,8 @@ keycloak_users = function(){
   # nocov end
 
 }
+
+app_sys = function(...){
+  system.file(..., package = "anomanor")
+}
+

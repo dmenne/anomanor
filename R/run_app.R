@@ -1,5 +1,6 @@
-#' Run anonmanor Shiny app
+#' Run anomanor app
 #'
+#' Start anomanor app
 #' @export
 run_app = function() {
   shinyApp(
@@ -19,4 +20,5 @@ run_app = function() {
     uiPattern = "/"
   )
 }
+
 

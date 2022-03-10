@@ -6,8 +6,6 @@
 # Not needed to run without Check
 # Warning: globals: no visible binding for '<<-' assignment to 'g'
 utils::globalVariables(c("g", "Keycloak"))
-#g = NA
-#Keycloak = NA
 
 globals = function(){
 #  options(warn = 2)
@@ -31,6 +29,8 @@ globals = function(){
       Sys.info()['sysname'] == 'Windows' ~ "Renviron_windows",
       active_config == "keycloak_production" ~ "Renviron_production",
       TRUE ~ "Renviron_devel")
+
+#  addResourcePath('www', app_sys('app/www'))
   root_dir = app_sys()
   env_file = file.path(root_dir, env_file_base)
   if (!file.exists(env_file))
@@ -190,3 +190,4 @@ globals = function(){
   checked_patients = check_patient_records()
   mget(ls())
 }
+
