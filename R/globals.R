@@ -30,7 +30,7 @@ globals = function(){
       active_config == "keycloak_production" ~ "Renviron_production",
       TRUE ~ "Renviron_devel")
 
-#  addResourcePath('www', app_sys('app/www'))
+  addResourcePath('www', app_sys('app/www'))
   root_dir = app_sys()
   env_file = file.path(root_dir, env_file_base)
   if (!file.exists(env_file))

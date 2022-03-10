@@ -21,7 +21,7 @@ anomanortheme/*
 ^.*\.cmd
 tests/_snaps
 covr
-^.docker-.*.yml
+^docker-.*.yml
 ^application.yml$
 .gitignore
 ^\.git
