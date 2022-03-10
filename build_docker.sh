@@ -19,7 +19,7 @@ docker rm -f anomanor
 # To force rebuild
 #docker rmi -f anomanor
 docker system prune -f
-docker build --tag anomanor -f Dockerfile_anomanor \
+docker build --tag dmenne/anomanor -f Dockerfile_anomanor \
   --build-arg R_CONFIG_ACTIVE \
   --build-arg ANOMANOR_DATA \
   --build-arg ANOMANOR_ADMIN_USERNAME \
@@ -31,6 +31,7 @@ docker build --tag anomanor -f Dockerfile_anomanor \
 docker container create --name copydata -v anomanor_data_data:/root hello-world
 docker cp ./inst/data_store/records copydata:/root/records
 docker cp ./inst/data_store/patients copydata:/root/patients
+docker cp ./inst/data_store/md copydata:/root/md
 docker rm copydata
 
 docker run -d -it  \
@@ -40,7 +41,7 @@ docker run -d -it  \
   -v anomanor_data_db:${ANOMANOR_DATA}/db \
   -v anomanor_data_cache:${ANOMANOR_DATA}/cache \
   -v anomanor_data_data:${ANOMANOR_DATA}/data \
-  anomanor
+  dmenne/anomanor
 
 docker ps -l
 sleep 3s

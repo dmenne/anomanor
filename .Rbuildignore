@@ -3,7 +3,8 @@
 ^data-raw$
 ^scripts$
 ^.github$
-^LICENSE\.md$
+^.letsencrypt$
+LICENSE\.md$
 ^README\.Rmd$
 ^keycloak$
 ^anomanortheme$
@@ -17,4 +18,4 @@
 ^docker-.*.yml
 ^application.yml$
 ^.gitignore$
-
+Renviron_production
