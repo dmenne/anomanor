@@ -32,7 +32,8 @@ globals = function(){
 
   root_dir = app_sys()
   env_file = file.path(root_dir, env_file_base)
-#  if (!file.exists(env_file))
+  if (!file.exists(env_file))
+    stop(paste(dir(), collapse  = "\n"), call. = FALSE)
 #    stop("Environment file ", env_file, " does not exist", call. = FALSE)
   readRenviron(env_file)
   if (Sys.getenv("R_CONFIG_ACTIVE") != active_config)
