@@ -32,10 +32,8 @@ globals = function(){
 
   root_dir = app_sys()
   env_file = file.path(root_dir, env_file_base)
-  if (!file.exists(env_file)) # For tests on github actions
-    env_file =  file.path(root_dir, 'inst', env_file_base)
-  if (!file.exists(env_file))
-    stop("Environment file ", env_file, " does not exist", call. = FALSE)
+#  if (!file.exists(env_file))
+#    stop("Environment file ", env_file, " does not exist", call. = FALSE)
   readRenviron(env_file)
   if (Sys.getenv("R_CONFIG_ACTIVE") != active_config)
     stop("The value of R_CONFIG_ACTIVE must not be changed in environment files",
