@@ -21,7 +21,6 @@ log
 dev
 testthat*.rds
 scripts/
-Renviron_devel
 covr/
 *.gcno
 *.gcda

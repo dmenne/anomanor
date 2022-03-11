@@ -1,0 +1,28 @@
+# !!!!! This file must be saved with UNIX endings !!!
+# Used with all variants of R_CONFIG_ACTIVE NOT equal to
+# "keycloak_production" on Linux
+# This file is used for development and has unsafe passwords
+
+# Keycloak
+# When no keycloak available, simulated names are used
+# MASTER_ADMIN must have role mappings/client roles/realm-managment
+# with all available roles assigned to it in keycloak
+MASTER_ADMIN_USERNAME=admin
+MASTER_ADMIN_PASSWORD=admin
+ANOMANOR_ADMIN_USERNAME=anomanor_admin
+ANOMANOR_ADMIN_PASSWORD=anomanor_admin
+# Do not use localhost as KEYCLOAK_SITE for development,
+# rather the IP adress of the development computer.
+# Windows, e.g. 192.168.2.20
+# or keycloak.yoursite.com when using an external keycloak instance
+#KEYCLOAK_SITE=192.168.2.20
+# Ubuntu
+ANOMANOR_DATA=/root/anomanor_data/anomanor
+
+# SQLPAD (optional)
+SQLPAD_ADMIN=admin
+SQLPAD_ADMIN_PASSWORD=admin
+
+# Used as email address when sample data for testing are generated
+# For a simulated user anton, a mail will be sent to anton@<TEST_EMAIL_URL>
+TEST_EMAIL_URL=mymail.com
