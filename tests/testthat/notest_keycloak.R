@@ -1,3 +1,5 @@
+# this test is by default deactivated because it needs a working
+# keycloak site
 Sys.setenv("R_CONFIG_ACTIVE" = "keycloak_devel")
 active_config = Sys.getenv("R_CONFIG_ACTIVE")
 skip_if_not(stringr::str_starts(active_config, "keycloak_"), "Keycloak not available")

@@ -27,8 +27,8 @@ test_data_dir = function(basename){
 
 touch_offset = function(file, offset){
   time = strftime(Sys.time() + offset, "%Y%m%d%H%M.%S")
-  #  return(system2("touch", c(paste("-t", time), shQuote(file))))
-  return(shell(paste("touch -t", time, shQuote(file))))
+  return(system2("touch", c(paste("-t", time), shQuote(file))))
+  #return(shell(paste("touch -t", time, shQuote(file))))
 }
 
 count_markers = function(record){

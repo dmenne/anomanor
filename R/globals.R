@@ -5,7 +5,7 @@
 # needed to keep Check quiet. Probably error in roxygen2
 # Not needed to run without Check
 # Warning: globals: no visible binding for '<<-' assignment to 'g'
-utils::globalVariables(c("g", "Keycloak"))
+utils::globalVariables("g")
 
 globals = function(){
 #  options(warn = 2)
