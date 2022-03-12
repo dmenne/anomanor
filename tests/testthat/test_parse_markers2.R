@@ -3,6 +3,7 @@ g = globals()
 withr::defer(cleanup_test_data())
 
 test_that("parse_markers handles raises error without #", {
+  skip()
   hr_lines = c("Annotations:", "\t40.00\thusten")
   expect_error(parse_markers(hr_lines), "No valid")
 })
@@ -14,18 +15,6 @@ test_that("parse_markers errors on invalid", {
   expect_error(parse_markers(hr_lines), "Invalid channel")
 })
 
-
-test_that("parse_markers handles multiple tabs", {
-  skip()
-  hr_lines = c("Annotations:", "\t\t20.00\thusten","\t40.00\t# Rest")
-  pm = parse_markers(hr_lines)
-  expect_null(pm$invalid_channels)
-  expect_equal(pm$markers$sec, c(0, 40))
-  expect_equal(pm$markers$annotation,  c("begin", "Rest"))
-  expect_equal(nrow(pm$unused_markers), 1)
-  expect_equal(pm$unused_markers$sec, 20)
-  expect_equal(pm$unused_markers$annotation, "husten")
-})
 
 test_that("parse_markers handles missing channels", {
   skip("skip") ## bad
