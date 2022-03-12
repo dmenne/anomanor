@@ -53,7 +53,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   if (length(annot_line) == 0)
     log_stop(glue("No annotations found in {file}"))
   zz = textConnection(hr_lines[1:(annot_line - 2)])
-  hr = read.delim()
+  hr = read.delim(zz)
   close(zz)
   check_record(hr, records_file)
   names(hr)[1] = "TIME" # this may be "TIEMPO"
