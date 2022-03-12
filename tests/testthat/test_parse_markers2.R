@@ -8,7 +8,6 @@ test_that("parse_markers handles raises error without #", {
 })
 
 test_that("parse_markers errors on invalid", {
-  skip()
   hr_lines = c("Annotations:", "\t-1.0  #B7",
                "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
   expect_error(parse_markers(hr_lines), "Invalid channel")
@@ -16,6 +15,7 @@ test_that("parse_markers errors on invalid", {
 
 
 test_that("parse_markers handles multiple tabs", {
+  skip()
   hr_lines = c("Annotations:", "\t\t20.00\thusten","\t40.00\t# Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
