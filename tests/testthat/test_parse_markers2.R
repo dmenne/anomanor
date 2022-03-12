@@ -3,13 +3,13 @@ g = globals()
 withr::defer(cleanup_test_data())
 
 test_that("parse_markers handles raises error without #", {
-  skip()
+  skip("parse")
   hr_lines = c("Annotations:", "\t40.00\thusten")
   expect_error(parse_markers(hr_lines), "No valid")
 })
 
 test_that("parse_markers errors on invalid", {
-  skip()
+  skip("parse")
   hr_lines = c("Annotations:", "\t-1.0  #B7",
                "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
   expect_error(parse_markers(hr_lines), "Invalid channel")
