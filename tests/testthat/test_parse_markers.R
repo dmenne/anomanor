@@ -30,12 +30,6 @@ test_that("parse_markers handles regular tabs with spaces", {
   expect_equal(nrow(pm$unused_markers), 0)
 })
 
-test_that("parse_markers errors on invalid", {
-  hr_lines = c("Annotations:", "\t-1.0  #B7",
-               "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
-  expect_error(parse_markers(hr_lines), "Invalid channel")
-})
-
 test_that("parse_markers handles multiple rows", {
   hr_lines = c("Annotations:", "\t20.00\thusten","\t40.00\t# Rest")
   pm = parse_markers(hr_lines)
