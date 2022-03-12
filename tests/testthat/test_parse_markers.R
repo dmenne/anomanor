@@ -36,7 +36,6 @@ test_that("parse_markers handles raises error without #", {
 })
 
 test_that("parse_markers handles multiple rows", {
-  skip("skip")
   hr_lines = c("Annotations:", "\t20.00\thusten","\t40.00\t# Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
@@ -48,7 +47,6 @@ test_that("parse_markers handles multiple rows", {
 })
 
 test_that("parse_markers handles multiple rows with spaces", {
-  skip("skip")
   hr_lines = c("Annotations:", "  20.00 husten","40.00\t # Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
