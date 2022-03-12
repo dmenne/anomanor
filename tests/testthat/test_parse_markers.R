@@ -22,7 +22,6 @@ test_that("parse_markers handles regular tabs with space", {
 
 
 test_that("parse_markers handles regular tabs with spaces", {
-  skip("skip")
   hr_lines = c("Annotations:", "\t40.00\t#  Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
@@ -32,7 +31,6 @@ test_that("parse_markers handles regular tabs with spaces", {
 })
 
 test_that("parse_markers handles raises error without #", {
-  skip("skip")
   hr_lines = c("Annotations:", "\t40.00\thusten")
   expect_error(parse_markers(hr_lines), "No valid")
 })
