@@ -35,7 +35,7 @@ test_that("parse_markers handles regular cases and errors", {
   expect_equal(nrow(pm$unused_markers), 1)
   expect_equal(pm$unused_markers$sec, 20)
   expect_equal(pm$unused_markers$annotation, "husten")
-  skip("parse_markers later")
+
   hr_lines = c("Annotations:", "  20.00 husten","40.00\t # Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
@@ -64,6 +64,7 @@ test_that("parse_markers handles regular cases and errors", {
   expect_equal(pm$unused_markers$sec, 20)
   expect_equal(pm$unused_markers$annotation, "husten")
 
+  skip("parse_markers later")
   hr_lines = c("Annotations:", "\t-1.0  #B7",
                "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
   expect_error(parse_markers(hr_lines), "Invalid channel")
