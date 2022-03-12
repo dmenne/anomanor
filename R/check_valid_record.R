@@ -13,7 +13,9 @@ check_valid_record = function(file, source_file = NULL) {
   if (length(annot_line) == 0)
     return("No markers found in file")
   # https://community.rstudio.com/t/readr-include-spec-false/60787
-  hr = read.delim(textConnection(hr_lines[1:(annot_line - 2)]))
+  zz = textConnection(hr_lines[1:(annot_line - 2)])
+  hr = read.delim(zz)
+  close(zz)
   cr = try(check_record(hr, file), silent = TRUE)
   if (inherits(cr, "try-error"))
     return(cr[1])

@@ -58,13 +58,13 @@ test_that("parse_markers handles multiple rows with spaces", {
 })
 
 test_that("parse_markers errors on invalid", {
+  skip("skip")
   hr_lines = c("Annotations:", "\t-1.0  #B7",
                "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
   expect_error(parse_markers(hr_lines), "Invalid channel")
 })
 
 test_that("parse_markers handles multiple tabs", {
-  skip("skip")
   hr_lines = c("Annotations:", "\t\t20.00\thusten","\t40.00\t# Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
@@ -76,7 +76,6 @@ test_that("parse_markers handles multiple tabs", {
 })
 
 test_that("parse_markers handles missing channels", {
-  skip("skip")
   hr_lines = c("Annotations:", "\t-1.0  # B1",
                "\t-1.0  #B2", "20.00 husten", "40.00\t # Rest")
   pm = parse_markers(hr_lines)

@@ -52,7 +52,9 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   annot_line = which(str_detect(hr_lines, fixed("Annotations:")))
   if (length(annot_line) == 0)
     log_stop(glue("No annotations found in {file}"))
-  hr = read.delim(textConnection(hr_lines[1:(annot_line - 2)]))
+  zz = textConnection(hr_lines[1:(annot_line - 2)])
+  hr = read.delim()
+  close(zz)
   check_record(hr, records_file)
   names(hr)[1] = "TIME" # this may be "TIEMPO"
   time_step = round(stats::median(diff(hr$TIME)),2)
