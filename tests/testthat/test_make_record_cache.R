@@ -10,7 +10,7 @@ test_that("parse_markers handles regular cases and errors", {
   expect_equal(pm$markers$sec, c(0, 40))
   expect_equal(pm$markers$annotation,  c("begin", "Rest"))
   expect_equal(nrow(pm$unused_markers), 0)
-
+  skip("Only one test")
   hr_lines = c("Annotations:", "\t40.00\t# Rest")
   pm = parse_markers(hr_lines)
   expect_null(pm$invalid_channels)
