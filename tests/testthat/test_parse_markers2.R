@@ -10,8 +10,14 @@ test_that("parse_markers handles raises error without #", {
   expect_error(parse_markers(hr_lines), "No valid")
 })
 
+test_that("parse_markers errors on empty annotation", {
+
+  expect_error(parse_markers(""), "no annotations")
+})
+
+
 test_that("parse_markers errors on invalid", {
-skip("temp")
+  skip("temp")
   hr_lines = c("Annotations:", "\t-1.0  #B7",
                "\t-1.0  #13", "20.00 husten", "40.00\t # Rest")
   expect_error(parse_markers(hr_lines), "Invalid channel")

@@ -239,7 +239,7 @@ mod_admin_server = function(id, app_user) {
          mks = c("Valid markers", "Missing markers", "Unexpected Markers",
                  "Unused Markers", "Invalid Channels")
          if (length(mks) != length(cv))
-           log_stop(glue("Invalid or missing marker name: {mks}, {names(cv)}"))
+           log_it(glue("Invalid or missing marker name: {mks}, {names(cv)}"))
          map2(cv,  mks,  function(x, y) {
            if (length(x) == 0) return(NULL)
            d = data.frame(x)

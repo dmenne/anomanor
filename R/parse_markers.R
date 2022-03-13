@@ -1,6 +1,6 @@
 parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
   # Find annotations
-  if (length(annot_line) == 0)
+  if (length(annot_line) == 0 || hr_lines == "")
     log_stop("There are no annotations in this file")
   # https://community.rstudio.com/t/readr-include-spec-false/60787
   hr_markers = str_trim(hr_lines[(annot_line + 1):length(hr_lines)])
@@ -27,14 +27,12 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
   invalid_channels = markers %>%
     filter(.data$sec < 0) %>%
     pluck("annotation")
-  if (FALSE) {
-    allowed_invalid_channels = c("B1", "B2", paste(1:10))
+  allowed_invalid_channels = c("B1", "B2", paste(1:10))
   if (!is.null(invalid_channels) && !invalid_channels %in% allowed_invalid_channels)
     log_stop(
       glue("Invalid channel(s) {paste(invalid_channels, collapse = ', ')}.",
            " Only {paste(allowed_invalid_channels, collapse = ', ')} are permitted.")
     )
-  }
   markers = markers %>%
     filter(sec >= 0)
   list(
