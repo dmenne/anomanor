@@ -24,6 +24,7 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
                        col.names =  c("sec", "annotation")) %>%
     mutate(annotation = str_trim(.data$annotation))
   close(zz)
+  if (FALSE) {
   invalid_channels = markers %>%
     filter(.data$sec < 0) %>%
     pluck("annotation")
@@ -35,6 +36,7 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
     )
   markers = markers %>%
     filter(.data$sec >= 0)
+  }
   list(
     markers = bind_rows(tribble(~sec, ~annotation, 0, "begin"),
                         markers),
