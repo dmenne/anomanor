@@ -34,9 +34,9 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
       glue("Invalid channel(s) {paste(invalid_channels, collapse = ', ')}.",
            " Only {paste(allowed_invalid_channels, collapse = ', ')} are permitted.")
     )
-  markers = markers %>%
-    filter(.data$sec >= 0)
   }
+  markers = markers %>%
+    filter(sec >= 0)
   list(
     markers = bind_rows(tribble(~sec, ~annotation, 0, "begin"),
                         markers),
