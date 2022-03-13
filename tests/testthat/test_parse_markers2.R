@@ -10,8 +10,13 @@ test_that("parse_markers handles raises error without #", {
   expect_error(parse_markers(hr_lines), "No valid")
 })
 
-test_that("parse_markers errors on empty annotation", {
+test_that("expect_error works on gi actions", {
+  a = try(stop("Hallo, welt", call. = FALSE))
+  expect_s3_class(a, "try-error")
+})
 
+test_that("parse_markers errors on empty annotation", {
+  skip_on_ci()
   expect_error(parse_markers(""), "no annotations")
 })
 
@@ -25,6 +30,7 @@ test_that("parse_markers errors on invalid", {
 
 
 test_that("parse_markers handles missing channels", {
+  skip_on_ci()
   hr_lines = c("Annotations:", "\t-1.0  # B1",
                "\t-1.0  #B2", "20.00 husten", "40.00\t # Rest")
   pm = parse_markers(hr_lines)
