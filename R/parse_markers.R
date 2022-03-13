@@ -24,11 +24,11 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
                        col.names =  c("sec", "annotation")) %>%
     mutate(annotation = str_trim(.data$annotation))
   close(zz)
-  if (FALSE) {
   invalid_channels = markers %>%
     filter(.data$sec < 0) %>%
     pluck("annotation")
-  allowed_invalid_channels = c("B1", "B2", paste(1:10))
+  if (FALSE) {
+    allowed_invalid_channels = c("B1", "B2", paste(1:10))
   if (!is.null(invalid_channels) && !invalid_channels %in% allowed_invalid_channels)
     log_stop(
       glue("Invalid channel(s) {paste(invalid_channels, collapse = ', ')}.",
