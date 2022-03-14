@@ -1,7 +1,8 @@
 parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
   # Find annotations
-  if (length(annot_line) == 0 || hr_lines[0] == "")
+  if (is.null(annot_line) || is.null(hr_lines) || hr_lines == "") {
     log_stop("There are no annotations in this file")
+  }
   # https://community.rstudio.com/t/readr-include-spec-false/60787
   hr_markers = str_trim(hr_lines[(annot_line + 1):length(hr_lines)])
   # Replace first space after number
