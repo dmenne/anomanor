@@ -1,6 +1,4 @@
-Sys.setenv("R_CONFIG_ACTIVE" = "test")
-g = globals()
-withr::defer(cleanup_test_data())
+# No setup needed
 
 test_that("parse_markers handles regular tabs", {
   hr_lines = c("Annotations:", "\t40.00\t#Rest")
