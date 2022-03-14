@@ -1,4 +1,3 @@
 library(testthat)
-#options(Ncpus = parallel::detectCores(logical = TRUE))
-options(Ncpus = 1)
+options(Ncpus = parallel::detectCores(logical = TRUE))
 test_check("anomanor")
