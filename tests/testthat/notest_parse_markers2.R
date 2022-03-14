@@ -10,11 +10,6 @@ test_that("parse_markers handles raises error without #", {
   expect_error(parse_markers(hr_lines), "No valid")
 })
 
-test_that("expect_error works on gi actions", {
-  a = try(stop("Hallo, welt", call. = FALSE))
-  expect_s3_class(a, "try-error")
-})
-
 test_that("parse_markers errors on empty annotation", {
   skip_on_ci()
   expect_error(parse_markers(""), "no annotations")
