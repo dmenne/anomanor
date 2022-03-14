@@ -1,3 +1,4 @@
+#nocov start
 Keycloak = R6::R6Class("Keycloak", list(
 
   realm = "anomanor",
@@ -268,3 +269,5 @@ Keycloak = R6::R6Class("Keycloak", list(
     httr::status_code(ret) %in% c(200, 201, 204)
   }
 ))
+#nocov end
+

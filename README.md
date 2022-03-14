@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/dmenne/anomanor/workflows/R-CMD-check/badge.svg)](https://github.com/dmenne/anomanor/actions)
+[![Codecov test coverage](https://codecov.io/gh/dmenne/anomanor/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dmenne/anomanor?branch=master)
 <!-- badges: end -->
 
 ## Overview

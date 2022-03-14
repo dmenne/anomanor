@@ -99,7 +99,7 @@ globals = function(){
     log_stop("No patient records found in ", record_dir)
   }
 
-
+  # nocov start
   keycloak = NULL
   # For Admin site
   keycloak_site = glue("<a href=",
@@ -132,6 +132,7 @@ globals = function(){
         "Cannot get authorization from Keycloak for {config$anomanor_admin_username}"))
     }
   }
+  # nocov end
 
   rgb_med = rev(c("#620045", "#92006D", "#C30344", "#F90401", "#FD4500",
                   "#FD9800", "#FBEA01", "#A2FC00", "#38ED12", "#01EDD2",

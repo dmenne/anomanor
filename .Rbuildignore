@@ -19,3 +19,4 @@ LICENSE\.md$
 ^application.yml$
 ^.gitignore$
 Renviron_production
+^codecov\.yml$
