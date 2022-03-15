@@ -14,10 +14,10 @@ test_that("File with subsampling is correctly time-interpolated", {
   checkmate::expect_file_exists(mk$png_line_file)
   checkmate::expect_file_exists(mk$cache_file)
   png_size = dim(png::readPNG(mk$png_hrm_file))
-  expect_equal(png_size, c(g$image_height, 2736, 3))
+  expect_equal(png_size[1:2], c(g$image_height, 2736))
 
   png_size = dim(png::readPNG(mk$png_line_file))
-  expect_equal(png_size, c(g$image_height, 2736, 3))
+  expect_equal(png_size[1:2], c(g$image_height, 2736))
 
   # Cleanup
   unlink(mk$png_hrm_file)
