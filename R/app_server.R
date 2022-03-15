@@ -1,4 +1,4 @@
-app_server = function(session, input, output) {
+app_server = function(input, output, session) {
 
   # ----------- Database ---------
   if (!file.exists(g$sqlite_path)) stop("No database available")
