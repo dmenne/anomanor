@@ -4,6 +4,7 @@ g = globals()
 withr::defer(cleanup_test_data())
 
 test_that("Can render all md files", {
+  expect_true(rmarkdown::pandoc_available())
   unlink(g$html_dir, recursive = TRUE)
   dir.create(g$html_dir)
   mds = file_path_sans_ext(dir(g$md_dir, "^.*\\.md$"))
