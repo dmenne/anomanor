@@ -37,11 +37,11 @@ test_that("File without subsampling is not interpolated", {
 
   checkmate::expect_file_exists(mk$png_hrm_file)
   png_size = dim(png::readPNG(mk$png_hrm_file))
-  expect_equal(png_size, c(g$image_height, 1639, 3))
+  expect_equal(png_size[1:2], c(g$image_height, 1639))
 
   checkmate::expect_file_exists(mk$png_line_file)
   png_size = dim(png::readPNG(mk$png_line_file))
-  expect_equal(png_size, c(g$image_height, 1639, 3))
+  expect_equal(png_size[1:2], c(g$image_height, 1639))
 
   # Cleanup
   unlink(mk$png_file)
