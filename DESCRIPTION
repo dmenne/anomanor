@@ -1,5 +1,5 @@
 Package: anomanor
-Title: EUGIM Anorectal Manometry Inter-Rater Agreement
+Title: Anorectal Manometry Inter-Rater Agreement
 Version: 0.9.0
 Author: Dieter Menne
 Authors@R: c(
@@ -8,11 +8,13 @@ Authors@R: c(
     person("Menne Biomed Consulting Tuebingen", role = c("cph")),
     person("International Working Group for Disorders of Gastrointestinal Motility and Function", 
            email="hrmconsensus.org",  role = c("fnd", "dtc")),
+    person("EUGIM European Gastrointestinal Motility", email = "info@EUGIM-Hub.eu",
+            role = c("fnd", "dtc") )
     person("Mark", "Fox", role = c("fnd", "ctb")),
     person("Isabella", "Bielicki", role = c("ctb"))
     )
 Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
-Description: This app provides online training for physicians and other practitioners 
+Description: Provides online training for physicians and other practitioners 
   using high-resolution anorectal manometry and the London Classification for 
   disorders of anorectal function. It provides the opportunity to compare 
   performance against a reference standard set by the lead authors of this 
@@ -77,5 +79,6 @@ Remotes: JohnCoene/tippy
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Language: en-US
+SystemRequirements: pandoc
 LinkingTo: 
     Rcpp
