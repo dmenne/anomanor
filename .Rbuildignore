@@ -8,8 +8,6 @@ LICENSE\.md$
 ^README\.Rmd$
 ^keycloak$
 ^anomanortheme$
-^tests/testthat/_snaps$
-^_snaps$
 ^.*\.sh$
 ^Dockerfile_.*$
 ^\.dockerignore$

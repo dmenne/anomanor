@@ -1,4 +1,4 @@
-# ---- plot_time ------------------------
+# ---- plot_time (horizontal section) ------------------------
 plot_time = function(xy, max_p) {
   # Degenerate case
   xy_sensor = xy[xy$where == "sensor",]
@@ -39,7 +39,7 @@ plot_time = function(xy, max_p) {
   section_data(xy, peak - baseline)
 }
 
-# ---- plot_position ------------------------
+# ---- plot_position (vertical section) ------------------------
 plot_position = function(xy, max_p) {
   stopifnot(is.list(g)) # requires globals
   xy_sensor = xy[xy$where == "sensor",]
