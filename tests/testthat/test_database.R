@@ -218,7 +218,7 @@ test_that("Invalid classification_from_database requests return NULL", {
   expect_null(ret)
   ret = classification_from_database("x_bertha", "test1", 'l', "all", 0.17)
   expect_null(ret)
-  ret = classification_from_database("x_bertha", NULL, 'l', "all", 0.17)
+  ret = classification_from_database("x_bertha", NULL, 'l', "tone", 0.17)
   expect_null(ret)
   ret = classification_from_database("x_bertha", "test1", 'x', "tone", 0.17)
   expect_null(ret)
