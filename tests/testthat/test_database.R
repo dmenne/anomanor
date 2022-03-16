@@ -213,6 +213,18 @@ test_that("classification_from_database returns list", {
   expect_equal(names(ret), nams)
 })
 
+test_that("Invalid classification_from_database requests return NULL", {
+  ret = classification_from_database("x_bertha", "test1", 'l', "blub", 0.17)
+  expect_null(ret)
+  ret = classification_from_database("x_bertha", "test1", 'l', "all", 0.17)
+  expect_null(ret)
+  ret = classification_from_database("x_bertha", NULL, 'l', "all", 0.17)
+  expect_null(ret)
+  ret = classification_from_database("x_bertha", "test1", 'x', "tone", 0.17)
+  expect_null(ret)
+  ret = classification_from_database("xxxxx", "test1", 'l', "tone", 0.17)
+  expect_null(ret)
+})
 
 test_that("markers_for_record returns data", {
   ret = markers_for_record("test1")

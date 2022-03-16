@@ -1,10 +1,12 @@
-classification_from_database = function(user, record, method, classification_phase,
-                                        time_step) {
-  if (classification_phase == 'all')
+classification_from_database = function(user, record, method,
+                                        classification_phase, time_step) {
+  if (classification_phase == 'all' ||
+      !(classification_phase %in% g$classification_phase_choices))
     return(NULL) # Shortcut, there are no "all" classifications
   if (is.null(record) || is.null(classification_phase))
     return(NULL)
-  stopifnot(method %in% c('h', 'l'))
+  if (!(method %in% c('h', 'l')))
+    return(NULL)
   record = str_replace(record, ".txt", "")
   q = glue_sql(
     "SELECT classification, finalized, comment, t1, t2, pos1, pos2 ",
@@ -14,7 +16,8 @@ classification_from_database = function(user, record, method, classification_pha
     "and record = {record}",
     .con = g$pool)
   sec = dbGetQuery(g$pool, q)
-  if (nrow(sec) == 0) return(NULL)
+  if (nrow(sec) == 0)
+    return(NULL)
   sec = sec[1,]
   if (!anyNA(c(sec$t1, sec$t2, sec$pos1, sec$pos2))) {
     # x1, x2 must be corrected by dynamic start_time
