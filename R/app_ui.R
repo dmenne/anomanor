@@ -14,14 +14,10 @@ app_ui = function(request) {
       tags$style(HTML(paste0(
         "body{overflow-y: auto;}",
         "#canvas1{margin-left:", g$hrm_legend_width, "px}",
-        "#canvas2{margin-left:", g$line_legend_width, "px}"))),
+        "#canvas2{margin-left:", g$line_legend_width, "px}")),
+      ),
       tags$head(
-        golem::favicon(),
-        golem::bundle_resources(
-          path = app_sys('app/www'),
-          app_title = paste('Anal Manometry Consensus',
-                            utils::packageVersion("anomanor"))
-        ),
+        tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css")
       ),
       extendShinyjs("www/lines.js",
         functions = c("image_clicked", "mouse_move", "canvas_resize", "clear_all",

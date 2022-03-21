@@ -549,6 +549,7 @@ app_server = function(input, output, session) {
 #  })
 
   output$patient_text = renderUI({
+    req(record())
     pat = str_replace(record(), ".txt", "")
     patient_md = glue("{g$patients_dir}/{pat}.md")
     if (!file.exists(patient_md))
