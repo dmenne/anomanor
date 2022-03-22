@@ -59,9 +59,13 @@ globals = function(){
   patients_dir = file.path(data_dir, "patients")
   md_dir = file.path(data_dir, "md")
   record_dir = file.path(data_dir, "records")
-  safe_create_dir(patients_dir)
-  safe_create_dir(md_dir)
-  safe_create_dir(record_dir)
+
+
+  # When directories are empty or missing, these are created and
+  # files are first-time copied
+  n_copied_patient = copy_from_data_store(patients_dir, if_empty_only = TRUE)
+  n_copied_record = copy_from_data_store(record_dir, if_empty_only = TRUE)
+  n_copied_md = copy_from_data_store(md_dir, if_empty_only = FALSE)
 
   # content and structure of cache dir will be restored if deleted
   cache_dir = file.path(anomanor_data_base, config$cache_dir)
@@ -185,6 +189,14 @@ globals = function(){
     if (!str_starts(active_config, "test"))
       log_it(gg)
   }
+  # Write log number of copied data
+  if (n_copied_patient > 0)
+    log_it(glue("Initiallly copied  {n_copied_patient} sample case description files"))
+  if (n_copied_record > 0)
+    log_it(glue("Initiallly copied  {n_copied_record} sample records (txt)"))
+  if (n_copied_md > 0)
+    log_it(glue("Initiallly copied  {n_copied_md} data records and images"))
+  rm(n_copied_md, n_copied_record, n_copied_patient)
 
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency

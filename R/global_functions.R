@@ -70,14 +70,15 @@ ano_modal = function(markdown_file){
 }
 
 safe_create_dir = function(dir){
-  # return NULL if exists, otherwise result of dir.create
-  if (dir.exists(dir)) return(NULL)
-  try(dir.create(dir, recursive = TRUE))
+  # return FALSE if exists and thus not create, otherwise TRUE
+  if (dir.exists(dir)) return(FALSE)
+  ret = try(dir.create(dir, recursive = TRUE))
   if (!dir.exists(dir)) {
     log_stop(glue("Could not create {dir}} \n"))
   } else {
     log_it(glue("Created {file_path_as_absolute(dir)}\n"), force_console = FALSE)
   }
+  return(TRUE)
 }
 
 save_file_rename = function(from, to){

@@ -7,7 +7,7 @@
 # The following line can be commented out when there is no Windows-LF risk
 # Use it whenever you see a <^M> turn up in error message
 #dos2unix ./inst/Renviron_devel
-export R_CONFIG_ACTIVE=sa_admin
+export R_CONFIG_ACTIVE=sa_admin # or sa_expert, sa_trainee
 set -o allexport;
 source ./inst/Renviron_devel
 set +o allexport

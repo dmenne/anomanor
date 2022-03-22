@@ -41,7 +41,6 @@ docker rm copydata
 docker rm -f anomanor
 #docker rmi -f anomanor
 docker build  --tag anomanor -f Dockerfile_anomanor \
-  --build-arg R_CONFIG_ACTIVE\
   --build-arg ANOMANOR_DATA \
   --build-arg ANOMANOR_ADMIN_USERNAME\
   --build-arg ANOMANOR_ADMIN_PASSWORD \

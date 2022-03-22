@@ -1,4 +1,5 @@
 # See valid values for R_CONFIG in config.yml
+# This file should have UNIX Line Ends
 # "sa_trainee", "sa_admin", "sa_expert", "test",
 # "test_expert", "keycloak_devel", "keycloak_production"
 # Restart R to activate after changes
