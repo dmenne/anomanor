@@ -89,11 +89,6 @@ RUN rm -rf /build_zone
 COPY  ./inst/config.yml /usr/local/lib/R/site-library/anomanor/
 COPY  ./inst/Renviron_production /usr/local/lib/R/site-library/anomanor/
 COPY  ./inst/Renviron_devel /usr/local/lib/R/site-library/anomanor/
-# Uncomment for test installations to copy all data
-# See also the files to copy to a volume in run_all.sh
-# COPY  ./inst/data_store/ ${ANOMANOR_DATA}/data/
-COPY  ./inst/data_store/md ${ANOMANOR_DATA}/data/md
-# Do not copy database!
 
 
 HEALTHCHECK --start-period=20s --interval=1m --timeout=5s \

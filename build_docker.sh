@@ -27,13 +27,6 @@ docker build --tag dmenne/anomanor -f Dockerfile_anomanor \
   --build-arg DOCKER_ANOMANOR_STANDALONE \
   .
 
-# https://github.com/moby/moby/issues/25245#issuecomment-365970076
-docker container create --name copydata -v anomanor_data_data:/root hello-world
-docker cp ./inst/data_store/records copydata:/root/records
-docker cp ./inst/data_store/patients copydata:/root/patients
-docker cp ./inst/data_store/md copydata:/root/md
-docker rm copydata
-
 docker run -d -it  \
   --name anomanor \
   --restart unless-stopped \

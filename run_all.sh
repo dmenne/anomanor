@@ -29,18 +29,10 @@ docker-compose down
 docker system prune -f
 #docker network rm anomanor-net
 
-# https://github.com/moby/moby/issues/25245
-# These 3 lines can be removed when nothing has changed in /data_store
-docker container create --name copydata -v anomanor_data:/root hello-world
-# Next line copies test data. Comment it to avoid this for production
-# docker cp ./inst/data_store/. copydata:/root
-# md-data are always copied
-docker cp ./inst/data_store/md copydata:/root/md
-docker rm copydata
-
 docker rm -f anomanor
 #docker rmi -f anomanor
 docker build  --tag anomanor -f Dockerfile_anomanor \
+  --build-arg R_CONFIG_ACTIVE \
   --build-arg ANOMANOR_DATA \
   --build-arg ANOMANOR_ADMIN_USERNAME\
   --build-arg ANOMANOR_ADMIN_PASSWORD \
