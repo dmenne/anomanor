@@ -1,6 +1,6 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 0.9.2
+Version: 0.9.3
 Author: Dieter Menne
 Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",

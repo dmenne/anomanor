@@ -4,6 +4,7 @@
 ^scripts$
 ^.github$
 ^.letsencrypt$
+^doc$
 LICENSE\.md$
 ^README\.Rmd$
 ^keycloak$

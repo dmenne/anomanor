@@ -1,10 +1,4 @@
-#' anomanor main user interface
-#'
-#' @param request Internal parameter for `{shiny}`.
-#' @noRd
-#'
-
-app_ui = function(request) {
+app_ui = function() {
   addResourcePath('www', app_sys('app/www'))
   tagList(
     shinyjs::useShinyjs(),

@@ -36,6 +36,7 @@ mod_admin_ui = function(id, ...) {
         id = ns("record_summary_panel"),
         "Records",
         shinyWidgets::actionBttn(ns("refresh_record_summary"), "Refresh"),
+        helpText(HTML("For records without classification, the anonymized names (anon) are not displayed. If you must find the association, e.g. to correct a record, use the dropdown near the <b>Delete</b> button on the Manage-tab.")),
         DT::DTOutput(ns("record_summary_table"), width = "300px")
       ),
       # tabPanel User
@@ -112,8 +113,8 @@ mod_admin_ui = function(id, ...) {
                 shinyWidgets::actionBttn(ns("delete_record"), "Delete",
                                        color = "danger")
               ),
-            helpText(HTML("Select record for deletion. This will also delete associated classifications, so be sure to request a database backup before deleting files.<br><b>Do not delete a record</b> when you have made changes and want to keep old classifications. Instead, upload the changed file, and confirm when asked to overwrite the existing version.")),
-              width = col_width, height = 100
+            helpText(HTML("Select record for deletion. This will also delete associated classifications, so be sure to request a database backup before deleting files. In the dropdown box, the anonymized record names are shown in brackets.<br>You can use the dropdown without deleting the record to determine the association between file name and anonymized name.<br><b>Do not delete a record</b> when you have made changes and want to keep old classifications. Instead, upload the changed file, and confirm when asked to overwrite the existing version.")),
+              width = col_width, height = 150
             ),
             hr(),
             fillRow(
