@@ -5,10 +5,10 @@
 #'
 
 app_ui = function(request) {
-  addResourcePath('www', app_sys('app/www'))
   tagList(
     shinyjs::useShinyjs(),
     fluidPage(
+      title = glue("Anal manometry {packageVersion('anomanor')}"),
       keys::useKeys(),
       keys::keysInput("keys", g$hotkeys),
       tags$style(HTML(paste0(
@@ -17,7 +17,12 @@ app_ui = function(request) {
         "#canvas2{margin-left:", g$line_legend_width, "px}")),
       ),
       tags$head(
-        tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css")
+        tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css"),
+        HTML('
+          <link rel="apple-touch-icon" sizes="180x180" href="www/apple-touch-icon.png">
+          <link rel="icon" type="image/ico" sizes="32x32" href=""www/favicon.ico">
+          <link rel="icon" type="image/png" sizes="32x32" href=""www/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href=""www/favicon-16x16.png">')
       ),
       extendShinyjs("www/lines.js",
         functions = c("image_clicked", "mouse_move", "canvas_resize", "clear_all",

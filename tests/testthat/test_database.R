@@ -40,6 +40,13 @@ test_that("classification_record_summary with valid name returns nfinalized ", {
       record_from_anon(ret$anon[1], 'h')$record[1], 'h'), ret$anon[1])
 })
 
+test_that("classification_record_all returns tibble", {
+  ret = classification_record_all()
+  expect_s3_class(ret, "tbl_df")
+  expect_equal(names(ret), c("record", "method", "anon", "n"))
+  expect_setequal(ret$anon, c('bhhv', "nse9", "ymrt", "fdvt"))
+})
+
 test_that("Without keycloak, keycloak_users returns values from database",{
   ret = keycloak_users()$user
   checkmate::expect_character(g$test_users)

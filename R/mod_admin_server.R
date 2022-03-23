@@ -35,6 +35,15 @@ mod_admin_server = function(id, app_user) {
        shinyjs::toggleState("invite_user", iv_email$is_valid())
      })
 
+     # -------------- record summary table ----------------
+     output$record_summary_table = DT::renderDT({
+       input$refresh_record_summary
+       classification_record_all()
+      },
+      rownames = FALSE,
+      options = list(paging = FALSE,searching = FALSE),
+     )
+
      # -------------- Classification tables HRM ----------------
      output$classification_table_h = renderUI({
        input$refresh_statistics_h

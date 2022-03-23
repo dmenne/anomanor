@@ -31,6 +31,13 @@ mod_admin_ui = function(id, ...) {
         # wellPanel
         DT::DTOutput(ns("users_table"))
       ),
+      # tabPanel record summary
+      tabPanel(
+        id = ns("record_summary_panel"),
+        "Records",
+        shinyWidgets::actionBttn(ns("refresh_record_summary"), "Refresh"),
+        DT::DTOutput(ns("record_summary_table"), width = "300px")
+      ),
       # tabPanel User
       tabPanel(
         id = ns("classification_panel_h"),
