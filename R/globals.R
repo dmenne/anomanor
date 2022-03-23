@@ -14,7 +14,12 @@ globals = function(){
 
   # Default configuration must set globally
   # By default, user is sa_admin
-  active_config = Sys.getenv("R_CONFIG_ACTIVE", "sa_admin")
+  active_config = Sys.getenv("R_CONFIG_ACTIVE")
+  # Do not use the default in Sys.getenv here, problem later
+  if (active_config == '') {
+    Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
+    active_config = Sys.getenv("R_CONFIG_ACTIVE")
+  }
 
   # See valid values in config.yml
   valid_config = c("sa_trainee", "sa_admin", "sa_expert", "test",

@@ -5,6 +5,7 @@
 #'
 
 app_ui = function(request) {
+  addResourcePath('www', app_sys('app/www'))
   tagList(
     shinyjs::useShinyjs(),
     fluidPage(

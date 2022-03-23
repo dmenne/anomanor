@@ -41,7 +41,7 @@ test_that("classification_record_summary with valid name returns nfinalized ", {
 })
 
 test_that("classification_record_all returns tibble", {
-  ret = classification_record_all()
+  ret = v()
   expect_s3_class(ret, "tbl_df")
   expect_equal(names(ret), c("record", "method", "anon", "n_ratings"))
   expect_setequal(ret$anon, c('bhhv', "nse9", "ymrt", "fdvt"))
