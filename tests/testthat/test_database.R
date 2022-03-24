@@ -244,6 +244,22 @@ test_that("markers_for_record returns data", {
 })
 
 
+test_that("invalid parameters in classification_to_database return NULL", {
+  # All valid cases are implicitly tested a few thousands of times
+  # "all" as classification_phase
+  ret = classification_to_database("sa_admin", "any", "l", TRUE,
+                                   "begin", 3, "all", NULL, "")
+  expect_null(ret)
+  # record is NULL
+  ret = classification_to_database("sa_admin", NULL, "l", TRUE,
+                                   "begin", 3, "tone", NULL, "")
+  expect_null(ret)
+  # classification_phase is NULL
+  ret = classification_to_database("sa_admin", "any", "l", TRUE,
+                                   "begin", 3, NULL, NULL, "")
+  expect_null(ret)
+})
+
 # Deletes, must be last
 test_that("consensus_classification_from_database w/o consensus data returns NULL", {
   dbExecute(g$pool, "DELETE from classification where user = 'x_consensus'")

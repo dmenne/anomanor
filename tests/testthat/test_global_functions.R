@@ -17,3 +17,11 @@ test_that("get_app_user returns valid user", {
   expect_equal(get_app_groups(), "trainees")
 })
 
+test_that("ano_button is valid HTML", {
+  ret = as.character(ano_bttn("test_button", "save", "primary"))
+  expect_match(ret, "Test_button")
+  expect_match(ret, 'id="test_button"')
+  expect_match(ret, 'bttn-primary')
+})
+
+

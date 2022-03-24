@@ -13,6 +13,34 @@ test_that("Can show user table", {
                 c("user", "email", "name", "verified", "group",
                   "method", "saved", "finalized"))
   })
+})
 
+test_that("Can show record summary table", {
+  shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
+    session$setInputs(refresh_statistics = 2)
+    dt = record_summary_table()
+    expect_s3_class(dt, "tbl")
+    expect_equal(names(dt), c("record", "method", "anon", "n_ratings"))
+    expect_equal(nrow(dt), 4)
+    expect_equal(unique(dt$record), c("test1", "test2"))
+  })
+})
+
+test_that("Can show HRM summary table", {
+  shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
+    session$setInputs(refresh_statistics_h = 2)
+    dt = classification_table_h()
+    expect_type(dt, "list")
+    expect_equal(names(dt), c("rair", "tone", "coord"))
+  })
+})
+
+  test_that("Can show conventional summary table", {
+    shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
+      session$setInputs(refresh_statistics_l = 2)
+      dt = classification_table_l()
+      expect_type(dt, "list")
+      expect_equal(names(dt), c("rair", "tone", "coord"))
+    })
 })
 

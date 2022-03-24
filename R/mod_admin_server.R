@@ -36,16 +36,20 @@ mod_admin_server = function(id, app_user) {
      })
 
      # -------------- record summary table ----------------
-     output$record_summary_table = DT::renderDT({
+     record_summary_table = reactive({
        input$refresh_record_summary
        classification_record_all()
+     })
+
+     output$record_summary_table = DT::renderDT({
+       record_summary_table()
       },
       rownames = FALSE,
       options = list(paging = FALSE,searching = FALSE),
      )
 
      # -------------- Classification tables HRM ----------------
-     output$classification_table_h = renderUI({
+     classification_table_h = reactive({
        input$refresh_statistics_h
        ret = classification_statistics_html(method = 'h')
        req(ret)
@@ -55,8 +59,12 @@ mod_admin_server = function(id, app_user) {
        })
      })
 
+     output$classification_table_h = renderUI({
+       classification_table_h()
+     })
+
      # -------------- Classification tables Line plot ----------------
-     output$classification_table_l = renderUI({
+     classification_table_l = reactive({
        input$refresh_statistics_l
        ret = classification_statistics_html(method = 'l')
        req(ret)
@@ -65,6 +73,11 @@ mod_admin_server = function(id, app_user) {
            htmltools_value(x, ft.align = "left")
        })
      })
+
+     output$classification_table_l = renderUI({
+       classification_table_l()
+     })
+
      # -------------- Invite user ----------------
      observeEvent(input$invite_user, {
        simul = if (!is.null(g$keycloak) &&
@@ -73,6 +86,7 @@ mod_admin_server = function(id, app_user) {
        else
          "<b>Simulated</b> "
        if (simul == "") {
+         # nocov start
          # Check if user is already in database
          if (!is.null(g$keycloak$get_userid_from_email(input$new_user_email))) {
            shiny::showNotification(
@@ -100,6 +114,7 @@ mod_admin_server = function(id, app_user) {
            )
            req(FALSE)
          } else {
+           # nocov end
            log_it(glue("Invited user {input$new_user_email} in group ",
                        "{input$new_user_group}"))
          }
