@@ -1,6 +1,7 @@
 #image-container {
   position: relative;
   margin-top: 10px;
+  margin-bottom:4px;
 }
 
 #image-container #canvas1, #canvas2, #mainimage {
