@@ -73,7 +73,7 @@ mod_admin_ui = function(id, ...) {
         "Database",
         h1("40 most recent log entries"),
         shinyWidgets::actionBttn(ns("refresh"), "Refresh"),
-        DT::DTOutput(ns("log_table"))
+        DT::DTOutput(ns("log_table"), width = 600)
       ),
       tabPanel(
         id = ns("management_panel"),

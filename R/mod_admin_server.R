@@ -294,27 +294,18 @@ mod_admin_server = function(id, app_user) {
      log_stat = reactive({
        input$refresh
        stat = dbGetQuery(g$pool,
-          "SELECT time, severity, message from ano_logs order by time desc limit 40")
+          "SELECT time, message from ano_logs order by time desc limit 40")
      })
-
-     logtable_options = list(
-       paging = FALSE,
-       searching = TRUE,
-       columnDefs = list(
-         list(width = 80, targets = 0),
-         list(width = 30, targets = 1),
-         list(width = 50, targets = 2)
-       )
-     )
 
      output$log_table = DT::renderDT({
        DT::datatable(log_stat(),
-       rownames = FALSE,
-       filter = "top",
-       options = logtable_options) %>%
-       DT::formatStyle(
-         'severity',
-         color = DT::styleEqual(c('error', 'info'), c("red", "")))
+         class = c("compact","stripe", "hover"),
+         rownames = FALSE,
+         filter = "top",
+         options = list(paging = FALSE,
+                        columnDefs = list(
+                          list(width = 130, targets = 0)),
+                        searching = TRUE))
      })
 
     output$download_database = downloadHandler(
