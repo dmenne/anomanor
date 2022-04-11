@@ -36,7 +36,6 @@ mod_admin_ui = function(id, ...) {
         id = ns("record_summary_panel"),
         "Records",
         shinyWidgets::actionBttn(ns("refresh_record_summary"), "Refresh"),
-        helpText(HTML("For records without classification, the anonymized names (anon) are not displayed. If you must find the association, e.g. to correct a record, use the dropdown near the <b>Delete</b> button on the Manage-tab.")),
         DT::DTOutput(ns("record_summary_table"), width = "300px")
       ),
       # tabPanel User
