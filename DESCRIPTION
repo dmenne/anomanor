@@ -1,6 +1,6 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 0.9.4
+Version: 0.9.5
 Author: Dieter Menne
 Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",
@@ -72,7 +72,6 @@ Suggests:
     testthat (>= 3.0.0),
     covr
 Encoding: UTF-8
-RoxygenNote: 7.1.2.9000
 URL: https://github.com/dmenne/anomanor
 BugReports: https://github.com/dmenne/anomanor/issues
 Remotes: JohnCoene/tippy
@@ -82,3 +81,4 @@ Language: en-US
 SystemRequirements: pandoc
 LinkingTo: 
     Rcpp
+RoxygenNote: 7.1.2
