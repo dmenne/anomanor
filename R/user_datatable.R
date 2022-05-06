@@ -14,12 +14,5 @@ user_datatable = function(stat) {
     options = ano_options
   ) %>%
   DT::formatStyle('verified',
-    color = DT::styleEqual(c(FALSE, TRUE), c("red", ""))) %>%
-  DT::formatStyle(
-      'finalized',
-      background = DT::styleColorBar(range(stat$finalized), 'lightblue'),
-      backgroundSize = '98% 88%',
-      backgroundRepeat = 'no-repeat',
-      backgroundPosition = 'center'
-    )
+    color = DT::styleEqual(c(FALSE, TRUE), c("red", "")))
 }

@@ -10,7 +10,8 @@ utils::globalVariables("g")
 globals = function(){
 #  options(warn = 2)
 #  options(shiny.error = browser)
-
+  # https://github.com/rstudio/shiny/issues/3626
+  options(shiny.useragg = TRUE)
 
   # Default configuration must set globally
   # By default, user is sa_admin
