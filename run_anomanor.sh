@@ -25,7 +25,7 @@ echo "Active configuration: $R_CONFIG_ACTIVE DOCKER_ANOMANOR_STANDALONE=$DOCKER_
 docker rm -f anomanor
 # To force rebuild
 #docker rmi -f anomanor
-docker system prune -f
+#docker system prune -f
 docker build --tag anomanor -f Dockerfile_anomanor \
   --build-arg R_CONFIG_ACTIVE \
   --build-arg ANOMANOR_DATA \

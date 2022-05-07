@@ -6,7 +6,7 @@ Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",
            role = c("aut", "cre")),
     person("Menne Biomed Consulting Tuebingen", role = c("cph")),
-    person("International Working Group for Disorders of Gastrointestinal Motility and Function", 
+    person("International Working Group for Disorders of Gastrointestinal Motility and Function",
            email="hrmconsensus.org",  role = c("fnd", "dtc")),
     person("EUGIM European Gastrointestinal Motility", email = "info@EUGIM-Hub.eu",
             role = c("fnd", "dtc")),
@@ -14,16 +14,16 @@ Authors@R: c(
     person("Isabella", "Bielicki", role = c("ctb"))
     )
 Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
-Description: Provides online training for physicians and other practitioners 
-  using high-resolution anorectal manometry and the London Classification for 
-  disorders of anorectal function. It provides the opportunity to compare 
-  performance against a reference standard set by the lead authors of this 
-  classification system. Data acquired during this training will be used to 
+Description: Provides online training for physicians and other practitioners
+  using high-resolution anorectal manometry and the London Classification for
+  disorders of anorectal function. It provides the opportunity to compare
+  performance against a reference standard set by the lead authors of this
+  classification system. Data acquired during this training will be used to
   assess inter-observer agreement between practitioners.
 License: MIT + file LICENSE
-Depends: 
+Depends:
     R (>= 4.0.0)
-Imports: 
+Imports:
     colorspace,
     config (>= 0.3.1),
     corrplot,
@@ -43,8 +43,8 @@ Imports:
     purrr,
     rlang,
     keys,
-    ragg,
     RSQLite,
+    ragg,
     readr,
     rpart,
     rmarkdown,
@@ -80,6 +80,6 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Language: en-US
 SystemRequirements: pandoc
-LinkingTo: 
+LinkingTo:
     Rcpp
 RoxygenNote: 7.1.2

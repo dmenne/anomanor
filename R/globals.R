@@ -212,4 +212,3 @@ globals = function(){
   checked_patients = check_patient_records()
   mget(ls())
 }
-
