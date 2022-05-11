@@ -27,6 +27,12 @@ docker build --tag dmenne/anomanor -f Dockerfile_anomanor \
   --build-arg DOCKER_ANOMANOR_STANDALONE \
   .
 
+# When run under Windows/wsl2, volumes can be found here:
+# \\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes
+# Example:
+# ls '\\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes\anomanor_data_db\_data\anomanor.sqlite'
+# From Windows: Enter \\wsl$ into Explorer
+
 docker run -d -it  \
   --name anomanor \
   --restart unless-stopped \
