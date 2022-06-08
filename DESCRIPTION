@@ -44,7 +44,6 @@ Imports:
     rlang,
     keys,
     RSQLite,
-    ragg,
     readr,
     rpart,
     rmarkdown,
@@ -82,4 +81,4 @@ Language: en-US
 SystemRequirements: pandoc
 LinkingTo:
     Rcpp
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
