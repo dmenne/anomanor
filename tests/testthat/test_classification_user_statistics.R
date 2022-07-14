@@ -15,6 +15,7 @@ test_that("classification_user_statistics returns valid data",{
 
 
 test_that("classification_statistic returns valid data", {
+  # Requires davidgohel/flextable 7.2 with 4.2.0
   ret = classification_statistics_html(method = 'h')
   expect_equal(names(ret), c("rair", "tone", "coord"))
   expect_true(all(map_chr(ret, function(x) class(x) ) == "flextable"))

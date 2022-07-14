@@ -6,6 +6,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   records_file = if (str_detect(file, "[/\\\\]")) file else
     file.path(g$record_dir, file)
   base_file = basename(records_file)
+  # Record is used in glue below
   record = file_path_sans_ext(base_file)
   if (!file.exists(records_file)) {
     # assume orphaned file

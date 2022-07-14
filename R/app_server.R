@@ -75,7 +75,9 @@ app_server = function(input, output, session) {
   classification_phase = reactive({dm$classification_phase()})
 
   # ----------- record --------------------------------
-  record = reactive({dm$record()})
+  record = reactive({
+    dm$record()
+  })
 
   # ----------- markers --------------------------------
   markers = reactive({dm$markers()})
@@ -125,9 +127,9 @@ app_server = function(input, output, session) {
       mk[mk$index == as.integer(protocol_phase_start()), "annotation"]
     classification_to_database(app_user, record, classification_method(),
                                finalized, protocol_phase,
-                               classification, classification_phase, rvalues$section_pars, comment)
+                               classification, classification_phase,
+                               rvalues$section_pars, comment)
     toggle_button_state(FALSE)
-    # TODO
     update_classification_phase_icons(FALSE) # Keep previous settings
     update_record_icons()
   }
@@ -543,11 +545,6 @@ app_server = function(input, output, session) {
   # ----------- Help-related functions --------------------
 
   # ----------- Patient text --------------------
-#  observe({
-#    is_all = classification_phase() == 'all'
-#    toggleElement("patient_text", condition = is_all)
-#  })
-
   output$patient_text = renderUI({
     req(record())
     pat = str_replace(record(), ".txt", "")
