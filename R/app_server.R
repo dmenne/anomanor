@@ -347,8 +347,6 @@ app_server = function(input, output, session) {
       plot_position(xy, input$max_p)
     }
   }) %>%
-#    bindCache(input$section, input$max_p, start_time(),
-#              data(), rvalues$section_pars, cache = "session") %>%
     bindEvent(input$section,
               input$max_p,
               input$time_zoom,
