@@ -83,7 +83,7 @@ alpha_text = function(alpha, classification_phase_sel){
   alpha_ret
 }
 
-classification_statistics_html = function(method){
+classification_statistics_html = function(method) {
   cs_w = classification_statistics_wide(method = method)
   alpha = krippendorff_alpha(method = method)
 
@@ -96,14 +96,15 @@ classification_statistics_html = function(method){
       })
     }
   }
+
   map2(cs_w, names(cs_w), function(cs1, phase){
     if (nrow(cs1) == 0) return(NULL)
-    cn = str_split_fixed(colnames(cs1),"_",2)
-    rle_cn = rle(cn[,1])
+    cn = str_split_fixed(colnames(cs1), "_", 2)
+    rle_cn = rle(cn[, 1])
     phase_text =
       names(g$classification_phase_choices)[g$classification_phase_choices == phase]
     ccc = cs1 %>%
-      flextable()   %>%
+      flextable() %>%
       set_header_labels(values = setNames(cn[,2], colnames(cs1)))   %>%
       add_header_row(values = rle_cn$values, colwidths = rle_cn$lengths) %>%
       set_table_properties(layout = "autofit") %>%
@@ -112,19 +113,16 @@ classification_statistics_html = function(method){
       add_footer(record = HTML(glue("Krippendorff's \u3B1 ",
                        "{alpha_text(alpha, phase)}. ",
           "Background colors code for relative frequency in user group"))) %>%
-      merge_at(j = 1:ncol(cs1), part = "footer") %>%
-      bg(
-        bg = bg_f("sum_trainees", cs1),
-        j = which(cn[,2] == "trainees")
+      merge_at(j = 1:ncol(cs1), part = "footer")
+    ccc = ccc %>%
+     flextable::bg(
+       bg = bg_f("sum_trainees", cs1),
+       j =  which(cn[, 2] == "trainees")
       )
     ccc = ccc %>%
-      bg(
+      flextable::bg(
         bg = bg_f("sum_experts", cs1),
-        j = which(cn[,2] == "experts")
+        j = which(cn[, 2] == "experts")
       )
-    #%>%
-    #  bg(bg = "#FFFFFF", i = 2, part = "header") %>%
-    #  bg(bg = "#E7F2FF", i = 1, part = "header") %>%
-    #  vline(j = cumsum(rle_cn$lengths))
   })
 }
