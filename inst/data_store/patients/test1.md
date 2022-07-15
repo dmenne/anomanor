@@ -1,1 +1,0 @@
-**Female**, 40+, rectal hypersensitivity, balloon expulsion not successful
