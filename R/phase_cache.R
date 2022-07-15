@@ -24,8 +24,7 @@ phase_cache = function(file, method, max_p, active_begin, phase_label,
 
   start_time = record_start_time(active_begin, active_width, window_width, image_width)
   screen_left_width = max((active_begin - start_time), 0)
-  screen_right_width =
-    (window_width - screen_left_width - active_width)
+  screen_right_width = max(window_width - screen_left_width - active_width, 0)
 
   screen_left = image_blank(screen_left_width, window_height, color = "lightgray")
   screen_right = image_blank(screen_right_width, window_height, color = "lightgray")
