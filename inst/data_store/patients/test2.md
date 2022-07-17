@@ -1,0 +1,1 @@
+**Male**, 70+, constipation, balloon expulsion successful
