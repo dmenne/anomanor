@@ -24,14 +24,14 @@ check_valid_record = function(file, source_file = NULL) {
     return(pm[1])
 
   required_markers =  g$mcp %>%
-    filter(.data$mtype == "r") %>%
-    dplyr::pull(.data$marker)
+    filter(mtype == "r") %>%
+    dplyr::pull(marker)
   optional_markers =  g$mcp %>%
-    filter(.data$mtype == "o") %>%
-    dplyr::pull(.data$marker)
+    filter(mtype == "o") %>%
+    dplyr::pull(marker)
   default_markers =  g$mcp %>%
-    filter(.data$mtype != "o") %>%
-    dplyr::pull(.data$marker)
+    filter(mtype != "o") %>%
+    dplyr::pull(marker)
 
   markers = pm$markers$annotation
   missing = setdiff(required_markers, markers)

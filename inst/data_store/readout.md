@@ -2,11 +2,11 @@
 title: Classification Help
 ---
 
-![](readout_help_link.png){style="float:right"}This window is shown at startup when you have classified less than 10 items. To close it, press *Esc* or click anywhere outside of it. To view it at a later time, click on _? Help_. 
+![](readout_help_link.png){style="float:right"}This window appease at startup if you have less than 10 items classified. To close it, press *Esc* or click anywhere outside of it. To view it later, click on _? Help_. 
 
 ---
 
- ![](readout_record_combo.png){style="float:right"}You can select records and phases in arbitrary sequence for classification from the dropdown boxes. Classifications can be temporarily *saved* for later modification, or *finalized* for submission. 
+ ![](readout_record_combo.png){style="float:right"}You can select records and phases for classification ano order from the drop-down boxes. Classifications can be *saved* temporarily for later modification, or *finalized* for submission. 
 
 ---
 
@@ -16,7 +16,7 @@ Cross-section parameters will be used for the refinement of classification crite
 
 ![](readout_tree.png)
 
-If you did not add a cross-section, on _Save_ or _Finalize_ you will be nudged to add it to indicate the part of the record that best support your classification choice. 
+If you did not add a cross-section, on _Save_ or _Finalize_ you will be nudged to add it to indicate the part of the record that best supports your classification choice. 
 
 ![](readout_save.png)
 
@@ -42,7 +42,7 @@ You can infer the status of individual classifications from the icon:
 
 -   Hover to read out a value; the pressure and position at the cross is displayed in the field above the cross-section plot
 -   Click/drag horizontally to create a time section plot.
--   Click/drag vertically to create cross section at a fixed time
+-   Click/drag vertically to create a cross section at a fixed time
 -   Use CTRL with click/drag for unconstrained sections.
 -   Only one section per classification phase is possible. Drawing a new section erases the previous.
 -   To explicitly clear the section, double-click anywhere in the image, or press _Esc_.

@@ -472,9 +472,9 @@ app_server = function(input, output, session) {
     req(cp)
     # nodes are package-internal data
     vis_selected = nodes %>%
-      filter(.data$phase == cp)  %>%
-      filter(.data$id == node) %>%
-      filter(.data$group != 'a')  # only terminal nodes
+      filter(phase == cp)  %>%
+      filter(id == node) %>%
+      filter(group != 'a')  # only terminal nodes
     if (nrow(vis_selected) == 0) 0 else vis_selected$id[1]
   })
 
@@ -494,12 +494,12 @@ app_server = function(input, output, session) {
     cm = classification_method()
     req(cp, cm)
     ed = edges %>%
-      filter(.data$phase == cp)
+      filter(phase == cp)
     ec = expert_classification %>%
-      filter(.data$classification_phase == cp) %>%
-      filter(.data$record == str_replace(record(), '.txt', '')) %>%
-      filter(.data$method == cm) %>%
-      select(.data$classification, .data$percent, .data$expert_classification) %>%
+      filter(classification_phase == cp) %>%
+      filter(record == str_replace(record(), '.txt', '')) %>%
+      filter(method == cm) %>%
+      select(classification, percent, expert_classification) %>%
       left_join(ed, by = c("classification" = "to"))
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100
@@ -507,12 +507,12 @@ app_server = function(input, output, session) {
       mutate(
         label = glue("{label}\n{percent}%" ),
         color = case_when(
-          .data$expert_classification ~ "green",
-          .data$percent == max_percent ~ "orange",
+          expert_classification ~ "green",
+          percent == max_percent ~ "orange",
           TRUE ~ "darkgray"),
-        width = .data$percent/12 + 1,
+        width = percent/12 + 1,
       ) %>%
-      select(.data$id, .data$label, .data$color, .data$width)
+      select(id, label, color, width)
     req(nrow(ec) > 0)
     # Setting selection here does not work!
     # There is no event "update_finalized"

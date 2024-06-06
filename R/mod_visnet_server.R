@@ -19,9 +19,9 @@ moduleServer(
 
     vis_def = reactive({
       nodes = vis_nodes %>%
-        dplyr::filter(.data$phase == classification_phase())
+        dplyr::filter(phase == classification_phase())
       edges = vis_edges %>%
-        dplyr::filter(.data$phase == classification_phase())
+        dplyr::filter(phase == classification_phase())
       visNetwork(nodes, edges) %>%
         visInteraction(
           dragNodes = FALSE,

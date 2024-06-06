@@ -6,7 +6,7 @@ expert_classification_from_database = function() {
   n_experts = dbGetQuery(g$pool, "SELECT count(*) as n from user
     where [group] =='experts' and user != 'x_consensus'")$n
   n_experts_ratings = expert_classification %>%
-    group_by(.data$classification_phase) %>%
+    group_by(classification_phase) %>%
     summarize(n = sum(n))
   # Join with consensus
   consensus_classification = consensus_classification_from_database()
@@ -14,10 +14,10 @@ expert_classification_from_database = function() {
     expert_classification = expert_classification %>%
       left_join(consensus_classification, by = c("record", "classification_phase")) %>%
       mutate(
-        expert_classification = .data$classification.x == .data$classification.y,
+        expert_classification = classification.x == classification.y,
         classification.y = NULL
       ) %>%
-    rename(classification = .data$classification.x)
+    rename(classification = classification.x)
   } else {
     expert_classification$expert_classification = FALSE
   }
