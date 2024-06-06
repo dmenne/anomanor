@@ -1,4 +1,4 @@
-FROM openanalytics/shinyproxy:2.6.0
+FROM openanalytics/shinyproxy:3.1.0
 
 ENV KEYCLOAK_IP=$KEYCLOAK_IP
 ENV ANOMANOR_DATA=$ANOMANOR_DATA

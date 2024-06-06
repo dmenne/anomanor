@@ -15,7 +15,6 @@ LaTeX: pdfLaTeX
 StripTrailingWhitespace: Yes
 
 BuildType: Package
-PackageCleanBeforeInstall: Yes
 PackageInstallArgs: --with-keep.source
 PackageCheckArgs: --no-manual
 PackageRoxygenize: rd,collate,namespace

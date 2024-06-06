@@ -1,6 +1,8 @@
-version: '3.8'
 services:
   # Keycloak Standalone for local testing
+  # docker compose -f docker-compose_keycloak.yml up --force-recreate --remove-orphans
+  # Redirect port 8080 to ssh (e.g. 8081)
+  # http://localhost:8081/admin
   keycloak:
     build:
       context: .
@@ -8,19 +10,19 @@ services:
     container_name: keycloak
     restart: unless-stopped
     ports:
-      - 8010:8080
+      - 8080:8080
     volumes:
       - anomanor_keycloak:/opt/jboss/keycloak/standalone/data
     environment:
       - KEYCLOAK_LOGLEVEL=ERROR
-      - ROOT_LOGLEVEL=ERROR
-      - PROXY_ADDRESS_FORWARDING=true
+      - KC_PROXY_HEADERS=forwarded # KC_PROXY is deprecated
       - TZ=Europe/Berlin
-    # https://stackoverflow.com/a/61071811
-      - KEYCLOAK_USER=${MASTER_ADMIN_USERNAME:-admin}
-      - KEYCLOAK_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
-
+      # Print environment variable:
+      # docker inspect <container>
+      # https://stackoverflow.com/a/61071811
+      - KEYCLOAK_ADMIN=${MASTER_ADMIN_USERNAME:-admin}
+      - KEYCLOAK_ADMIN_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
+    command: [ "start-dev", "--verbose" ]
 
 volumes:
   anomanor_keycloak:
-
