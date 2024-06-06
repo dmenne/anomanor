@@ -39,3 +39,44 @@
 #' @useDynLib anomanor, .registration = TRUE
 ## usethis namespace: end
 NULL
+
+utils::globalVariables(c(
+  "<<-",
+  "annotation",
+  "anon",
+  "classification",
+  "classification.x",
+  "classification.y",
+  "classification_phase",
+  "color",
+  "email",
+  "emailVerified",
+  "finalized",
+  "firstName",
+  "group",
+  "id",
+  "isdir",
+  "label",
+  "lastName",
+  "marker",
+  "method",
+  "mtime",
+  "mtime_dest",
+  "mtime_store",
+  "mtype",
+  "patient.x",
+  "patient.y",
+  "percent",
+  "phase",
+  "pos",
+  "record",
+  "rowname",
+  "rowname.x",
+  "sec",
+  "short",
+  "user",
+  "username",
+  "verified",
+  "width"
+))
+

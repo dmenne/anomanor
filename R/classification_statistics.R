@@ -9,12 +9,12 @@ classification_statistics = function(use_group = "all", method = "h" ) {
   # This code could be made more efficient by filtering on required
   # users earlier
   users_f = users %>%
-    filter(.data$group !=  "admins") %>%
-    filter(.data$verified) %>%
-    select(.data$user, .data$group)
+    filter(group !=  "admins") %>%
+    filter(verified) %>%
+    select(user, group)
   if (use_group != "all") {
     users_f = users_f %>%
-    filter(.data$group == use_group)
+    filter(group == use_group)
   }
 
   # Database
@@ -24,13 +24,13 @@ classification_statistics = function(use_group = "all", method = "h" ) {
                "and method = {method}", .con = g$pool)
   # nodes are package-internal data
   nodes_short = nodes %>%
-    filter(.data$group != "a") %>%
-    select(.data$phase, .data$id, .data$short)
+    filter(group != "a") %>%
+    select(phase, id, short)
   dbGetQuery(g$pool, q) %>%
-    select(-.data$method) %>%
+    select(-method) %>%
     left_join(users_f, by = "user") %>%
-    filter(!is.na(.data$group)) %>%
-    group_by(.data$record, .data$group, .data$phase, .data$classification) %>%
+    filter(!is.na(group)) %>%
+    group_by(record, group, phase, classification) %>%
     summarize(
       n = n(),
       .groups = "drop"
@@ -49,7 +49,7 @@ classification_statistics_wide = function(use_group = "all",
   map(
     set_names(c("rair", "tone", "coord")), function(.x){
       cs  %>%
-      filter(.data$phase == .x) %>%
+      filter(phase == .x) %>%
       pivot_wider(
         id_cols = c("record"),
         names_from = c(all_of(classification_name), "group"),
@@ -60,22 +60,22 @@ classification_statistics_wide = function(use_group = "all",
         sum_trainees = rowSums(select(., ends_with("_trainees"))),
         sum_experts = rowSums(select(., ends_with("_experts")))
       ) %>%
-      select(.data$record, sort(colnames(.)))
+      select(record, sort(colnames(.)))
     }
   )
 }
 
 alpha_text = function(alpha, classification_phase_sel){
   ap_c = alpha %>%
-    filter(.data$classification_phase == classification_phase_sel)
+    filter(classification_phase == classification_phase_sel)
   if (nrow(ap_c) == 0) return(" not calculated")
   alpha_ret = "from"
   ex = ap_c %>%
-    filter(.data$group == "experts")
+    filter(group == "experts")
   if (nrow(ex) == 1 )
     alpha_ret = glue("from {ex$n_raters} expert raters, \u3B1={ex$estimate}, ",
                      "CI 95% ({ex$lower} to {ex$upper}); " )
-  tr = ap_c %>% filter(.data$group == "trainees")
+  tr = ap_c %>% filter(group == "trainees")
   if (nrow(tr) == 1 )
     alpha_ret = glue(
      "{alpha_ret} from {tr$n_raters} trainee raters, \u3B1={tr$estimate}, ",

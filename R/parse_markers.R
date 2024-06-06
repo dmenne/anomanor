@@ -14,7 +14,7 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
   unused_markers = read.delim(zz, header = FALSE,
                               col.names =  c("sec", "annotation")) %>%
     as_tibble() %>%
-    mutate(annotation = str_trim(.data$annotation))
+    mutate(annotation = str_trim(annotation))
   close(zz)
   hr_markers = hr_markers[str_detect(hr_markers, "#")]
   # And remove the hashes
@@ -24,20 +24,24 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
   zz = textConnection(hr_markers)
   markers = read.delim(zz, header = FALSE,
                        col.names =  c("sec", "annotation")) %>%
-    mutate(annotation = str_trim(.data$annotation))
+    mutate(annotation = str_trim(annotation))
   close(zz)
+  # Channels to be invalidated have negative time
   invalid_channels = markers %>%
-    filter(.data$sec < 0) %>%
+    filter(sec < 0)   %>%
     pluck("annotation")
+  # simulated old behavior of <pluck>
+  if (length(invalid_channels) == 0)
+    invalid_channels = NULL
   allowed_invalid_channels = c("B1", "B2", paste(1:10))
-  if (!any(is.null(invalid_channels)) &&
+  if (!is.null(invalid_channels)  &&
       !any(invalid_channels %in% allowed_invalid_channels))
     log_stop(
       glue("Invalid channel(s) {paste(invalid_channels, collapse = ', ')}.",
            " Only {paste(allowed_invalid_channels, collapse = ', ')} are permitted.")
     )
   markers = markers %>%
-    filter(.data$sec >= 0)
+    filter(sec >= 0)
   list(
     markers = bind_rows(tribble(~sec, ~annotation, 0, "begin"),
                         markers),

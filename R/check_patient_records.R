@@ -7,14 +7,14 @@ check_patient_records = function(){
 
   no_record = paste0(
     mt %>%
-    filter(is.na(.data$patient.x)) %>%
-    select(.data$patient.y) %>%
+    filter(is.na(patient.x)) %>%
+    select(patient.y) %>%
     unlist(),
     collapse = "</li><li>\n" )
   no_patient = paste0(
     mt %>%
-    filter(is.na(.data$patient.y)) %>%
-    select(.data$patient.x) %>%
+    filter(is.na(patient.y)) %>%
+    select(patient.x) %>%
     unlist(),
    collapse = ", " )
   msg = ""

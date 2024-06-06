@@ -135,11 +135,11 @@ keycloak_users = function(){
     q = glue_sql("SELECT user, [group] from user", .con = g$pool)
     users = dbGetQuery(g$pool, q)    %>%
       transmute(
-        user = .data$user,
+        user = user,
         email = "none",
-        name = .data$user,
+        name = user,
         verified = TRUE,
-        group = .data$group
+        group = group
       )
     return(users)
   }
@@ -160,12 +160,12 @@ keycloak_users = function(){
     )
   users %>%
     transmute(
-      user = .data$username,
-      email = .data$email,
-      name = ifelse(is.na(.data$firstName) | is.na(.data$lastName),
-                    "", paste(.data$firstName, .data$lastName)),
-      verified = .data$emailVerified,
-      group = .data$group
+      user = username,
+      email = email,
+      name = ifelse(is.na(firstName) | is.na(lastName),
+                    "", paste(firstName, lastName)),
+      verified = emailVerified,
+      group = group
     )
   # nocov end
 

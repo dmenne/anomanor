@@ -3,7 +3,7 @@ classification_user_statistics = function() {
            "FROM classification GROUP By user, method, finalized")
   stat = dbGetQuery(g$pool, q)  %>%
     mutate(
-      state = ifelse(.data$finalized == 0, "saved", "finalized" ),
+      state = ifelse(finalized == 0, "saved", "finalized" ),
       finalized = NULL
       #method = if_else(method == 'l', "Line", "HRM")
     ) %>%

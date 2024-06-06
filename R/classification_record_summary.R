@@ -20,7 +20,7 @@ classification_record_summary = function(user, method) {
       anon_l = NULL,
       anon_h = NULL
     ) %>%
-    arrange(.data$anon) %>%
+    arrange(anon) %>%
     as_tibble()
 }
 

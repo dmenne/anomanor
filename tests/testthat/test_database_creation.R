@@ -32,10 +32,13 @@ test_that("Database is recreated when a table is missing",{
   expect_output({
     g$pool = create_tables_and_pool(g$sqlite_path, g$record_cache_dir)},
     "incomplete")
-
   available_new_tables = dbGetQuery(g$pool, q)$name
   expect_equal(available_tables, available_new_tables)
-  ano_poolClose()
 })
+
+# Creates warnings
+# <pool> Checked-out object deleted before being returned.
+# <pool> Make sure to `poolReturn()` all objects retrieved with `poolCheckout().`
+
 
 

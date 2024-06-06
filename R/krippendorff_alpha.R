@@ -15,17 +15,17 @@ krippendorff_alpha = function(method) {
   q = glue_sql("SELECT * from krippendorff where method ={method}", .con = g$pool)
   dbGetQuery(g$pool, q)  %>%
     select(-method) %>%
-    group_by(.data$classification_phase, .data$group) %>%
+    group_by(classification_phase, group) %>%
     transmute(
-      user = as.integer(as.factor(.data$user)),
-      record = as.integer(as.factor(.data$record)),
-      classification = .data$classification
+      user = as.integer(as.factor(user)),
+      record = as.integer(as.factor(record)),
+      classification = classification
     ) %>%
     pivot_wider(id_cols = c("user", "classification_phase", "group"),
                 names_from = "record",
-                values_from = .data$classification,
+                values_from = classification,
                 values_fill = NA, names_repair = "minimal") %>%
-   select(-.data$user) %>%
+   select(-user) %>%
    group_modify(~kripp(.x))
 }
 

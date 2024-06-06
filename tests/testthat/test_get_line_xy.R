@@ -34,6 +34,5 @@ test_that("get_line_xy returns vertical and horizontal cross sections", {
   # Test overflow
   xy = get_line_xy(dt, start_time = 0, time_step = 0.18, time_zoom = 1,
                    view = 1, x1 = 10000, x2 = 11200, y1 = 334, y2 = 334)
-  print(str(xy))
   expect_null(xy)
 })
