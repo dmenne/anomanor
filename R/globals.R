@@ -25,15 +25,19 @@ globals = function(){
   # See valid values in config.yml
   valid_config = c("sa_trainee", "sa_admin", "sa_expert", "test",
                    "test_expert", "keycloak_devel",
+                   "keycloak_test",
                    "keycloak_production", "sa_random_trainee" )
   if (!active_config %in% valid_config)
     stop("Please set environment variable R_CONFIG_ACTIVE, ",
          "currently '", active_config, "' to one of ",
          paste(valid_config, collapse = ", "),call. = FALSE)
   # Renviron_production is not saved in git
+  is_windows = Sys.info()['sysname'] == 'Windows'
   env_file_base =  case_when(
-      Sys.info()['sysname'] == 'Windows' ~ "Renviron_windows",
+      active_config == "keycloak_devel" ~ "Renviron_devel",
       active_config == "keycloak_production" ~ "Renviron_production",
+      active_config == "keycloak_test" ~ "Renviron_keycloak_test",
+      is_windows ~ "Renviron_windows",
       TRUE ~ "Renviron_devel")
 
   root_dir = app_sys()
@@ -113,10 +117,10 @@ globals = function(){
   keycloak = NULL
   # For Admin site
   keycloak_site = glue("<a href=",
-    "https://{config$keycloak_site}/auth/admin/anomanor/console target='_blank'>",
+    "https://{config$keycloak_site}/admin/master/console target='_blank'>",
     "Keycloak interface</a>")
 
-  # Force port 443 if we have a string
+    # Force port 443 if we have a string
   g <<- mget(ls()) # Temporary global
   if (config$use_keycloak && !keycloak_available())
     log_stop(
@@ -134,6 +138,7 @@ globals = function(){
     }
     keycloak = Keycloak$new(config$anomanor_admin_username,
                            config$anomanor_admin_password,
+                           config$anomanor_secret,
                            config$keycloak_site,
                            config$keycloak_port,
                             active_config)
@@ -184,7 +189,6 @@ globals = function(){
   # Requires temporary g assigned above
   g <<- mget(ls()) # Temporary replacement for global g
   initial_record_cache()
-
 
   test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
   # Generate data set when "test..." is active

@@ -1,6 +1,8 @@
 # this test is by default deactivated because it needs a working
 # keycloak site
-Sys.setenv("R_CONFIG_ACTIVE" = "keycloak_devel")
+# In Keycloak "Clients/Client details", Direct access grants must be checked
+#
+Sys.setenv("R_CONFIG_ACTIVE" = "keycloak_test")
 active_config = Sys.getenv("R_CONFIG_ACTIVE")
 skip_if_not(stringr::str_starts(active_config, "keycloak_"), "Keycloak not available")
 g = try(globals(), silent = TRUE)
@@ -16,13 +18,16 @@ if (inherits(g, "try-error"))
 
 skip_if_not(g$config$use_keycloak,
             "Skipped because use_keycloak is FALSE in config.yml")
-skip_if_not(keycloak_available())
+# Will stop already in globals if no keycloak
+# skip_if_not(keycloak_available())
 
 test_that("Can connect to keycloak, add and delete users", {
   keycloak = Keycloak$new(g$config$anomanor_admin_username,
                           g$config$anomanor_admin_password,
-                          "localhost",
-                          g$config$keycloak_port, active_config)
+                          g$config$anomanor_secret,
+                          g$config$keycloak_site,
+                          80,
+                          active_config)
   skip_if_not(keycloak$active())
   ret = keycloak$delete_user("anton@menne-biomed.de") # Just in case
   ret = keycloak$add_user("anton@menne-biomed.de", "experts")

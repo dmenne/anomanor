@@ -3,6 +3,7 @@ mod_admin_ui = function(id, ...) {
   col_width = 800
   tagList(
     tabsetPanel(
+      # user
       tabPanel(
         "Users",
         wellPanel(
@@ -26,9 +27,13 @@ mod_admin_ui = function(id, ...) {
               "All other actions, such as a promotion to admin or a removal of a ",
               "user must be done from the {g$keycloak_site}."
             )
+          )),
+          helpText(HTML(
+            "To show the user table, currently at least one classification must be present (bug)"
           ))
         ),
         # wellPanel
+        shinyWidgets::actionBttn(ns("refresh_user"), "Refresh"),
         DT::DTOutput(ns("users_table"))
       ),
       # tabPanel record summary
@@ -72,7 +77,7 @@ mod_admin_ui = function(id, ...) {
         "Database",
         h1("40 most recent log entries"),
         shinyWidgets::actionBttn(ns("refresh"), "Refresh"),
-        DT::DTOutput(ns("log_table"), width = 600)
+        DT::DTOutput(ns("log_table"), width = 700)
       ),
       tabPanel(
         id = ns("management_panel"),
@@ -135,4 +140,3 @@ mod_admin_ui = function(id, ...) {
     ) #tabsetPanel
   )# tagList
 }
-

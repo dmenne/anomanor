@@ -38,7 +38,7 @@ get_app_user = function() {
   user = Sys.getenv("SHINYPROXY_USERNAME")
   if (is.null(user) ||  user == "")
     user = g$config$app_user
-  if (user == "random")
+  if (!is.null(user) && user == "random")
     user = encode32(sample.int(.Machine$integer.max, 1))
   if (is.null(user))
     log_stop("Both SHINYPROXY_USERNAME and config.app_user are NULL")
@@ -103,9 +103,10 @@ log_it = function(msg, force_console = FALSE, severity = "info") {
   tm = as.POSIXlt(Sys.time(), "UTC")
   force_console = force_console || g$config$force_console
   if (force_console || (!is.null(g$config) && is.list(g$config) && g$config$force_console))
-    cat(msg, "\n")
+    cat(file = stderr(), msg, "\n")
   if (!is.null(g$pool) && DBI::dbIsValid(g$pool)) {
-    iso = strftime(tm , "%Y-%m-%d %H:%M:%S")
+    op <- options(digits.secs = 2)
+    iso = strftime(tm , tz = "Europe/Berlin", "%Y-%m-%d %H:%M:%OS")
     q = glue_sql("INSERT into ano_logs (time, severity, message) ",
                  "values ({iso}, {severity}, {msg})", .con = g$pool)
     dbExecute(g$pool, q)
@@ -133,6 +134,7 @@ keycloak_users = function(){
   # Without keycloak, get user surrogate from database
   if (is.null(g$keycloak) || !keycloak_available() || !g$keycloak$active()) {
     q = glue_sql("SELECT user, [group] from user", .con = g$pool)
+    log_it(paste("keycloak_users ", q))
     users = dbGetQuery(g$pool, q)    %>%
       transmute(
         user = user,
@@ -145,20 +147,20 @@ keycloak_users = function(){
   }
   # nocov start
   users = g$keycloak$users()
-  if (is.null(users)) {
+
+  if (is.null(users) || rlang::is_empty(users) ) {
     log_stop("Keycloak did not return users")
     return(NULL)
   }
   # We prioritize groups, only the dominant is kept
-  users = g$keycloak$users() %>%
+  users = users %>%
     mutate(
       group = case_when(
         admins ~ 'admins',
         experts ~ 'experts',
         TRUE ~ 'trainees'
       )
-    )
-  users %>%
+    ) %>%
     transmute(
       user = username,
       email = email,
@@ -167,6 +169,8 @@ keycloak_users = function(){
       verified = emailVerified,
       group = group
     )
+  # log_it(paste("Users:", paste(users$user, collapse = ", ")))
+  users
   # nocov end
 
 }
@@ -196,5 +200,3 @@ tippy_all = function() {
   )
   invisible(apply(tippy_main_text, 1, function(x) tippyThis(x["id"], x["text"])))
 }
-
-

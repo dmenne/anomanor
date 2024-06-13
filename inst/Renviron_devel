@@ -1,4 +1,5 @@
 # !!!!! This file must be saved with UNIX endings !!!
+# dos2unix Renviron.devel
 # Used with all variants of R_CONFIG_ACTIVE NOT equal to
 # "keycloak_production" on Linux
 # This file is used for development and has unsafe passwords

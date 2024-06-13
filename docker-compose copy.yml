@@ -1,17 +1,26 @@
 services:
+  # docker compose up --force-recreate
+  # To show variables
+  # docker compose config > compose_config.yml
   traefik:
     image: traefik:v3.0
     container_name: traefik
     restart: unless-stopped
-    # Enables the web UI and tells Traefik to listen to docker
-    # https://github.com/traefik/blog-posts/blob/master/2019_09_10-101_docker/docker-compose-06.yml
+    # https://github.com/heyvaldemar/keycloak-traefik-letsencrypt-docker-compose/blob/main/keycloak-traefik-letsencrypt-docker-compose.yml
     command:
-      # *** Remove api.insecure for production ***
-      - --api.insecure # Use port redirection, e.g. to 8081, to access dashboard
       - --log.level=ERROR
-      - --providers.docker
+      #      - --accesslog=true
+      # *** Remove api.insecure for production ***
+      # Use port redirection, e.g. to 8081, to access dashboard
+      - --api.insecure
+      - --ping=true
+      - --ping.entrypoint=ping
+      - --entryPoints.ping.address=:8082
+
+      - --providers.docker=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+
       - --certificatesresolvers.hrmresolver.acme.httpchallenge=true
       # *** For testing use caserver; comment for default
       # This will generate STAGING (=invalid) certificates for Wannabe Watercress or similar
@@ -19,6 +28,8 @@ services:
       - --certificatesresolvers.hrmresolver.acme.email=dieter.menne@menne-biomed.de
       - --certificatesresolvers.hrmresolver.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.hrmresolver.acme.httpchallenge.entryPoint=web
+      - --global.checkNewVersion=true
+      - --global.sendAnonymousUsage=false
       - --log.filePath=/log/traefik.log
     networks:
       - anomanor-net
@@ -26,13 +37,28 @@ services:
       - 80:80
       - 443:443
       # The Web UI (enabled by --api.insecure=true)
-      - 8080:8080
+      - 8083:8080
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "http://localhost:8082/ping",
+          "--spider"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     labels:
       # global redirect to https
+      - traefik.enable=true
+      - traefik.docker.network=anomanor-net
       - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
       - traefik.http.routers.http-catchall.entrypoints=websecure
       - traefik.http.routers.http-catchall.middlewares=redirect-to-https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.headers.customrequestheaders.X-Forwarded-Proto=https
 
     volumes:
       # To view this file, might require:
@@ -42,58 +68,109 @@ services:
       - ./log:/log
       - /var/run/docker.sock:/var/run/docker.sock
 
-  # Keycloak
-  # https://keycloak.discourse.group/t/keycloak-behind-traefik/1832/3
   keycloak:
+    # Keycloak
+    # https://keycloak.discourse.group/t/keycloak-behind-traefik/1832/3
+    # To use smtp.gmail.com, get an app password from google
+    # https://support.google.com/accounts/answer/185833?hl=en
     build:
       context: .
       dockerfile: Dockerfile_keycloak
     container_name: keycloak
     depends_on:
       - traefik
+      - postgres
     labels:
       - traefik.enable=true
-      - traefik.http.routers.keycloak.rule=Host(`keycloak.hrmconsensus.org`)
-      - traefik.http.services.keycloak.loadbalancer.server.port=8010
+      - traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_SITE}`)
+      - traefik.http.routers.keycloak.service=keycloak
       - traefik.http.routers.keycloak.entrypoints=websecure
-      - traefik.http.routers.keycloak.tls.certresolver=hrmresolver
-      - traefik.http.routers.keycloak.entrypoints=websecure
+
       - traefik.http.services.keycloak.loadbalancer.server.port=8080
       - traefik.http.routers.keycloak.tls=true
+      - traefik.http.routers.keycloak.tls.certresolver=hrmresolver
       - traefik.http.services.keycloak.loadbalancer.passhostheader=true
       - traefik.http.routers.keycloak.middlewares=compresstraefik
       - traefik.http.middlewares.compresstraefik.compress=true
       - traefik.docker.network=anomanor_net
-    restart: unless-stopped
+    #restart: unless-stopped
     ports:
       # nc -zv smtp.gmail.com 587
       - 8010:8080
     networks:
       - anomanor-net
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
     volumes:
-      - anomanor_keycloak:/opt/jboss/keycloak/standalone/data
+      # to import a realm, inside the container:
+      # /opt/keycloak/bin/kc.sh import --file /opt/jboss/keycloak/standalone/data/realm-export.json
+      - /home/hrmconsensus/anomanor_data/keycloak:/opt/jboss/keycloak/standalone/data
     environment:
-      - KC_LOG_LEVEL=INFO
+      # https://conciso.de/durchstarten-keycloak-docker/
+      #      - KC_LOG_LEVEL=ALL
+      - KC_HOSTNAME=${KEYCLOAK_SITE}
       - KC_HOSTNAME_STRICT=false
-      - KC_HOSTNAME=hrmconsensus.org
-      - KC_HOSTNAME_PORT=8080
-      - ROOT_LOGLEVEL=INFO
-      - KC_PROXY=edge
-      - KC_PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_ADMIN=${MASTER_ADMIN_USERNAME}
+      - KEYCLOAK_ADMIN_PASSWORD=${MASTER_ADMIN_PASSWORD}
+      - KC_PROXY_HEADERS=xforwarded
       - KC_HTTP_ENABLED=true
       - TZ=Europe/Berlin
-      # https://stackoverflow.com/a/61071811
-      - KEYCLOAK_ADMIN=${MASTER_ADMIN_USERNAME:-admin}
-      - KEYCLOAK_ADMIN_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
-    command: [ "start", "--verbose", "--optimized" ]
+      # Do not use KC_DB! It will be inserted to URL_HOST
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_SCHEMA=public
+      - KC_DB_USERNAME=${ANOMANOR_ADMIN_USERNAME}
+      - KC_DB_PASSWORD=${ANOMANOR_ADMIN_PASSWORD}
+    # https://stackoverflow.com/questions/75082054/keycloak-does-not-use-postgres-database-and-tries-to-connect-h2-database
+    # If in doubt, remove --optimized
+    #command: [ "start", "--optimized", "--verbose" ]
+    # log level: https://www.keycloak.org/server/logging
+    command: [ "start" ]
+    #command: ["start","--verbose","--spi-theme-static-max-age=-1","--spi-theme-cache-themes=false","--spi-theme-cache-templates=false"]
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    volumes:
+      - /home/hrmconsensus/anomanor_data/postgres:/var/lib/postgresql/data
+      - /home/hrmconsensus/anomanor_data/postgres/backup:/root/backup/
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: ${ANOMANOR_ADMIN_USERNAME}
+      POSTGRES_PASSWORD: ${ANOMANOR_ADMIN_PASSWORD}
+    networks:
+      - anomanor-net
+    ports:
+      - 5432:5432
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "keycloak",
+          "-U",
+          "${ANOMANOR_ADMIN_USERNAME}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
   shinyproxy:
+    #profiles: [ "with_shiny_proxy" ]
     build:
       context: .
       dockerfile: Dockerfile_shinyproxy
     container_name: shinyproxy
     depends_on:
       - traefik
+      - keycloak
     restart: unless-stopped
     labels:
       - traefik.http.routers.shinyproxy.rule=Host(`hrmconsensus.org`)
@@ -105,6 +182,7 @@ services:
       # Defaults only used for compose down
       - KEYCLOAK_IP=${KEYCLOAK_IP:-0.0.0.0}
       - ANOMANOR_DATA=${ANOMANOR_DATA:-/root/anomanor_data/anomanor}
+      - ANOMANOR_SECRET=$ANOMANOR_SECRET
     ports:
       - 8020:8080
     networks:
@@ -112,9 +190,27 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: unless-stopped
+    depends_on:
+      - traefik
+    labels:
+      - traefik.http.routers.portainer.rule=Host(`portainer.hrmconsensus.org`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.tls.certresolver=hrmresolver
+      - traefik.http.services.portainer.loadbalancer.server.port=9000 # required
+    networks:
+      - anomanor-net
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+
   sqlpad:
-    # An explicit A-entry sqlpad.hrmconsensus.org must be in DSN, no *
-    # https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/
     image: sqlpad/sqlpad:latest
     depends_on:
       - traefik
@@ -137,50 +233,8 @@ services:
       # Use/root/anomanor_data/anomanor/db/anomanor.sqlite as Filename/path in sqlpad connection
       - /home/hrmconsensus/anomanor_data/anomanor/db:${ANOMANOR_DATA:-/root/anomanor_data/anomanor}/db
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: unless-stopped
-    depends_on:
-      - traefik
-    labels:
-      - traefik.http.routers.portainer.rule=Host(`portainer.hrmconsensus.org`)
-      - traefik.http.routers.portainer.entrypoints=websecure
-      - traefik.http.routers.portainer.tls.certresolver=hrmresolver
-      - traefik.http.services.portainer.loadbalancer.server.port=9000 # required
-    networks:
-      - anomanor-net
-    ports:
-      - 9000:9000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - anomanor_portainer:/data
-
-  whoami:
-    profiles:
-      # activate with <<docker compose --profile test up>>
-      - test # so by default not started
-    image: traefik/whoami
-    container_name: whoami
-    networks:
-      - anomanor-net
-    labels:
-      - traefik.http.routers.whoami.rule=Host(`whoami.hrmconsensus.org`)
-      - traefik.http.routers.whoami.entrypoints=websecure
-      - traefik.http.routers.whoami.tls.certresolver=hrmresolver
-    #      - traefik.http.services.whoami.loadbalancer.server.port=80
-    ports:
-      - 8880:80
-
 volumes:
-  # This volume can be missing after a disk backup of the server is restored.
-  # You will see an error message after a rebuild
-  # Follow the recommendation to recreate it manually, it will re-connect to the
-  # existing files on disk
-  anomanor_data_db:
-    external: true
-  anomanor_portainer:
-  anomanor_keycloak:
+  portainer:
   sqlpad_data:
 
 

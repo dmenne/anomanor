@@ -25,6 +25,7 @@ mod_admin_server = function(id, app_user) {
      # -----------  User Statistics Table ------------
      user_stats_table = reactive({
        rvalues$request_usertable # toggled when new user added
+       input$refresh_user
        stat = classification_user_statistics()
        req(stat)
        stat

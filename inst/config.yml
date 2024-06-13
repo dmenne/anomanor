@@ -31,8 +31,6 @@ sa_random_trainee:
   app_user: random # Replaced by random name
   app_groups: trainee
 
-
-
 test:
   # email_url only to generate sample data
   anomanor_data_base: !expr tempdir(TRUE)
@@ -51,10 +49,12 @@ keycloak:
   use_keycloak: TRUE
   anomanor_admin_username: !expr Sys.getenv("ANOMANOR_ADMIN_USERNAME")
   anomanor_admin_password: !expr Sys.getenv("ANOMANOR_ADMIN_PASSWORD")
+  anomanor_secret: !expr Sys.getenv("ANOMANOR_SECRET")
+
 
 keycloak_devel:
   inherits: keycloak
-  use_keycloak: TRUE
+  use_keycloak: FALSE
   # app_user only for testing without keycloak
   app_user: anton
   app_groups: admins
@@ -65,3 +65,9 @@ keycloak_production:
   # Make show_testbuttons FALSE in final
   show_testbuttons: FALSE
   #keycloak_port: 443 # https is set automatically
+
+keycloak_test: # Only for testing remote keycloak in notest_keycloak.R
+  # Uses ANOMANOR_xxx from Renviron_keycloak_test
+  inherits: keycloak
+  use_keycloak: TRUE
+

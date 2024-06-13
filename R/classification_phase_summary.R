@@ -1,9 +1,13 @@
 classification_phase_summary = function(user, record, method) {
   stopifnot(method %in% c("l", "h"))
+  if (rlang::is_empty(record))
+    return(invisible(NULL))
   q = glue_sql("SELECT classification_phase, finalized, method from classification ",
                "where user={user} and record={record} and method={method}", .con = g$pool)
-  ps = tibble(classification_phase = c("rair", "tone", "coord")) %>%
-      left_join(dbGetQuery(g$pool, q), by = "classification_phase") %>%
+  ps = tibble(classification_phase = c("rair", "tone", "coord"))
+  pp = dbGetQuery(g$pool, q)
+  ps = ps %>%
+    left_join(pp, by = "classification_phase") |>
     mutate(
       icon = case_when(
         is.na(finalized) ~ "fa-question",

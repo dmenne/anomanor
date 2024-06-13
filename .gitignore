@@ -25,3 +25,7 @@ covr/
 *.gcno
 *.gcda
 Renviron_production
+Renviron_keycloak_test
+keycloak/*.gz
+
+

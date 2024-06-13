@@ -6,8 +6,10 @@ set -o allexport;
 source ./.Renviron
 if [[ "$R_CONFIG_ACTIVE" = "keycloak_production" ]]
 then
+  ln -sf ./inst/Renviron_production ./.env
   source ./inst/Renviron_production
 else
+  ln -sf ./inst/Renviron_devel ./.env
   source ./inst/Renviron_devel
 fi
 set +o allexport

@@ -1,8 +1,10 @@
 FROM quay.io/keycloak/keycloak:24.0.5
-
+# docker build -f Dockerfile_keycloak .
 ENV KEYCLOAK_USER=${MASTER_ADMIN_USERNAME:-admin}
 ENV KEYCLOAK_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
-COPY ./anomanortheme/ /opt/jboss/keycloak/themes/anomanortheme
-# Health check port is WITHIN container
-# Check now define in docker-compose
-#HEALTHCHECK --start-period=40s --interval=20s --timeout=10s CMD curl -H --fail http://localhost:8080 || exit 1
+ENV KC_DB=postgres
+# https://stackoverflow.com/questions/75082054/keycloak-does-not-use-postgres-database-and-tries-to-connect-h2-database
+COPY ./inst/anomanortheme /opt/keycloak/themes/anomanortheme
+WORKDIR /opt/keycloak
+RUN /opt/keycloak/bin/kc.sh build
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

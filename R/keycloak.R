@@ -9,11 +9,12 @@ Keycloak = R6::R6Class("Keycloak", list(
   headers = NULL,
   admin_username = NULL,
   admin_password = NULL,
+  anomanor_secret = NULL,
 
 
   # To update bearer, see
   # https://yihui.org/en/2017/10/later-recursion/
-  initialize = function(admin_username, admin_password,
+  initialize = function(admin_username, admin_password, anomanor_secret,
                         keycloak_site, keycloak_port, active_config) {
     if (active_config == "keycloak_production") {
       if (is.null(admin_username) || admin_username == "")
@@ -24,13 +25,14 @@ Keycloak = R6::R6Class("Keycloak", list(
                  "No password in environment variable ADMIN_PASSWORD")
     }
     if (stringr::str_starts(keycloak_site, "keycloak")){
-      self$base_url = glue("https://{keycloak_site}/auth")
+      self$base_url = glue("https://{keycloak_site}")
     } else {
-      self$base_url = glue("http://{keycloak_site}:{keycloak_port}/auth")
+      self$base_url = glue("http://{keycloak_site}:{keycloak_port}")
     }
     self$admin_url = glue("{self$base_url}/admin/realms/{self$realm}")
     self$admin_username = admin_username
     self$admin_password = admin_password
+    self$anomanor_secret = anomanor_secret
     self$authenticate() # First login
   },
 
@@ -39,16 +41,17 @@ Keycloak = R6::R6Class("Keycloak", list(
     url = glue("{self$base_url}/realms/{self$realm}/protocol/openid-connect/token")
     # Error missing grant_type in Postman:  Must send in body, not in params
     # Error: account not fully setup: Verify email in users
-    auth_post = httr::POST(url = url,
-                     body = list(
-                       client_id = self$realm,
-                       username = self$admin_username,
-                       password = self$admin_password,
-                       grant_type = "password"
-                     ),
-                     encode = "form",
-
+    body = list(
+      client_id = self$realm,
+      username = self$admin_username,
+      password = self$admin_password,
+      client_secret = self$anomanor_secret,
+      grant_type = "password"
     )
+    #log_it(paste("Authentication ", url, paste(body, collapse = "\n "), sep = "\n"),
+#           force_console = TRUE)
+
+    auth_post = httr::POST(url = url, body = body, encode = "form")
     if (!self$valid_status(auth_post)) return(NULL)
     content = httr::content(auth_post)
     self$bearer = glue("Bearer {content$access_token}")
@@ -102,7 +105,7 @@ Keycloak = R6::R6Class("Keycloak", list(
       setequal(self$groups$name, c("experts", "admins", "trainees"))
   },
 
-  add_user = function(new_user_email, group, force_confirm = FALSE,
+  add_user = function(new_user_email, group, force_confirm = TRUE,
                       emailVerified = FALSE) {
     # Add user
     new_user_name = str_extract(new_user_email, "([^@]*)")
@@ -270,4 +273,3 @@ Keycloak = R6::R6Class("Keycloak", list(
   }
 ))
 #nocov end
-

@@ -1,4 +1,4 @@
-FROM rocker/r-base:latest
+FROM rocker/r-base:4.4.0
 
 LABEL maintainer="dieter.menne@menne-biomed.de"
 
@@ -55,7 +55,6 @@ RUN install2.r --error --ncpus 4 --skipinstalled \
     png \
     colorspace \
     pool \
-    iptools \
     later \
     golem \
     ragg \
@@ -67,6 +66,7 @@ ARG R_CONFIG_ACTIVE
 ARG ANOMANOR_DATA
 ARG ANOMANOR_ADMIN_USERNAME
 ARG ANOMANOR_ADMIN_PASSWORD
+ARG ANOMANOR_SECRET
 ARG DOCKER_ANOMANOR_STANDALONE
 
 ENV ANOMANOR_DOCKER=${DOCKER_ANOMANOR_STANDALONE:-FALSE}
@@ -75,6 +75,9 @@ ENV ANOMANOR_DATA=${ANOMANOR_DATA}
 ENV R_CONFIG_ACTIVE=${R_CONFIG_ACTIVE}
 ENV ANOMANOR_ADMIN_USERNAME=${ANOMANOR_ADMIN_USERNAME:-anomanor_admin}
 ENV ANOMANOR_ADMIN_PASSWORD=${ANOMANOR_ADMIN_PASSWORD:-anomanor_admin}
+ENV ANOMANOR_SECRET=${ANOMANOR_SECRET}
+
+ENV TZ="Europe/Berlin"
 
 RUN mkdir -p /root/anomanor
 RUN mkdir -p ${ANOMANOR_DATA}/data
@@ -100,4 +103,5 @@ HEALTHCHECK --start-period=20s --interval=1m --timeout=5s \
 EXPOSE 3838
 CMD R -e "anomanor::run_app()"
 # Debug
-#CMD ["bash"]
+# https://stackoverflow.com/questions/43308319/how-can-i-run-bash-in-a-docker-container
+# docker run -v /home/hrmconsensus/anomanor_data/anomanor:${ANOMANOR_DATA} --rm -it --entrypoint bash anomanor

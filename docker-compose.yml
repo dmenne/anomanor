@@ -1,5 +1,7 @@
 services:
   # docker compose up --force-recreate
+  # To show variables
+  # docker compose config > compose_config.yml
   traefik:
     image: traefik:v3.0
     container_name: traefik
@@ -35,7 +37,7 @@ services:
       - 80:80
       - 443:443
       # The Web UI (enabled by --api.insecure=true)
-      - 8080:8080
+      - 8083:8080
     healthcheck:
       test:
         [
@@ -66,15 +68,18 @@ services:
       - ./log:/log
       - /var/run/docker.sock:/var/run/docker.sock
 
-  # Keycloak
-  # https://keycloak.discourse.group/t/keycloak-behind-traefik/1832/3
   keycloak:
+    # Keycloak
+    # https://keycloak.discourse.group/t/keycloak-behind-traefik/1832/3
+    # To use smtp.gmail.com, get an app password from google
+    # https://support.google.com/accounts/answer/185833?hl=en
     build:
       context: .
       dockerfile: Dockerfile_keycloak
     container_name: keycloak
     depends_on:
       - traefik
+      - postgres
     labels:
       - traefik.enable=true
       - traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_SITE}`)
@@ -101,25 +106,72 @@ services:
       retries: 3
       start_period: 90s
     volumes:
-      - keycloak:/opt/jboss/keycloak/standalone/data
+      # to import a realm, inside the container:
+      # /opt/keycloak/bin/kc.sh import --file /opt/jboss/keycloak/standalone/data/realm-export.json
+      - /home/hrmconsensus/anomanor_data/keycloak:/opt/jboss/keycloak/standalone/data
     environment:
-      - KC_LOG_LEVEL=ERROR
+      # https://conciso.de/durchstarten-keycloak-docker/
+      #      - KC_LOG_LEVEL=ALL
+      - KC_HOSTNAME=${KEYCLOAK_SITE}
       - KC_HOSTNAME_STRICT=false
-      - KEYCLOAK_ENABLE_STATISTICS=true
+      - KEYCLOAK_ADMIN=${MASTER_ADMIN_USERNAME}
+      - KEYCLOAK_ADMIN_PASSWORD=${MASTER_ADMIN_PASSWORD}
+      # KC_PROXY is deprecated
       - KC_PROXY_HEADERS=xforwarded
       - KC_HTTP_ENABLED=true
       - TZ=Europe/Berlin
-      - KEYCLOAK_ADMIN=${MASTER_ADMIN_USERNAME:-admin}
-      - KEYCLOAK_ADMIN_PASSWORD=${MASTER_ADMIN_PASSWORD:-admin}
+      # Do not use KC_DB! It will be inserted to URL_HOST
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_SCHEMA=public
+      - KC_DB_USERNAME=${ANOMANOR_ADMIN_USERNAME}
+      - KC_DB_PASSWORD=${ANOMANOR_ADMIN_PASSWORD}
+    # https://stackoverflow.com/questions/75082054/keycloak-does-not-use-postgres-database-and-tries-to-connect-h2-database
+    # If in doubt, remove --optimized
     command: [ "start", "--optimized", "--verbose" ]
+    # log level: https://www.keycloak.org/server/logging
+    #command: [ "start" ]
+    # The following has rarely an effect with Docker containers
+    #command: ["start", "--verbose","--spi-theme-static-max-age=-1","--spi-theme-cache-themes=false","--spi-theme-cache-templates=false"]
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    volumes:
+      - /home/hrmconsensus/anomanor_data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: ${ANOMANOR_ADMIN_USERNAME}
+      POSTGRES_PASSWORD: ${ANOMANOR_ADMIN_PASSWORD}
+    networks:
+      - anomanor-net
+    ports:
+      - 5432:5432
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "keycloak",
+          "-U",
+          "${ANOMANOR_ADMIN_USERNAME}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
   shinyproxy:
+    #profiles: [ "with_shiny_proxy" ]
     build:
       context: .
       dockerfile: Dockerfile_shinyproxy
     container_name: shinyproxy
     depends_on:
       - traefik
+      - keycloak
     restart: unless-stopped
     labels:
       - traefik.http.routers.shinyproxy.rule=Host(`hrmconsensus.org`)
@@ -131,6 +183,7 @@ services:
       # Defaults only used for compose down
       - KEYCLOAK_IP=${KEYCLOAK_IP:-0.0.0.0}
       - ANOMANOR_DATA=${ANOMANOR_DATA:-/root/anomanor_data/anomanor}
+      - ANOMANOR_SECRET=$ANOMANOR_SECRET
     ports:
       - 8020:8080
     networks:
@@ -182,14 +235,7 @@ services:
       - /home/hrmconsensus/anomanor_data/anomanor/db:${ANOMANOR_DATA:-/root/anomanor_data/anomanor}/db
 
 volumes:
-  # This volume can be missing after a disk backup of the server is restored.
-  # You will see an error message after a rebuild
-  # Follow the recommendation to recreate it manually, it will re-connect to the
-  # existing files on disk
-  anomanor_data_db:
-    external: true
   portainer:
-  keycloak:
   sqlpad_data:
 
 

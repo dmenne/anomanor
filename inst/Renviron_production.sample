@@ -12,6 +12,9 @@ MASTER_ADMIN_PASSWORD=<<admin_password>>
 # with all available roles assigned to it in keycloak
 ANOMANOR_ADMIN_USERNAME=<<anomanor_admin>>
 ANOMANOR_ADMIN_PASSWORD=<<anomanor_admin_password>>
+# Client secret can change on version change.
+# See Keycloak  anomanor clients 'Client details' Credentials
+ANOMANOR_SECRET=<<client secret>>
 KEYCLOAK_SITE=<<your.keycloak.subdomain>>
 ANOMANOR_DATA=/root/anomanor_data/anomanor
 
