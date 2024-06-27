@@ -16,7 +16,7 @@ Cross-section parameters will be used for the refinement of classification crite
 
 ![](readout_tree.png)
 
-If you did not add a cross-section, on _Save_ or _Finalize_ you will be nudged to add it to indicate the part of the record that best support your classification choice. 
+If you did not add a cross-section, on _Save_ or _Finalize_ you will be nudged to add it to indicate the part of the record that best supports your classification choice. 
 
 ![](readout_save.png)
 
