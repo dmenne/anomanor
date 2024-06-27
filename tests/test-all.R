@@ -3,5 +3,5 @@ library(testthat)
 # Some tests may fail in parallel mode.
 # Use in DESCRIPTION
 # Config/testthat/parallel: false
-#options(Ncpus = 1)
+options(Ncpus = 1)
 test_check("anomanor")

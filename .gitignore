@@ -26,6 +26,6 @@ covr/
 *.gcda
 Renviron_production
 Renviron_keycloak_test
-keycloak/*.gz
+keycloak/
 
 
