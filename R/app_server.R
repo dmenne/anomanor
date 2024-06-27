@@ -624,8 +624,10 @@ app_server = function(input, output, session) {
 
   # classification_method() with ignoreInit
   observeEvent(classification_method(), {
-    shiny::showNotification(type = "warning", duration = 3,
-      HTML("Switching between methods displays <b>a different</b> random record.")
+    msg = if (str_detect(isolate(record()), "test"))
+      "For example records starting with <b>$ex</b>, switching between methods shows the same patient's data." else
+      "Switching between methods displays <b>a different</b> random record."
+    shiny::showNotification(type = "warning", duration = 4, HTML(msg)
     )},
     ignoreInit = TRUE
   )

@@ -16,7 +16,7 @@ mod_data_ui = function(id, ...) {
         onLabel = "Conventional",
         offLabel = "HRM"
       ),
-      HTML("Switch between HRM and conventional.<br><b>A different random record will be displayed after switching.</b>")
+      HTML("Switch between HRM and conventional view.<br><b>A different random record will be displayed after switching.</b><br>For example cases, the same record will be displayed.")
     ),
     shinyWidgets::progressBar(ns("completed"), value = 0, display_pct = TRUE),
     # Error message when using tippy directly on progressBar, ok with tippyThis
