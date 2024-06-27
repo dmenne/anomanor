@@ -260,6 +260,10 @@ test_that("invalid parameters in classification_to_database return NULL", {
   expect_null(ret)
 })
 
+test_that("is_example returns logical", {
+  expect_false(is_example("test1"))
+})
+
 # Deletes, must be last
 test_that("consensus_classification_from_database w/o consensus data returns NULL", {
   dbExecute(g$pool, "DELETE from classification where user = 'x_consensus'")
