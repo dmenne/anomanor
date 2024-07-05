@@ -9,9 +9,9 @@
 
 # https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -euxo pipefail
-
 source ./chown_docker_sock.sh
 dos2unix ./.Renviron
+
 
 # Make sure that ./.Renviron is valid
 set -a
@@ -50,8 +50,7 @@ docker system prune -f
 #docker network rm anomanor-net
 
 
-docker rm -f anomanor
-#docker rmi -f anomanor
+docker rmi -f anomanor
 
 docker build  --tag anomanor -f Dockerfile_anomanor \
   --build-arg R_CONFIG_ACTIVE \

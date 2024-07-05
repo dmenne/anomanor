@@ -1,6 +1,7 @@
 ## code to prepare dataset goes here
 ## Run it whenever nodes_edges.xlsx changes
-
+library(dplyr)
+library(stringr)
 nodes_file = rprojroot::find_package_root_file("data-raw", "nodes_edges.xlsx")
 
 nodes = readxl::read_xlsx(nodes_file, "nodes") %>%
