@@ -23,12 +23,15 @@ app_server = function(input, output, session) {
     expert_classification = expert_classification_from_database()
     complete_expert_ratings = attr(expert_classification, "complete_expert_ratings")
   }
+  if (!is_admin)
+    delay(2000, ano_modal("sorry"))
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
       !g$config$show_testbuttons &&
       !is_admin &&
       n_classified < 10 )
     delay(2000, ano_modal("readout"))
+
 
 #  hide("section_value")
   hide("patient_panel")
@@ -54,6 +57,7 @@ app_server = function(input, output, session) {
       duration = ifelse(str_starts(g$active_config, "keycloak"), 60, 10),
       closeButton = TRUE,
       type = "warning")
+
 
   # ----------- Data Module  ------------------------------
   dm = mod_data_server("dm", app_user, reactive(input$max_p),
