@@ -23,8 +23,7 @@ app_server = function(input, output, session) {
     expert_classification = expert_classification_from_database()
     complete_expert_ratings = attr(expert_classification, "complete_expert_ratings")
   }
-  if (!is_admin)
-    delay(2000, ano_modal("sorry"))
+#  if (!is_admin)   delay(2000, ano_modal("sorry"))
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
       !g$config$show_testbuttons &&
