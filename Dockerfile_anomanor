@@ -1,4 +1,4 @@
-FROM rocker/r-base:4.4.0
+FROM r-base
 
 LABEL maintainer="dieter.menne@menne-biomed.de"
 

@@ -4,13 +4,17 @@
 
 set ANOMANOR_DATA="/root/anomanor_data/anomanor"
 
+
 docker run -d -it --name anomanor ^
   --restart unless-stopped ^
   --publish 3838:3838 ^
   -v anomanor_data_db:%ANOMANOR_DATA%/db ^
   -v anomanor_data_cache:%ANOMANOR_DATA%/cache ^
   -v anomanor_data_data:%ANOMANOR_DATA%/data ^
-  dmenne/anomanor:latest
+  dmenne/anomanor:1.0.1
+
+:: Replace the tag, e.g. 1.0.1, by the currently active one
+:: https://hub.docker.com/repository/docker/dmenne/anomanor/general
 
 docker ps -l
 sleep 3s

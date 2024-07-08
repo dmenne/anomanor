@@ -134,7 +134,7 @@ keycloak_users = function(){
   # Without keycloak, get user surrogate from database
   if (is.null(g$keycloak) || !keycloak_available() || !g$keycloak$active()) {
     q = glue_sql("SELECT user, [group] from user", .con = g$pool)
-    log_it(paste("keycloak_users ", q))
+    # log_it(paste("keycloak_users ", q))
     users = dbGetQuery(g$pool, q)    %>%
       transmute(
         user = user,
