@@ -7,7 +7,7 @@ app_server = function(input, output, session) {
   max_p_line = 100
   ns_ano = NS("ano") # Access to visual tree network
   ns_dm = NS("dm") # Access to data module
-  app_user = get_app_user()
+  app_user = get_app_user(session)
   login_time = Sys.time()
   log_it(glue("Session start user {app_user} at {login_time} "),
          force_console = FALSE)

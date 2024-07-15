@@ -21,7 +21,7 @@ The results will be published. All those completing all 50 cases will be
 acknowledged. This information will also inform the development of
 version 2.0 of the London classification.
 
--   **App** Anomanor Version 0.8.xx
+-   **App** Anomanor Version 1.0.2
 -   **Design** Dieter Menne, Menne Biomed Consulting
 -   **Sponsor** EU Gastrointestinal Motility Hub / International Working
     Group for Disorders of Gastrointestinal Motility and Function

@@ -51,6 +51,9 @@ proxy:
       ]
     container-image: anomanor
     container-network: anomanor-net
+    seats-per-container: 2
+    minimum-seats-available: 2
+
 
 logging:
   requestdump: false

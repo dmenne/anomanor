@@ -16,7 +16,7 @@ set +o allexport
 
 export DOCKER_ANOMANOR_STANDALONE=TRUE
 echo "Active configuration: $R_CONFIG_ACTIVE DOCKER_ANOMANOR_STANDALONE=$DOCKER_ANOMANOR_STANDALONE"
-TAG="1.0.1"
+TAG="1.0.2"
 
 docker rm -f anomanor
 # To force rebuild

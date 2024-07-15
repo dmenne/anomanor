@@ -1,2 +1,2 @@
-docker tag anomanor dmenne/anomanor:1.0.1
+docker tag anomanor dmenne/anomanor:1.0.2
 docker push dmenne/anomanor:latest

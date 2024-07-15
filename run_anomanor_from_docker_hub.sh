@@ -7,8 +7,8 @@ docker run -d -it --name anomanor \
   -v anomanor_data_db:${ANOMANOR_DATA}/db \
   -v anomanor_data_cache:${ANOMANOR_DATA}/cache \
   -v anomanor_data_data:${ANOMANOR_DATA}/data \
-  dmenne/anomanor:1.0.1
-  
+  dmenne/anomanor:1.0.2
+
 :: Replace the tag, e.g. 1.0.1, by the currently active one
 :: https://hub.docker.com/repository/docker/dmenne/anomanor/general
 
