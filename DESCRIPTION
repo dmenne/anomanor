@@ -80,4 +80,4 @@ Language: en-US
 SystemRequirements: pandoc
 LinkingTo:
     Rcpp
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.1
