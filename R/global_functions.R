@@ -34,8 +34,10 @@ record_start_time = function(active_begin, active_width, window_width, image_wid
   min(start_time, max(image_width - window_width, 0))
 }
 
-get_app_user = function(session) {
-  user = session$request$HTTP_X_SP_USERID
+get_app_user = function(session = NULL) {
+  user = NULL
+  if (!is.null(session))
+    user = session$request$HTTP_X_SP_USERID
   if (is.null(user) ||  user == "")
     user = Sys.getenv("SHINYPROXY_USERNAME")
   if (is.null(user) ||  user == "")
