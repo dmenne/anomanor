@@ -25,12 +25,12 @@ Optionally, you can add a comment in the lower right corner.
 
 You can infer the status of individual classifications from the icon:
 
-<i class="fa fa-question fa-lg">Nothing done yet</i>, 
-<i class="fa fa-battery-1 fa-lg"></i>, 
-<i class="fa fa-battery-2 fa-lg"></i>, 
-<i class="fa fa-battery-3 fa-lg"> Partially completed</i>, 
-<i class="fa fa-check fa-lg"> Saved</i>, 
-<i class="fa fa-flag-checkered fa-lg"> Finalized</i>
+<span class="fa fa-question fa-lg"></span> Nothing done yet, 
+<span class="fa fa-battery-1 fa-lg"></span>, 
+<span class="fa fa-battery-2 fa-lg"></span>, 
+<span class="fa fa-battery-3 fa-lg"></span> Partially completed, 
+<span class="fa fa-check fa-lg"></span> Saved, 
+<span class="fa fa-flag-checkered fa-lg"></span> Finalized
 
 ## Navigation
 - Use the cursor keys or arrow buttons to move to next protocol section of the selected phase.

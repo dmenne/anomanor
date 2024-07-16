@@ -8,6 +8,7 @@ icons
 cache/
 data/patients/
 data/records/
+man/
 sqlpad/
 volumes/
 db/anomanor.sqlite
