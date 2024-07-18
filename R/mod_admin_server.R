@@ -244,7 +244,9 @@ mod_admin_server = function(id, app_user) {
          g$checked_patients = check_patient_records()
          # Change this if unexpected markers are to be suppressed
          can_accept = !(is.character(cv)) &&
-           ((length(cv$missing) + length(cv$unexpected)) == 0)
+           ((length(cv$missing) +
+             length(cv$unexpected) +
+             length(cv$duplicates)) == 0)
          toggleState("accept", can_accept)
          validation_table_html(cv)
        }
@@ -261,8 +263,11 @@ mod_admin_server = function(id, app_user) {
          )
        } else {
          # missing, unexpected, commented_markers
+         expect_names = c("valid_markers", "missing", "unexpected",
+                          "duplicates", "unused_markers", "invalid_channels")
+
          mks = c("Valid markers", "Missing markers", "Unexpected Markers",
-                 "Unused Markers", "Invalid Channels")
+                 "Duplicated Markers", "Unused Markers", "Invalid Channels")
          if (length(mks) != length(cv))
            log_it(glue("Invalid or missing marker name: {mks}, {names(cv)}"))
          map2(cv,  mks,  function(x, y) {

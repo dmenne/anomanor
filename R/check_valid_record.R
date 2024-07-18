@@ -34,6 +34,7 @@ check_valid_record = function(file, source_file = NULL) {
     dplyr::pull(marker)
 
   markers = pm$markers$annotation
+  duplicates = markers[duplicated(markers)]
   missing = setdiff(required_markers, markers)
   unexpected = setdiff(markers,
                        c(default_markers, optional_markers, "begin"))
@@ -42,6 +43,7 @@ check_valid_record = function(file, source_file = NULL) {
     valid_markers = setdiff(markers, c(missing, unexpected, unused_markers, "begin")),
     missing = if (length(missing) == 0) NULL else missing,
     unexpected = if (length(unexpected) == 0) NULL else unexpected,
+    duplicates = if (length(duplicates) == 0) NULL else duplicates,
     unused_markers = if (length(unused_markers) == 0) NULL else unused_markers,
     invalid_channels = pm$invalid_channels
   )

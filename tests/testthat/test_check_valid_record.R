@@ -3,7 +3,17 @@ g = globals()
 withr::defer(cleanup_test_data())
 
 expect_names = c("valid_markers", "missing", "unexpected",
-                 "unused_markers", "invalid_channels")
+                 "duplicates", "unused_markers", "invalid_channels")
+
+test_that("Duplicate squeeze returns message", {
+  file = test_data_dir("testduplicatesqueeze.txt")
+  ret = check_valid_record(file)
+  checkmate::expect_list(ret)
+  expect_equal(names(ret), expect_names)
+  expect_equal(ret$duplicates[1], "Squeeze 2")
+  expect_null(ret$missing)
+  expect_null(ret$unexpected)
+})
 
 test_that("Valid file returns list with empty entries", {
   file = test_data_dir("test1.txt")
@@ -23,6 +33,7 @@ test_that("Bad markers file returns unexpected and missing", {
   expect_equal(ret$unexpected[1], "Blub")
   expect_setequal(ret$missing, c("Push 1", "Squeeze 1", "Squeeze 2"))
 })
+
 
 test_that("File with missing markers returns unexpected and missing", {
   file = test_data_dir("testmissingmarkers.txt")
