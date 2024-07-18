@@ -20,7 +20,7 @@ mod_data_ui = function(id, ...) {
     ),
     shinyWidgets::progressBar(ns("completed"), value = 0, display_pct = TRUE),
     # Error message when using tippy directly on progressBar, OK with tippyThis
-    tippyThis(ns("completed"), "Percent of task completed: 50% HRM, 50% conventional"),
+    tippyThis(ns("completed"), "Percent of task completed"),
     tags$style(glue("#{ns('help')} {{margin-top:26px}}")),
     fillRow(
       tippy(

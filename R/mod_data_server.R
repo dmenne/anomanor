@@ -65,8 +65,11 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       update_record_icons = function(){
         crs = records()
         req(crs)
-        ncompleted = sum(crs$nfinalized, na.rm = TRUE)
-        ntotal = nrow(crs)*3
+        # $ex are not counted for completion state
+        crs_no_sex = crs |>
+          filter(!str_starts(anon, "\\$"))
+        ncompleted = sum(crs_no_sex$nfinalized, na.rm = TRUE)
+        ntotal = nrow(crs_no_sex)*3
         shinyWidgets::updateProgressBar(
           session,
           id = "completed",
