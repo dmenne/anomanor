@@ -19,5 +19,5 @@ String encode32(uint32_t hash_int, int length = 7)
 }
 
 /*** R
-  encode32(312);
+  encode32(312)
  */
