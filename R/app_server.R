@@ -216,7 +216,9 @@ app_server = function(input, output, session) {
     iy = min(max(mc$y, 1), nrow(dt))
     y = round(y_to_pos(mc$y))
     p = round(dt[ix, iy]/10.0)
-    if (y >= 0) glue(" {p} mmHg, {y} mm") else '--'
+    if (y >= 0)
+      return(glue(" {p} mmHg {y} mm")) else
+    return('--')
   })
 
 

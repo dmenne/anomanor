@@ -9,8 +9,8 @@
 #' @importFrom glue glue glue_sql
 #' @importFrom dplyr case_when mutate select n left_join filter full_join summarize
 #' @importFrom dplyr group_by rename if_else  bind_rows transmute group_modify
-#' @importFrom dplyr arrange all_of pull
-#' @importFrom tidyr pivot_wider replace_na
+#' @importFrom dplyr arrange all_of pull right_join
+#' @importFrom tidyr pivot_wider replace_na drop_na
 #' @importFrom tidyselect ends_with
 #' @importFrom tibble tibble tribble as_tibble rownames_to_column
 #' @importFrom flextable flextable autofit bg

@@ -6,6 +6,7 @@ filter_markers = function(markers, classification_ph) {
   fmcp = g$mcp %>%
     filter(g$mcp$classification_phase == classification_ph)
   markers %>%
-    dplyr::right_join(fmcp,  by = c("annotation" = "marker")) %>%
-    select(-classification_phase, -mtype)
+    right_join(fmcp,  by = c("annotation" = "marker")) %>%
+    select(-classification_phase, -mtype) %>%
+    drop_na(sec)
 }
