@@ -99,7 +99,7 @@ mod_admin_ui = function(id, ...) {
           fillRow(
             flex = c(1,3),
             shinyWidgets::actionBttn(ns("reset_me"), "Reset me"),
-            helpText(HTML("This will erase all classifications for the currently logged-in admin user. No relevant information is destroyed, because classifications entered by the admin users are only stored, but discarded in statistics. Use this when you want to reset you classification for a demonstration, so your and only your ratings are back to the <b>?</b>-state.")),
+            helpText(HTML("This will erase all classifications for the currently logged-in admin user. No relevant information is destroyed, because classifications entered by the admin users are stored, but discarded in statistics. Use this when you want to reset you classification for a demonstration, so your and only your ratings are back to the <b>?</b>-state.")),
             width = col_width,  height = 70
           ),
           h2("Danger zone"),

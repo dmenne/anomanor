@@ -21,6 +21,10 @@ test_that("filter_markers returns sublist", {
 
   ret = filter_markers(markers, "tone")
   expect_equal(ret$annotation, c("Rest", "Squeeze 1", "Squeeze 2", "Long Squeeze"))
+  # Remove squeeze - there should be no NA
+  ret = filter_markers(markers |> filter(annotation != "Long Squeeze"), "tone")
+  expect_equal(ret$annotation, c("Rest", "Squeeze 1", "Squeeze 2"))
+
 
   ret = filter_markers(markers, "blub")
   expect_equal(nrow(ret), 0)

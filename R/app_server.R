@@ -691,5 +691,6 @@ app_server = function(input, output, session) {
            force_console = FALSE)
     if (keycloak_available())
       g$keycloak$logout_user_by_name(app_user)
+    stopApp()
   })
 }
