@@ -27,7 +27,7 @@ generate_sample_classification = function(users, force = TRUE,
   add_users = users
   if (add_consensus) add_users = c(add_users, "x_consensus")
   lapply(add_users, function(user){
-    group = if (str_starts(user, "x_")) "experts" else "trainees"
+    group = ifelse(str_starts(user, "x_"), "experts", "trainees")
     insert_user(user, group)
     invisible(NULL)
   })
@@ -46,7 +46,7 @@ generate_sample_classification = function(users, force = TRUE,
           next
         for (method in c("l", "h")) {
           use_correct = rbinom(1, 1,  p_correct)
-          classification = if (use_correct) correct_class else sample(classes, 1)
+          classification = ifelse(use_correct, correct_class, sample(classes, 1))
           tt = round(rnorm(1, 30, 5),1)
           pos = round(rnorm(1, 27, 5),1)
           section_pars = NULL
@@ -65,7 +65,7 @@ generate_sample_classification = function(users, force = TRUE,
               "pos2", round(pos + rnorm(1, 5),1)
             )
           }
-          finalized = if (is_expert) 1 else rbinom(1, 1,  p_finalized)
+          finalized = ifelse(is_expert, 1, rbinom(1, 1,  p_finalized))
 
           classification_to_database(user, record, method, finalized, "begin",
                                  classification, phase1, section_pars, "Comment")
@@ -82,7 +82,7 @@ generate_sample_classification = function(users, force = TRUE,
   }
   # Add to keycloak if not there already
   for (user in users) {
-    group = if (str_starts(user, "x_")) "experts" else "trainees"
+    group = ifelse(str_starts(user, "x_"), "experts", "trainees")
     email = glue("{user}@{g$config$test_email_url}")
     p = g$keycloak$add_user(email, group, force_confirm = TRUE, emailVerified = TRUE)
 #      log_it(paste0(p, " ", email, " ", group, "\n"))

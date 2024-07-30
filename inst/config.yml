@@ -33,7 +33,8 @@ sa_random_trainee:
 
 test:
   # email_url only to generate sample data
-  anomanor_data_base: !expr tempdir(TRUE)
+  anomanor_data_base: !expr anomanor::test_database_dir()
+  #anomanor_data_base: !expr tempdir(TRUE)
   test_email_url: !expr Sys.getenv("TEST_EMAIL_URL")
   app_user: test
   app_groups: trainees

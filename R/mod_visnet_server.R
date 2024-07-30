@@ -70,9 +70,9 @@ moduleServer(
     })
 
     observe({
-      js = if (finalized())
-        glue::glue("$('#{ns_network}').addClass('noclick')") else
-          glue::glue("$('#{ns_network}').removeClass('noclick')")
+      js = ifelse(finalized(),
+        glue::glue("$('#{ns_network}').addClass('noclick')"),
+        glue::glue("$('#{ns_network}').removeClass('noclick')"))
       shinyjs::runjs(js)
     })
 

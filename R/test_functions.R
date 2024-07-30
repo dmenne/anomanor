@@ -1,4 +1,20 @@
-# Not used in app, only for as auxillary functions for testsin
+#' Create temporary director
+#' Creates a temporary directory as randomly name
+#' subdirectory of the temporary directory.
+#' Exported there because it is being used in config.yml,
+#' e.g as
+#' `anomanor_data_base: !expr anomanor::test_database_dir()`
+#'
+#' @return Full path to temporary directory
+#' @export
+test_database_dir = function(){
+  d = paste(tempdir(TRUE),stringi::stri_rand_strings(1,10),sep = "\\")
+  if (!dir.exists(d))
+    dir.create(d)
+  d
+}
+
+# Not used in app, only as auxillary functions for testing
 # Callback from globals.R
 copy_test_data = function(gg){
   dd = rprojroot::find_testthat_root_file("../data/md")
@@ -15,6 +31,7 @@ cleanup_test_data = function(){
     unlink(g$anomanor_data_base, recursive = TRUE)
   }
 }
+
 
 test_data_dir = function(basename){
   f = file.path(dirname(rprojroot::find_testthat_root_file()),

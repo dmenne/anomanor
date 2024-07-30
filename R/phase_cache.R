@@ -49,7 +49,7 @@ phase_cache = function(file, method, max_p, active_begin, phase_label,
         operator = operator )
   for (i in 1:nrow(annot)) {
     a = annot[i,]
-    color = if (method == 'h' & i != 4)  "white" else "black"
+    color = ifelse(method == 'h' & i != 4, "white", "black")
     boxcolor = if (i <= 3) NULL else
                if (color == "white") "black" else "white"
     img = img %>%

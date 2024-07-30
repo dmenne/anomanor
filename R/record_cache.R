@@ -3,8 +3,8 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   # Prepare names, create cache dir, and delete old cache file
   # When file has a "/", it is assumed that it is already full qualified
   # Full path is used for testing
-  records_file = if (str_detect(file, "[/\\\\]")) file else
-    file.path(g$record_dir, file)
+  records_file = ifelse(str_detect(file, "[/\\\\]"), file,
+    file.path(g$record_dir, file))
   base_file = basename(records_file)
   # Record is used in glue below
   record = file_path_sans_ext(base_file)
@@ -30,8 +30,9 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
                  .con = g$pool)
   file_mtime = dbGetQuery(g$pool,sql)
   file_mtime1 = as.integer(file.info(records_file)$mtime)
-  in_db = if (nrow(file_mtime) == 0 || is.na(file_mtime1) || is.na(file_mtime[1,1]))
-    FALSE  else abs(file_mtime[1,1] - file_mtime1) < 2
+  in_db = ifelse(
+    nrow(file_mtime) == 0 || is.na(file_mtime1) || is.na(file_mtime[1,1]),
+    FALSE,  abs(file_mtime[1,1] - file_mtime1) < 2)
   if (in_db &&
       is.null(test_hook) &&
       file.exists(png_hrm_file) &&

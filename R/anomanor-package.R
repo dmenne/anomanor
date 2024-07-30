@@ -34,6 +34,7 @@
 #' @importFrom flextable set_caption add_footer merge_at bg set_table_properties
 #' @importFrom flextable htmltools_value
 #' @importFrom flextable htmltools_value
+#' @importFrom stringi stri_rand_strings
 #' @importFrom scales col_numeric
 # @importFrom withr defer
 #' @useDynLib anomanor, .registration = TRUE

@@ -420,7 +420,7 @@ app_server = function(input, output, session) {
   }
 
   observe({
-    if (rvalues$finalized) disable_main_image()  else enable_main_image()
+    if (rvalues$finalized) {disable_main_image()}  else {enable_main_image()}
     toggleState("comment", !rvalues$finalized)
   })
 
@@ -431,7 +431,7 @@ app_server = function(input, output, session) {
   # ----------- toggle_picker_state ------------------------------
   toggle_picker_state  = function(id, enabled) {
     # https://github.com/dreamRs/shinyWidgets/issues/341
-    disable = if (enabled) "false" else "true"
+    disable = ifelse(enabled, "false", "true")
     shinyjs::runjs(glue("$('#{id}').prop('disabled', {disable});"))
     shinyjs::runjs(glue("$('#{id}').selectpicker('refresh');"))
   }
@@ -480,7 +480,7 @@ app_server = function(input, output, session) {
       filter(phase == cp)  %>%
       filter(id == node) %>%
       filter(group != 'a')  # only terminal nodes
-    if (nrow(vis_selected) == 0) 0 else vis_selected$id[1]
+    ifelse(nrow(vis_selected) == 0, 0, vis_selected$id[1])
   })
 
   # ----------- when to update network edges ---------------------------
@@ -583,8 +583,7 @@ app_server = function(input, output, session) {
       rvalues$section_line = cf[1:4]
       updateTextAreaInput(session, "comment", value = cf$comment)
       rvalues$classification = cf$classification
-    } else
-    {
+    } else {
       rvalues$finalized = FALSE
       rvalues$classification = 0 # Nothing selected
       rvalues$section_line = NULL
@@ -611,14 +610,15 @@ app_server = function(input, output, session) {
   output$user = renderText({
     record()
     ag = paste(app_groups, collapse = ", ")
-    indocker = if (g$in_docker) 'D' else 'ND'
-    use_keycloak = if (keycloak_available()) 'K' else 'NK'
+    indocker = ifelse(g$in_docker, 'D', 'ND')
+    use_keycloak = ifelse(keycloak_available(), 'K', 'NK')
     if (g$active_config == "keycloak_production" && !is_admin) {
       glue("User: {app_user}/{ag}")
     } else {
-      xr = if (is.null(complete_expert_ratings)) "No expert ratings" else
-        if (complete_expert_ratings) "Expert ratings complete" else
-          "Expert ratings not complete"
+      xr = if (is.null(complete_expert_ratings))
+        {"No expert ratings"} else  if (complete_expert_ratings)
+        {"Expert ratings complete"} else
+        "Expert ratings not complete"
       glue("User: {app_user}/{ag} {indocker} {g$active_config}/{use_keycloak}; {xr}")
     }
   })
@@ -631,8 +631,8 @@ app_server = function(input, output, session) {
   observeEvent(classification_method(), {
     is_example = is_example(isolate(record()))
     msg = if (is_example)
-      "For example records starting with <b>$ex</b>, switching between methods shows the same patient's data." else
-      "Switching between methods displays <b>a different</b> random record."
+      {"For example records starting with <b>$ex</b>, switching between methods shows the same patient's data."} else {
+      "Switching between methods displays <b>a different</b> random record." }
     shiny::showNotification(type = "warning", duration = 4, HTML(msg)
     )},
     ignoreInit = TRUE

@@ -114,7 +114,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         ps = classification_phase_summary(app_user,
                                           str_replace(rec, '.txt', ''),
                                           classification_method())
-        selected = if (select_all)  "all" else input$classification_phase
+        selected = ifelse(select_all, "all", input$classification_phase)
         shinyWidgets::updatePickerInput(session = session,
                           inputId = "classification_phase",
                           selected = selected,
