@@ -5,8 +5,10 @@ withr::defer(cleanup_test_data())
 
 test_that("phase_cache creates required files", {
 
-  unlink(glue("{g$png_dir}/*.png"))
-  unlink(glue("{g$record_cache_dir}/*.rds"))
+  message(g$png_dir)
+  message(g$record_cache_dir)
+  unlink(glue("{g$png_dir}/*.png"), force = TRUE)
+  unlink(glue("{g$record_cache_dir}/*.rds"), force = TRUE)
   expect_equal(length(dir(g$png_dir)), 0)
   expect_equal(length(dir(g$record_cache_dir)), 0)
 
