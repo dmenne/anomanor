@@ -205,7 +205,7 @@ mod_admin_server = function(id, app_user) {
                           session = session,
                           type = "error")
        initial_record_cache()
-       checked_patients = check_patient_records()
+       g$checked_patients = check_patient_records()
        update_record_choices()
        if (checked_patients != "")
          shiny::showNotification(HTML(checked_patients), type = "warning")

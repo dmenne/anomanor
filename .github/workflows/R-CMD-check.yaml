@@ -3,7 +3,7 @@
 # Version July 2024
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, refactoring_globals]
   pull_request:
     branches: [main, master]
 

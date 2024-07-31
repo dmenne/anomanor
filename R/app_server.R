@@ -50,7 +50,7 @@ app_server = function(input, output, session) {
     window_width = NULL)
 
   # Display message
-  if (g$checked_patients != "")
+  if (exists("checked_patients", where = g) && g$checked_patients != "")
     shiny::showNotification(
       HTML(g$checked_patients),
       duration = ifelse(str_starts(g$active_config, "keycloak"), 60, 10),
