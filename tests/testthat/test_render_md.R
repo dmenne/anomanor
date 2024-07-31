@@ -1,6 +1,6 @@
 Sys.setenv("R_CONFIG_ACTIVE" = "test")
 
-g = globals()
+globals()
 withr::defer(cleanup_test_data())
 
 test_that("Can render all md files", {

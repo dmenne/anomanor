@@ -7,7 +7,7 @@ run_app = function() {
     ui = app_ui,
     server = app_server,
     onStart = function(){
-      g <<- globals() # g is defined in globals.R
+      globals() # assigns g to .GlobalEnv
       onStop(function() {
         ano_poolClose()
       })

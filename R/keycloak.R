@@ -24,7 +24,7 @@ Keycloak = R6::R6Class("Keycloak", list(
         log_stop("keyloack_production:",
                  "No password in environment variable ADMIN_PASSWORD")
     }
-    if (stringr::str_starts(keycloak_site, "keycloak")){
+    if (stringr::str_starts(keycloak_site, "keycloak")) {
       self$base_url = glue("https://{keycloak_site}")
     } else {
       self$base_url = glue("http://{keycloak_site}:{keycloak_port}")

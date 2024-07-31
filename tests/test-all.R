@@ -1,7 +1,7 @@
 library(testthat)
-options(Ncpus = parallel::detectCores(logical = TRUE))
-# Some tests may fail in parallel mode.
 # Use in DESCRIPTION
 # Config/testthat/parallel: true
-#options(Ncpus = 1)
+options(Ncpus = parallel::detectCores(logical = TRUE))
+# Some tests may fail in parallel mode.
+#options(Ncpus = 6)
 test_check("anomanor")

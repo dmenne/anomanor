@@ -4,7 +4,7 @@
 # I have no idea why the following two lines are
 # needed to keep Check quiet. Probably error in roxygen2
 # Not needed to run without Check
-# Warning: globals: no visible binding for '<<-' assignment to 'g'
+# Warning: globals: no visible binding for global variable g
 utils::globalVariables("g")
 
 globals = function(){
@@ -121,7 +121,7 @@ globals = function(){
     "Keycloak interface</a>")
 
     # Force port 443 if we have a string
-  g <<- mget(ls()) # Temporary global
+  assign("g", mget(ls()), envir = .GlobalEnv)
   if (config$use_keycloak && !keycloak_available())
     log_stop(
       glue(
@@ -187,7 +187,7 @@ globals = function(){
   tippy_global_theme("translucent")
 
   # Requires temporary g assigned above
-  g <<- mget(ls()) # Temporary replacement for global g
+  assign("g", mget(ls()), envir = .GlobalEnv)
   initial_record_cache()
 
   test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
@@ -211,8 +211,8 @@ globals = function(){
       "Initiallly copied  {n_copied_md} static data records and images (md, txt)"))
   rm(n_copied_md, n_copied_record, n_copied_patient)
 
+  assign("g", mget(ls()), envir = .GlobalEnv)
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency
-  checked_patients = check_patient_records()
-  mget(ls())
+  check_patient_records()
 }

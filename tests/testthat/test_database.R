@@ -1,5 +1,5 @@
 Sys.setenv("R_CONFIG_ACTIVE" = "test")
-g = globals()
+globals()
 withr::defer(cleanup_test_data())
 
 valid_fa = c("fa-battery-2", "fa-battery-1", "fa-battery-3",

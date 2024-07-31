@@ -1,5 +1,5 @@
 Sys.setenv("R_CONFIG_ACTIVE" = "test")
-g = globals()
+globals()
 withr::defer(cleanup_test_data())
 options(warn = 2)
 
