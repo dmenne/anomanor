@@ -8,7 +8,7 @@
 #' @return Full path to temporary directory
 #' @export
 test_database_dir = function(){
-  d = paste(tempdir(TRUE),stringi::stri_rand_strings(1,10),sep = "\\")
+  d = file.path(tempdir(TRUE),stringi::stri_rand_strings(1,10))
   if (!dir.exists(d))
     dir.create(d)
   d
