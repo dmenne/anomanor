@@ -43,7 +43,7 @@ plot_time = function(xy, max_p) {
 plot_position = function(xy, max_p) {
   stopifnot(is.list(g)) # requires globals
   xy_sensor = xy[xy$where == "sensor",]
-  if (nrow(xy_sensor) == 0) return (NULL)
+  if (nrow(xy_sensor) == 0) return(NULL)
   xy_sensor$pos = xy_sensor$pos - min(xy_sensor$pos)
   req(nrow(xy_sensor) > 0 )
   # Use simple minimum as baseline

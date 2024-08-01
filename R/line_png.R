@@ -29,7 +29,7 @@ line_png = function(ss, png_line_file, max_p, time_step_stretched) {
 }
 
 line_channels = function(){
-  first_channel = as.integer(2*g$balloon_size)+1
+  first_channel = as.integer(2*g$balloon_size) + 1
   c(1L, as.integer(seq.int(first_channel, g$image_height,
                            length.out = g$n_line_channels)))
 }

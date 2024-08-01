@@ -12,7 +12,7 @@ line_legend = function(legend_file, scale, max_p, image_height) {
   # https://github.com/ropensci/magick/issues/330
   image_montage(scales,
                 geometry = glue("{legend_w}x{offset_step}+0+0"),
-                tile = glue("1x{g$n_line_channels +1}"))  %>%
+                tile = glue("1x{g$n_line_channels + 1}"))  %>%
     image_resize(glue("{legend_w}!x{image_height}")) %>%
     image_write(legend_file, format = "png")
 }

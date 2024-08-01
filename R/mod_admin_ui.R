@@ -87,22 +87,24 @@ mod_admin_ui = function(id, ...) {
           fillRow(
             flex = c(1,3),
             downloadButton(ns("download_database"), "Download Database"),
-            helpText("Download the zipped SQLite database file. Use this before you perform any risky operations on this page. Restoring data from an existing SQLite backup must be done by the system admin currently."),
+            helpText("Download the zipped SQLite database file. Use this before performing any risky operations on this page. Restoring data from an existing SQLite backup must currently be done by the system administrator."),
             width = col_width,  height = 70
           ),
           fillRow(
             flex = c(1,3),
             shinyWidgets::actionBttn(ns("clear_cache"), "Clear cache"),
-            helpText("HRM and conventional displays are created on the fly when requested for the first time, and stored in a cache for future faster retrieval. Use this button when old style images turn up and you want to force a refresh of the cache. No classification data will be deleted."),
+            helpText("HRM and conventional displays are created on the fly the first time they are requested and stored in a cache for faster future retrieval. Use this button when old style images appear and you want to force a cache refresh. Classification data is not deleted."),
             width = col_width,  height = 70
           ),
           fillRow(
             flex = c(1,3),
             shinyWidgets::actionBttn(ns("reset_me"), "Reset me"),
-            helpText(HTML("This will erase all classifications for the currently logged-in admin user. No relevant information is destroyed, because classifications entered by the admin users are stored, but discarded in statistics. Use this when you want to reset you classification for a demonstration, so your and only your ratings are back to the <b>?</b>-state.")),
+            helpText(HTML("This will delete all classifications for the currently logged in Admin user. No relevant information will be destroyed, because classifications entered by admin users are only stored, but discarded in the statistics. Use this if you want to reset your classification for a demonstration, so that your and only your ratings are back to <b>?</b>-status.")),
             width = col_width,  height = 70
           ),
-          h2("Danger zone"),
+          h2("Danger zone (currently hidden)", id = "danger-zone"),
+          # *** Remove this to show danger elements
+          shinyjs::hidden(
           wellPanel(
             width = col_width + 20,
             fillRow(
@@ -124,17 +126,17 @@ mod_admin_ui = function(id, ...) {
             fillRow(
               flex = c(1,3),
               shinyWidgets::actionBttn(ns("clear"), "Clear", color = "danger"),
-              helpText(HTML("<b>Danger</b>: This will delete all classifications, without creating randomized new data. Use it when you want to start a test run from scratch. The log file will also be cleared.")),
+              helpText(HTML("<b>Danger</b>: This will delete all classifications, without creating randomized new data. Use his if you want to start a test run from scratch. The log file will also be cleared.")),
               width = col_width, height = 60
             ),
             fillRow(
               flex = c(1,3),
               shinyWidgets::actionBttn(ns("generate"), "Test data",
                                        color = "danger"),
-              helpText(HTML("<b>Danger:</b> This will delete all classifications and create a new set of simulated random data. Use it only in test mode!")),
+              helpText(HTML("<b>Danger:</b> This will delete all classifications and create a new set of simulated random data. Use this in test mode only!")),
               width = col_width, height = 60
             ),
-          )
+          )),
         ),
       ) # tabPanel
     ) #tabsetPanel

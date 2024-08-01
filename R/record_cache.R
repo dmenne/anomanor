@@ -77,7 +77,6 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   }
 
   nc = ncol(hr) - 3 # TIME and balloons are not interpolated
-  nr = nrow(hr)
   # interpolate
   new_y = seq(1, nc, by = g$mm_resolution/g$sensor_step)
   if ("B1" %in% invalid_channels) hr$B1 = hr$B2

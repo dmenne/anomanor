@@ -39,6 +39,10 @@ h2 {
   margin-bottom: 5px;
 }
 
+#danger-zone {
+  margin-top:40px;
+}
+
 #sidebar_panel {
   max-width: 300px;
 }
