@@ -5,6 +5,22 @@ withr::defer(cleanup_test_data())
 valid_fa = c("fa-battery-2", "fa-battery-1", "fa-battery-3",
   "fa-question", "fa-flag-checkered", "fa-check")
 
+test_that("timestamp is updated when classification is saved",{
+  ret = classification_from_database("x_bertha", "test1", 'l', "tone", 0.17)
+  expect_type(ret, "list")
+  expect_equal(length(ret), 7)
+  timestamp_sql = glue(
+    "SELECT timestamp from classification where user = 'x_bertha' and record = 'test1' ",
+    "and method = 'l' and classification_phase = 'tone'")
+  ts1 = dbGetQuery(g$pool, timestamp_sql)
+  expect_equal(nrow(ts1),1)
+  classification_to_database("x_bertha", "test1", "l", 1, "begin", 9, "tone",
+                              NULL, "comment")
+  ts2 = dbGetQuery(g$pool, timestamp_sql)
+  expect_gt(ts2, ts1)
+})
+
+
 
 test_that("selectize_record_choices returns grouped list",{
   record_summary = tibble(
