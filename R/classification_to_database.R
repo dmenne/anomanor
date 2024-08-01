@@ -7,12 +7,13 @@ classification_to_database = function(user, record, method, finalized, protocol_
   if (classification_phase == "all")  # Shortcut, no "all" values are saved
     return(NULL)
   record = str_replace(record, ".txt", "")
+  timestamp = as.integer(Sys.time())
   if (is.null(section_pars)) {
     q = glue_sql("INSERT OR REPLACE INTO classification ",
      "(user, record, method, finalized, protocol_phase, classification,",
-     "classification_phase, comment) ",
+     "classification_phase, comment, timestamp) ",
      "VALUES ({user},{record},{method},{finalized},{protocol_phase},",
-     "{classification},{classification_phase},{comment})",
+     "{classification},{classification_phase},{comment},{timestamp})",
          .con = g$pool)
 
   } else {
@@ -20,12 +21,13 @@ classification_to_database = function(user, record, method, finalized, protocol_
     q = glue_sql(
       "INSERT OR REPLACE INTO classification ",
       "(user, record, method, finalized, protocol_phase, classification, ",
-      "classification_phase,",
-      "duration, length, p_min, p_max, above_base, t1, t2, pos1, pos2, comment) ",
+      "classification_phase,", "duration, length, p_min, p_max, above_base,
+      t1, t2, pos1, pos2, comment, timestamp) ",
       "VALUES ({user},{record},{method},{finalized},{protocol_phase},",
       "{classification},{classification_phase},",
       "{v['duration']},{v['length']},{v['p_min']},{v['p_max']},",
-      "{v['above_base']},{v['t1']},{v['t2']},{v['pos1']},{v['pos2']}, {comment})",
+      "{v['above_base']},{v['t1']},{v['t2']},{v['pos1']},{v['pos2']}, {comment},
+      {timestamp})",
                  .con = g$pool)
   }
   success = dbExecute(g$pool, q)

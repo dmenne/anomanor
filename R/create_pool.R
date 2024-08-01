@@ -51,7 +51,8 @@ create_tables = list(
   t2             DOUBLE,
   pos1           DOUBLE,
   pos2           DOUBLE,
-  comment        CHAR
+  comment        CHAR,
+  timestamp      INTEGER
 );",
 
 "CREATE UNIQUE INDEX IF NOT EXISTS user_phase ON classification (

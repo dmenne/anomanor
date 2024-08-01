@@ -9,6 +9,13 @@ test_that("marker_classification_phase table exists and has values", {
   expect_setequal(ret$mtype, c("o", "n", "r"))
 })
 
+test_that("classification has the correct fields", {
+  q = "SELECT * from classification"
+  ret = dbGetQuery(g$pool, q)
+  expected_fields = c('user', 'record', 'method', 'finalized', 'protocol_phase', 'classification_phase', 'classification', 'duration', 'length', 'p_min', 'p_max', 'above_base', 't1', 't2', 'pos1', 'pos2', 'comment', 'timestamp')
+  expect_setequal(names(ret), expected_fields)
+})
+
 test_that("New sqlite database is created",{
   q = "SELECT DISTINCT user from classification"
   ret = dbGetQuery(g$pool, q)$user
