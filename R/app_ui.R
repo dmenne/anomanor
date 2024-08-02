@@ -50,7 +50,7 @@ app_ui = function() {
                 choices = g$pressure_choices)
               )
           ),
-          helpText("Press F11 key for full-screen view"),
+          helpText("Press F11 or Control-⌘-F (Mac) for full-screen view"),
           conditionalPanel("output.is_admin", tippy(
             shinyWidgets::switchInput(
               inputId = "admin",
