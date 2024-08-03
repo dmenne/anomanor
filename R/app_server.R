@@ -180,27 +180,51 @@ app_server = function(input, output, session) {
 
   # ----------- Finalize button action -----------------------------
   observeEvent(input$finalize, {
-    no_profile = ""
-    if (classification_method() == 'h' && is.null(rvalues$section_pars))
+    request_section = classification_method() == 'h' &&
+      is.null(rvalues$section_pars)
+#    no_profile = request_confirmation = NULL
+    request_confirmation = no_profile = NULL
+    if (request_section) {
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"
-    shinyWidgets::ask_confirmation(inputId = "confirm_finalize",
-     title = "Confirm Finalization",
-     text = HTML(paste0(no_profile,
-    "After finalization you can no longer change your selection.",
-    "Trainees will be shown expert classification on the edge text")),
-                     btn_labels = c( "I will think it over", "Finalize!"),
-                     btn_colors = c( "#e08e0b", "#000000"),
-                     html = TRUE
-    )
+      request_confirmation = TRUE
+    } else {
+      no_profile = ""
+      finalize_count = get_finalize_count(app_user)
+      request_confirmation =
+        finalize_count < g$config$confirm_finalize_count
+      remaining_shows = g$config$confirm_finalize_count - finalize_count
+      if ()
+        no_profile = glue('<p class="blink-text">{finalize_count} Times</p>')
+
+      if (request_confirmation)
+        finalize_count = increment_finalize_count(app_user, finalize_count)
+    }
+    if (request_confirmation) {
+      shinyWidgets::ask_confirmation(inputId = "confirm_finalize",
+       title = "Confirm Finalization",
+       text = HTML(paste0(no_profile,
+      "After finalization you can no longer change your selection.",
+      "Trainees will be shown expert classification on the edge text")),
+                       btn_labels = c( "I will think it over", "Finalize!"),
+                       btn_colors = c( "#e08e0b", "#000000"),
+                       html = TRUE
+    )} else
+    {
+      shiny::showNotification("Finalized", type = "message", duration = 2)
+      confirm_finalize()
+    }
   })
+  # ----------- confirm_finalize ---------------------------------------
+  confirm_finalize = function(){
+    save_classification(TRUE)
+    rvalues$finalized = TRUE
+  }
 
   # ----------- confirm of finalize action -----------------------------
   observeEvent(input$confirm_finalize, {
     if (input$confirm_finalize) {
-      save_classification(TRUE)
-      rvalues$finalized = TRUE
-      shiny::showNotification("Finalized")
+      confirm_finalize()
     } else {
       toggle_button_state(TRUE)
     }

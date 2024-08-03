@@ -14,6 +14,7 @@ default:
   keycloak_realm: anomanor
   show_results_to_experts: TRUE
   test_email_url: !expr Sys.getenv("TEST_EMAIL_URL")
+  confirm_finalize_count: 3
 
 sa_trainee:
   app_user: caesar

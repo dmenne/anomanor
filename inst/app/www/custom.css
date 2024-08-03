@@ -235,3 +235,28 @@ hr {
 #section_value_div {
   height: 100px;
 }
+
+@keyframes blink {
+  0%  { opacity: 1;}
+  50% { opacity:0;}
+  100%{ opacity:1;}
+}
+
+.blinking-text{
+  text-align:center;
+  margin-top:20%;
+  font-size:24px;
+  color:green;
+  animation:blink 1s infinite;
+}
+
+#shiny-notification-panel {
+  font-size: 2rem;
+  top: 30%;
+  bottom: unset;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 450px;
+}

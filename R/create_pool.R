@@ -103,10 +103,22 @@ VALUES
 ('n','tone','Rest'),
 ('n','tone','Long Squeeze'),
 ('r','tone','Squeeze 1'),
-('r','tone','Squeeze 2');
-"
+('r','tone','Squeeze 2');",
 
+"CREATE TABLE IF NOT EXISTS settings (
+  user  TEXT REFERENCES user (user) ON DELETE CASCADE,
+  key   TEXT NOT NULL,
+  value TEXT
+);",
+
+"-- Index: user_key
+CREATE UNIQUE INDEX IF NOT EXISTS user_key ON settings (
+  user,
+  key
+);
+"
 )
+
 
 create_pool = function(sqlite_path) {
   ret = pool::dbPool(drv = RSQLite::SQLite(), dbname = sqlite_path,
