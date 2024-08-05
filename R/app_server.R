@@ -75,7 +75,9 @@ app_server = function(input, output, session) {
   })
 
   # ----------- classification_phase --------------------------------
-  classification_phase = reactive({dm$classification_phase()})
+  classification_phase = reactive({
+    dm$classification_phase()
+  })
 
   # ----------- record --------------------------------
   record = reactive({
@@ -83,22 +85,34 @@ app_server = function(input, output, session) {
   })
 
   # ----------- markers --------------------------------
-  markers = reactive({dm$markers()})
+  markers = reactive({
+    dm$markers()
+  })
 
   # ----------- markers --------------------------------
-  active_width = reactive({dm$active_width()})
+  active_width = reactive({
+    dm$active_width()
+  })
 
   # ----------- protocol_phase_start ------------------------------
-  protocol_phase_start = reactive({dm$protocol_phase_start()})
+  protocol_phase_start = reactive({
+    dm$protocol_phase_start()
+  })
 
   # ----------- start_time ------------------------------
-  start_time = reactive({dm$start_time()})
+  start_time = reactive({
+    dm$start_time()
+  })
 
   # ----------- data ------------------------------
-  data = reactive({dm$data()})
+  data = reactive({
+    dm$data()
+  })
 
   # ----------- Sampling step for this record  --------------------------
-  time_step = reactive({data()$time_step})
+  time_step = reactive({
+    data()$time_step
+  })
 
   # ----------- update_classification_phase_icons  --------------------------
   update_classification_phase_icons = function(select_all = FALSE){
@@ -184,6 +198,7 @@ app_server = function(input, output, session) {
     if (classification_method() == 'h' && is.null(rvalues$section_pars))
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"
+    print(group)
     shinyWidgets::ask_confirmation(inputId = "confirm_finalize",
      title = "Confirm Finalization",
      text = HTML(paste0(no_profile,
@@ -691,6 +706,6 @@ app_server = function(input, output, session) {
            force_console = FALSE)
     if (keycloak_available())
       g$keycloak$logout_user_by_name(app_user)
-    stopApp()
+#    stopApp() # this will crash the app on F5
   })
 }

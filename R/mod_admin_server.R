@@ -335,7 +335,6 @@ mod_admin_server = function(id, app_user) {
       unlink(paste0(g$record_cache_dir, "/*"))
       unlink(paste0(g$html_dir, "/*"))
       log_it("Cache cleared")
-      session$reload()
     })
 
     observeEvent(input$reset_me, {
@@ -344,21 +343,21 @@ mod_admin_server = function(id, app_user) {
       note = glue("Classifications for user {app_user} were erased")
       shiny::showNotification(note )
       log_it(note)
-      session$reload()
+#      session$reload()
     })
 
     observeEvent(input$generate, {
       generate_sample_classification(g$test_users, force = TRUE,
         expert_complete = TRUE, add_consensus = TRUE)
       log_it("Sample data generated")
-      session$reload()
+      session$reload() # Will leave admin mode
     })
 
     observeEvent(input$clear, {
       dbExecute(g$pool, "DELETE FROM classification")
       dbExecute(g$pool, "DELETE FROM ano_logs")
       log_it("Classfications deleted, log cleared")
-      session$reload()
+      session$reload() # Will leave admin mode
     })
 
     update_record_choices = function() {
