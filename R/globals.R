@@ -214,7 +214,5 @@ globals = function(){
   assign("g", mget(ls()), envir = .GlobalEnv)
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency
-  log_it("Executed globals.R")
-
   check_patient_records()
 }
