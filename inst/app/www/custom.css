@@ -107,7 +107,6 @@ h2 {
   padding-right: 4px;
   text-align: center;
   font-weight: bold;
-  float: right;
   width: 100px;
   margin-top: 10px;
   vertical-align: middle;
@@ -184,6 +183,7 @@ h2 {
 
 .progress {
   margin-bottom:8px;
+  border:none;
 }
 
 .shiny-output-error-validation {
@@ -214,6 +214,18 @@ h2 {
   margin-top: 0px;
 }
 
+.well {
+  border: none;
+  padding: 5px;
+  margin:5px;
+}
+
+.well .disabled {
+  color:#aaa;
+  background:#F5F5F5;
+  pointer-events: none;
+}
+
 .col-sm-3 {
     padding-right: 0;
     width: 290px;
@@ -235,3 +247,4 @@ hr {
 #section_value_div {
   height: 100px;
 }
+

@@ -10,12 +10,14 @@
 #' @return The number of files copied.
 #'
 #' @examples
+#' \dontrun{
 #' copy_from_data_store("my_destination")
 #' # Copy all files from data store to "my_destination" if my_destination is empty
 #'
 #' # Copy only modified files from data store to "my_destination"
 #' copy_from_data_store("my_destination", if_empty_only = FALSE)
 #'
+#'}
 #' @export
 
 copy_from_data_store = function(dest_dir, if_empty_only = TRUE){

@@ -21,3 +21,4 @@ Renviron_production
 ^codecov\.yml$
 ^\.lintr
 ^\.gitkeep$
+.prettierrc

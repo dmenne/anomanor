@@ -27,31 +27,34 @@ app_ui = function() {
         sidebarPanel(
           id = "sidebar_panel",
           titlePanel("Anorectal Manometry"),
-          mod_data_ui("dm"),
-          textOutput("readout_hrm_value"),
-          tableOutput("readout_conventional_value"),
-          imageOutput("section", height = "270px"),
-          div(
-            id = "section_value_div",
-            uiOutput("section_value", class = "shiny-html-output")
-          ),
-          fluidRow(
-            splitLayout(
-              cellWidths = c("35%", "55%"),
-              shinyWidgets::sliderTextInput(
-                  inputId = "time_zoom",
-                  label = "Zoom (+/- key)",
+          wellPanel(
+            id = "in_sidebar_well",
+            mod_data_ui("dm"),
+            textOutput("readout_hrm_value"),
+            tableOutput("readout_conventional_value"),
+            imageOutput("section", height = "270px"),
+            div(
+              id = "section_value_div",
+              uiOutput("section_value", class = "shiny-html-output")
+            ),
+            fluidRow(
+              splitLayout(
+                cellWidths = c("35%", "55%"),
+                shinyWidgets::sliderTextInput(
+                    inputId = "time_zoom",
+                    label = "Zoom (+/- key)",
+                    force_edges = TRUE,
+                    grid = TRUE,  width = "100px",
+                    choices = g$time_zoom_levels),
+                shinyWidgets::sliderTextInput(
+                  "max_p", "Scale", grid = TRUE,
                   force_edges = TRUE,
-                  grid = TRUE,  width = "100px",
-                  choices = g$time_zoom_levels),
-              shinyWidgets::sliderTextInput(
-                "max_p", "Scale", grid = TRUE,
-                force_edges = TRUE,
-                choices = g$pressure_choices)
-              )
-          ),
-          helpText("Press F11 or Control-⌘-F (Mac) for full-screen view"),
-          conditionalPanel("output.is_admin", tippy(
+                  choices = g$pressure_choices)
+                )
+            ),
+        ),
+         helpText("Press F11 or Control \u2318-F (Mac) for full-screen view"),
+         conditionalPanel("output.is_admin", tippy(
             shinyWidgets::switchInput(
               inputId = "admin",
               "Administrator",
@@ -65,6 +68,7 @@ app_ui = function() {
           width = 3
         ), # sidebarPanel
         mainPanel(
+          id = "main_panel",
           conditionalPanel("input.admin == false",
            div(id = "image-container",
                imageOutput("mainimage"),
@@ -85,12 +89,6 @@ app_ui = function() {
               )
            ) # fluidRow
           ), # conditionalPanel no-admin,
-          conditionalPanel("input.admin  == true",
-            id = "admin_panel",
-            selected = "Upload",
-            type = "pills",
-            mod_admin_ui("admin")
-          ),
           width = 9
         ) # mainPanel
       ), # sidebarLayout

@@ -1,19 +1,22 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 1.2.0
+Version: 1.2.5
+Date/Publication:	2024-08-12
 Author: Dieter Menne
 Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",
            role = c("aut", "cre")),
-    person("Menne Biomed Consulting Tuebingen", role = c("cph")),
+    person("Mark", "Fox", role = c("fnd", "ctb")),
+    person("Isabella", "Bielicki", role = c("ctb")),
+    person("Menne Biomed Consulting", role = c("cph")),
     person("International Working Group for Disorders of Gastrointestinal Motility and Function",
            email="hrmconsensus.org",  role = c("fnd", "dtc")),
     person("EUGIM European Gastrointestinal Motility", email = "info@EUGIM-Hub.eu",
             role = c("fnd", "dtc")),
-    person("Mark", "Fox", role = c("fnd", "ctb")),
-    person("Isabella", "Bielicki", role = c("ctb"))
+    person(given = "University Hospital of Zurich, Dep. Gastroenterology",
+             role = c("dtc")),
+    person("Klinik Arlesheim", role = c("dtc"))       
     )
-Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
 Description: Provides online training for physicians and other practitioners
   using high-resolution anorectal manometry and the London Classification for
   disorders of anorectal function. It provides the opportunity to compare

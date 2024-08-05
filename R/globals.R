@@ -16,12 +16,13 @@ globals = function(){
   # Default configuration must set globally
   # By default, user is sa_admin
   active_config = Sys.getenv("R_CONFIG_ACTIVE")
+  # See .Renviron file for settings
   # Do not use the default in Sys.getenv here, problem later
   if (active_config == '') {
     Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
     active_config = Sys.getenv("R_CONFIG_ACTIVE")
   }
-
+  checked_patients = ""
   # See valid values in config.yml
   valid_config = c("sa_trainee", "sa_admin", "sa_expert", "test",
                    "test_expert", "keycloak_devel",
@@ -39,7 +40,6 @@ globals = function(){
       active_config == "keycloak_test" ~ "Renviron_keycloak_test",
       is_windows ~ "Renviron_windows",
       TRUE ~ "Renviron_devel")
-
   root_dir = app_sys()
   env_file = file.path(root_dir, env_file_base)
   if (!file.exists(env_file))
@@ -202,13 +202,13 @@ globals = function(){
   # Write log number of copied data
   if (n_copied_patient > 0)
     log_it(
-      glue("Initiallly copied  {n_copied_patient} sample case description files (md)"))
+      glue("Initially copied  {n_copied_patient} sample case description files (md)"))
   if (n_copied_record > 0)
     log_it(glue(
-      "Initiallly copied  {n_copied_record} sample case records (txt)"))
+      "Initially copied  {n_copied_record} sample case records (txt)"))
   if (n_copied_md > 0)
     log_it(glue(
-      "Initiallly copied  {n_copied_md} static data records and images (md, txt)"))
+      "Initially copied  {n_copied_md} static data records and images (md, txt)"))
   rm(n_copied_md, n_copied_record, n_copied_patient)
 
   assign("g", mget(ls()), envir = .GlobalEnv)

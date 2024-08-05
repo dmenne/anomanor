@@ -1,9 +1,10 @@
-#' Create temporary director
-#' Creates a temporary directory as randomly name
+#' Create temporary directory for database
+#'
+#' Creates a temporary directory as randomly named
 #' subdirectory of the temporary directory.
-#' Exported there because it is being used in config.yml,
-#' e.g as
-#' `anomanor_data_base: !expr anomanor::test_database_dir()`
+#' Exported here because it is used in \code{config.yml}, e.g as
+#'
+#' \code{anomanor_data_base: !expr anomanor::test_database_dir()}
 #'
 #' @return Full path to temporary directory
 #' @export
@@ -14,7 +15,7 @@ test_database_dir = function(){
   d
 }
 
-# Not used in app, only as auxillary functions for testing
+# Not used in app, only as auxiliary functions for testing
 # Callback from globals.R
 copy_test_data = function(gg){
   dd = rprojroot::find_testthat_root_file("../data/md")

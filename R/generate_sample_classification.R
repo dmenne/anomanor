@@ -1,3 +1,14 @@
+#' Generates sample classification
+#'
+#' @param users List of user names
+#' @param force Force confirm in keykloak if active
+#' @param expert_complete Make expert classifications complete to show feedback for
+#' trainees
+#' @param add_consensus Add consensus user `x_consensus` as sample
+#'
+#' @return Logged text if successful. As main side effect, database
+#' is cleared, and users with sample classifications are added.
+#' @export
 generate_sample_classification = function(users, force = TRUE,
                             expert_complete = FALSE, add_consensus = FALSE){
   stopifnot(is.list(g)) # Globals

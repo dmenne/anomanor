@@ -8,13 +8,33 @@ app_server = function(input, output, session) {
   ns_ano = NS("ano") # Access to visual tree network
   ns_dm = NS("dm") # Access to data module
   app_user = get_app_user(session)
+  app_groups = get_app_groups(app_user)
+  is_admin = str_detect(app_groups, "admins")
+  n_classified = number_of_classifications(app_user)
+
+  # ---------------- Admin Server and UI ---------------------------
+  if (is_admin) {
+    mod_admin_server("admin", app_user)
+    admin_panel =
+      conditionalPanel(
+        "input.admin  == true",
+        id = "admin_panel",
+        selected = "Upload",
+        type = "pills",
+        mod_admin_ui("admin")
+      )
+
+    insertUI(
+      selector = "#main_panel",
+      where = "beforeEnd",
+      admin_panel
+    )
+  }
+
   login_time = Sys.time()
   log_it(glue("Session start user {app_user} at {login_time} "),
          force_console = FALSE)
 
-  app_groups = get_app_groups(app_user)
-  is_admin = str_detect(app_groups, "admins")
-  n_classified = number_of_classifications(app_user)
 
   # ----------- Allow display of results -----------
   expert_classification = NULL
@@ -67,6 +87,11 @@ app_server = function(input, output, session) {
   observe({
     rvalues$window_width =
       trunc(session$clientData$output_mainimage_width / 20)*20
+  })
+
+  # --------------- enable/disable patient/record well ---------------
+  observe({
+    shinyjs::toggleState("in_sidebar_well", !input$admin)
   })
 
   # ----------- classification_method --------------------------------
@@ -437,10 +462,6 @@ app_server = function(input, output, session) {
     if (rvalues$finalized) {disable_main_image()}  else {enable_main_image()}
     toggleState("comment", !rvalues$finalized)
   })
-
-  # ---------------- Admin Server ------------------------------
-  mod_admin_server("admin", app_user)
-
 
   # ----------- toggle_picker_state ------------------------------
   toggle_picker_state  = function(id, enabled) {

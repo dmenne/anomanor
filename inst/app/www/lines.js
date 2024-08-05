@@ -1,4 +1,4 @@
-if (typeof shinyjs !== 'undefined') { // protect against a golem problem
+if (typeof shinyjs !== "undefined") { // protect against a golem problem
 
 shinyjs.init = function(){
   firstEvent = null
