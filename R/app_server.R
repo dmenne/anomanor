@@ -198,7 +198,6 @@ app_server = function(input, output, session) {
     if (classification_method() == 'h' && is.null(rvalues$section_pars))
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"
-    print(group)
     shinyWidgets::ask_confirmation(inputId = "confirm_finalize",
      title = "Confirm Finalization",
      text = HTML(paste0(no_profile,
