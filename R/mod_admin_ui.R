@@ -102,9 +102,9 @@ mod_admin_ui = function(id, ...) {
             helpText(HTML("This will delete all classifications for the currently logged in Admin user. No relevant information will be destroyed, because classifications entered by admin users are only stored, but discarded in the statistics. Use this if you want to reset your classification for a demonstration, so that your and only your ratings are back to <b>?</b>-status.")),
             width = col_width,  height = 70
           ),
-          h2("Danger zone (currently hidden)", id = "danger-zone"),
+          h2("Danger zone", id = "danger-zone"),
           # *** Remove this to show danger elements
-          shinyjs::hidden(
+#          shinyjs::hidden(
           wellPanel(
             width = col_width + 20,
             fillRow(
@@ -136,7 +136,8 @@ mod_admin_ui = function(id, ...) {
               helpText(HTML("<b>Danger:</b> This will delete all classifications and create a new set of simulated random data. Use this in test mode only!")),
               width = col_width, height = 60
             ),
-          )),
+          )
+ #       ),
         ),
       ) # tabPanel
     ) #tabsetPanel

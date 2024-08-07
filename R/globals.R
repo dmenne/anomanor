@@ -202,13 +202,13 @@ globals = function(){
   # Write log number of copied data
   if (n_copied_patient > 0)
     log_it(
-      glue("Initiallly copied  {n_copied_patient} sample case description files (md)"))
+      glue("Initially copied  {n_copied_patient} sample case description files (md)"))
   if (n_copied_record > 0)
     log_it(glue(
-      "Initiallly copied  {n_copied_record} sample case records (txt)"))
+      "Initially copied  {n_copied_record} sample case records (txt)"))
   if (n_copied_md > 0)
     log_it(glue(
-      "Initiallly copied  {n_copied_md} static data records and images (md, txt)"))
+      "Initially copied  {n_copied_md} static data records and images (md, txt)"))
   rm(n_copied_md, n_copied_record, n_copied_patient)
 
   assign("g", mget(ls()), envir = .GlobalEnv)
