@@ -7,6 +7,10 @@
 # The following line can be commented out when there is no Windows-LF risk
 # Use it whenever you see a <^M> turn up in error message
 #dos2unix ./inst/Renviron_devel
+
+# https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -euxo pipefail
+
 set -o allexport;
 source ./.Renviron
 source ./inst/Renviron_devel
