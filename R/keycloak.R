@@ -67,36 +67,36 @@ Keycloak = R6::R6Class("Keycloak", list(
   post = function(url, body, encode = 'json') {
     pst = httr::POST(url, self$headers, body = body, encode = encode)
     if (self$valid_status(pst))  return(pst)
-    if (httr::status_code(pst) == 401)
-      log_it("Trying to re-authenticate")
+#    if (httr::status_code(pst) == 401)
+#      log_it("Trying to re-authenticate")
     self$authenticate()
     pst = httr::POST(url, self$headers, body = body, encode = encode)
-    if (self$valid_status(pst))
-      log_it("Re-authenticate success")
+#    if (self$valid_status(pst))
+#      log_it("Re-authenticate success")
     pst
   },
 
   get = function(url) {
     gt = httr::GET(url, self$headers)
     if (self$valid_status(gt)) return(gt)
-    if (httr::status_code(gt) == 401)
-      log_it("Trying to re-authenticate")
+#    if (httr::status_code(gt) == 401)
+#      log_it("Trying to re-authenticate")
     self$authenticate()
     gt = httr::GET(url, self$headers)
-    if (self$valid_status(gt))
-      log_it("Re-authenticate success")
+#    if (self$valid_status(gt))
+#      log_it("Re-authenticate success")
     gt
   },
 
   delete = function(url) {
     del = httr::DELETE(url, self$headers)
     if (self$valid_status(del)) return(del)
-    if (httr::status_code(del) == 401)
-      log_it("Trying to re-authenticate")
+#    if (httr::status_code(del) == 401)
+#      log_it("Trying to re-authenticate")
     self$authenticate()
     del = httr::DELETE(url, self$headers)
-    if (self$valid_status(del))
-      log_it("Re-authenticate success")
+#    if (self$valid_status(del))
+#      log_it("Re-authenticate success")
     del
   },
 

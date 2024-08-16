@@ -186,6 +186,7 @@ app_server = function(input, output, session) {
   # ----------- Save button action ----------------------------------
   observeEvent(input$save, {
     req(rvalues$classification != 0) # Should be Ok anyway
+    # TODO isolate classification_method?
     if (classification_method() == 'l' || !is.null(rvalues$section_pars)) {
       save_classification() # Save without asking
     } else {
@@ -220,6 +221,7 @@ app_server = function(input, output, session) {
   # ----------- Finalize button action -----------------------------
   observeEvent(input$finalize, {
     no_profile = ""
+    # TODO Isolate?
     if (classification_method() == 'h' && is.null(rvalues$section_pars))
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"

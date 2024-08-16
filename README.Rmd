@@ -11,8 +11,7 @@ output: github_document
 
 ## Overview
 
-EUGIM Hub Project: Educational training of physicians working with high-resolution anorectal manometry
-![readme_sample](https://user-images.githubusercontent.com/506275/146637934-4f688341-d62a-47f6-aa63-cb420e62239b.png)
+EUGIM Hub Project: Educational training of physicians working with high-resolution anorectal manometry ![readme_sample](https://user-images.githubusercontent.com/506275/146637934-4f688341-d62a-47f6-aa63-cb420e62239b.png)
 
 Interactive application providing online training for physicians and other practitioners using high-resolution anorectal manometry and the [London
 Classification](https://onlinelibrary.wiley.com/doi/full/10.1111/nmo.13679) for disorders of anorectal function. It provides the opportunity to

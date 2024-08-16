@@ -80,11 +80,27 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         shinyWidgets::updatePickerInput(
           session = session,
           inputId = "record",
-          selected = input$record,
+          selected =  isolate(input$record),
           choices = choices$choices,
           choicesOpt = list(icon = choices$icon)
         )
       }
+
+      # ----------- Update selected record ---------------------
+      observeEvent(input$classification_method, {
+        crs = isolate(records())
+        req(crs)
+        old_selected = isolate(input$record)
+        choices = selectize_record_choices(crs)
+        selected = get_random_record(choices, old_selected )
+        shinyWidgets::updatePickerInput(
+          session = session,
+          inputId = "record",
+          choices = choices$choices,
+          selected =  selected,
+        )
+      })
+
 
       # ----------- Width of current marker to next marker -------------------------
       active_width = reactive({

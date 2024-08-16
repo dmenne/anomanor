@@ -191,7 +191,6 @@ mod_admin_server = function(id, app_user) {
        if (overwritten) {
          log_it(glue("File {file$name} was uploaded and overwritten by {app_user}"))
        } else {
-         cat()
          log_it(glue("File {file$name} was first-time uploaded by {app_user}"))
        }
        unlink(file$datapath)
@@ -351,7 +350,7 @@ mod_admin_server = function(id, app_user) {
       generate_sample_classification(g$test_users, force = TRUE,
         expert_complete = TRUE, add_consensus = TRUE)
       log_it("Sample data generated")
-      session$reload() # Will leave admin mode
+      #session$reload() # Will leave admin mode
     })
 
     observeEvent(input$clear, {
@@ -362,7 +361,8 @@ mod_admin_server = function(id, app_user) {
     })
 
     update_record_choices = function() {
-      rec = dbGetQuery(g$pool, "SELECT record, anon_h, anon_l from record order by record")
+      rec = dbGetQuery(g$pool,
+        "SELECT record, anon_h, anon_l from record order by record")
       choice_names = glue("{rec$record} ({rec$anon_h}, {rec$anon_l})")
       choices = setNames(rec$record, choice_names)
       shinyWidgets::updatePickerInput(session, "select_delete_record",

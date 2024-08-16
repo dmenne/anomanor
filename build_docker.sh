@@ -33,7 +33,8 @@ docker build -f Dockerfile_anomanor \
   --build-arg DOCKER_ANOMANOR_STANDALONE \
   .
 
-# Push to github
+# Push to github, use this from command line
+# docker login dmenne
 # docker push dmenne/anomanor:${TAG}
 
 
