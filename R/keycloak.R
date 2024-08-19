@@ -108,6 +108,7 @@ Keycloak = R6::R6Class("Keycloak", list(
   add_user = function(new_user_email, group, force_confirm = TRUE,
                       emailVerified = FALSE) {
     # Add user
+    if (is.null(new_user_email) || new_user_email == "") return(NULL);
     new_user_name = str_extract(new_user_email, "([^@]*)")
     url = glue("{self$admin_url}/users")
     stopifnot(length(group) == 1) # Only one group allowed
