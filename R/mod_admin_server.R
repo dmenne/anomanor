@@ -3,18 +3,23 @@ mod_admin_server = function(id, app_user) {
   moduleServer(id, function(input, output, session) {
     rvalues = reactiveValues(request_user_table = 0, upload_file = NULL)
     ns = NS(id)
-    iv = shinyvalidate::InputValidator$new()
-    iv_email = shinyvalidate::InputValidator$new()
-    iv_email$add_rule("", shinyvalidate::sv_required())
-    iv_email$add_rule("new_user_email", shinyvalidate::sv_email())
-    iv_email$enable()
-
+    iv_email = NULL
     disable("discard")
     disable("accept")
 
-    # ----------- Admin Form -----------------------
-    output$users_table = DT::renderDT({
-      user_datatable(user_stats_table())
+    # ------------ Function input_validator --------
+    input_validator = function() {
+      iv_email = shinyvalidate::InputValidator$new()
+      iv_email = shinyvalidate::InputValidator$new()
+      iv_email$add_rule("new_user_email", shinyvalidate::sv_required())
+      iv_email$add_rule("new_user_email", shinyvalidate::sv_email())
+      iv_email$enable()
+      iv_email
+    }
+
+
+    observeEvent(input$new_user_panel, {
+      shinyjs::logjs("tabset visible")
     })
 
     # -----------  User Statistics Table ------------
@@ -26,8 +31,11 @@ mod_admin_server = function(id, app_user) {
       stat
     })
 
-
-    observeEvent(input$new_user_email, {
+    observeEvent(input$new_user_email, handlerExpr = {
+      # Initializing the validator in mod_admin_server globally
+      # gives javascript error on startup
+      if (is.null(iv_email))
+        iv_email <<- input_validator()
       shinyjs::toggleState("invite_user", iv_email$is_valid())
     })
 

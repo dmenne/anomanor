@@ -24,6 +24,7 @@ app_server = function(input, output, session) {
         mod_admin_ui("admin")
       )
 
+
     insertUI(
       selector = "#main_panel",
       where = "beforeEnd",

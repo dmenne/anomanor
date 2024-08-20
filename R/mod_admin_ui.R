@@ -3,6 +3,7 @@ mod_admin_ui = function(id, ...) {
   col_width = 800
   tagList(
     tabsetPanel(
+      id = "tabset_admin",
       # user
       tabPanel(
         "Users",
@@ -28,8 +29,8 @@ mod_admin_ui = function(id, ...) {
               "user must be done from the {g$keycloak_site}."
             )
           )),
-          helpText(HTML(
-            "To show the user table, currently at least one classification must be present (bug)"
+          helpText(HTML("To see the user table, at least one classification
+                        must be present (bug)"
           ))
         ),
         # wellPanel
