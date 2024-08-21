@@ -3,7 +3,7 @@ mod_admin_ui = function(id, ...) {
   col_width = 800
   tagList(
     tabsetPanel(
-      id = "tabset_admin",
+      #id = "tabset_admin",
       # user
       tabPanel(
         "Users",
@@ -30,12 +30,12 @@ mod_admin_ui = function(id, ...) {
             )
           )),
           helpText(HTML("To see the user table, at least one classification
-                        must be present (bug)"
+                        must be present"
           ))
-        ),
-        # wellPanel
-        shinyWidgets::actionBttn(ns("refresh_user"), "Refresh"),
-        DT::DTOutput(ns("users_table"))
+          ),
+        # wellPanels
+        shinyWidgets::actionBttn(ns("refresh_users"), "Refresh"),
+        DT::DTOutput(ns("user_table"))
       ),
       # tabPanel record summary
       tabPanel(

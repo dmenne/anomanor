@@ -86,8 +86,9 @@ app_server = function(input, output, session) {
 
   # ----------- reactive value window_width ----------------------------
   observe({
+    width_step = 20
     rvalues$window_width =
-      trunc(session$clientData$output_mainimage_width / 20)*20
+      trunc(session$clientData$output_mainimage_width / width_step)*width_step
   })
 
   # --------------- enable/disable patient/record well ---------------

@@ -9,7 +9,7 @@ utils::globalVariables("g")
 
 globals = function(){
 #  options(warn = 2)
-#  options(shiny.error = browser)
+  options(shiny.error = browser)
   # https://github.com/rstudio/shiny/issues/3626
   options(shiny.useragg = TRUE)
 
@@ -190,15 +190,19 @@ globals = function(){
   assign("g", mget(ls()), envir = .GlobalEnv)
   initial_record_cache()
 
-  test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
-  # Generate data set when "test..." is active
-  force_generate = FALSE # Set to true to reset on each start
-  if (str_starts(active_config, "test") || force_generate) {
-    gg = generate_sample_classification(test_users, force = TRUE,
-                                        expert_complete = TRUE, add_consensus = TRUE)
-    if (!str_starts(active_config, "test"))
-      log_it(gg)
+  if (active_config != "keycloak_production") {
+    test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
+    # Generate data set when "test..." is active
+    #### Danger #####
+    force_generate = FALSE # Set to true to reset on each start
+    if (str_starts(active_config, "test") || force_generate) {
+      gg = generate_sample_classification(test_users, force = TRUE,
+                                          expert_complete = TRUE, add_consensus = TRUE)
+      if (!str_starts(active_config, "test"))
+        log_it(gg)
+    }
   }
+
   # Write log number of copied data
   if (n_copied_patient > 0)
     log_it(

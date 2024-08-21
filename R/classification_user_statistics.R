@@ -9,7 +9,6 @@ classification_user_statistics = function() {
     ) %>%
     pivot_wider(id_cols = c("user", "method"),
                 names_from = "state", values_from = n)
-
   if (nrow(stat) == 0 ) return(NULL)
   users = keycloak_users()  # NULL if no keycloak
   if (!is.null(users))

@@ -74,7 +74,7 @@ ano_modal = function(markdown_file){
 }
 
 safe_create_dir = function(dir){
-  # return FALSE if exists and thus not create, otherwise TRUE
+  # return FALSE if directory exists, otherwise TRUE
   if (dir.exists(dir)) return(FALSE)
   ret = try(dir.create(dir, recursive = TRUE))
   if (!dir.exists(dir)) {

@@ -17,19 +17,20 @@ mod_admin_server = function(id, app_user) {
       iv_email
     }
 
-
-    observeEvent(input$new_user_panel, {
-      shinyjs::logjs("tabset visible")
-    })
-
     # -----------  User Statistics Table ------------
-    user_stats_table = reactive({
+    user_table = reactive({
+      input$refresh_users
       rvalues$request_usertable # toggled when new user added
-      input$refresh_user
       stat = classification_user_statistics()
       req(stat)
       stat
     })
+
+    output$user_table = DT::renderDT({
+      user_table()
+    }, rownames = FALSE,
+      options = list(paging = TRUE, pageLength = 20, searching = FALSE), )
+
 
     observeEvent(input$new_user_email, handlerExpr = {
       # Initializing the validator in mod_admin_server globally

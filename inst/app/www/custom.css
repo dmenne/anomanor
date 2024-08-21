@@ -222,7 +222,7 @@ h2 {
 
 .well .disabled {
   color:#aaa;
-  background:#F5F5F5;
+  background: #F5F5F5;
   pointer-events: none;
 }
 
