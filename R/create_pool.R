@@ -104,8 +104,24 @@ VALUES
 ('n','tone','Long Squeeze'),
 ('r','tone','Squeeze 1'),
 ('r','tone','Squeeze 2');
-"
+",
 
+"CREATE TABLE history (
+    history_date TEXT    NOT NULL,
+    user         TEXT    NOT NULL,
+    method       TEXT    NOT NULL,
+    finalized    INTEGER NOT NULL,
+    cnt          INTEGER NOT NULL
+);
+",
+
+"CREATE UNIQUE INDEX unique_history ON history (
+    history_date,
+    user,
+    method,
+    finalized
+);
+"
 )
 
 create_pool = function(sqlite_path) {
