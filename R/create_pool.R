@@ -151,8 +151,8 @@ ano_poolClose = function(){
 create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   if (file.exists(sqlite_path) && file.info(sqlite_path)$size == 0)
     unlink(sqlite_path)
-  required_tables = c("record", "marker", "user", "classification", "ano_logs",
-                      "marker_classification_phase")
+  required_tables = c('ano_logs', 'classification', 'history', 'marker',
+                      'marker_classification_phase', 'record', 'user')
   if (file.exists(sqlite_path)) {
     # Check if tables valid
     pool_temp = create_pool(sqlite_path)

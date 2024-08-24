@@ -39,6 +39,7 @@ Imports:
     grid,
     httr,
     icr,
+    lubridate,
     magick,
     magrittr,
     pingr,

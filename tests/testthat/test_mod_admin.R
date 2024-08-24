@@ -6,7 +6,7 @@ library(shiny)
 test_that("Can show user table", {
   shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
     request_usertable = TRUE
-    dt = user_stats_table()
+    dt = user_table()
     expect_gte(nrow(dt), 10)
     expect_equal(ncol(dt), 8)
     expect_equal(names(dt),
