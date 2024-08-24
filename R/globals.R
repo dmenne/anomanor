@@ -194,14 +194,13 @@ globals = function(){
     test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
     # Generate data set when "test..." is active
     #### Danger #####
-    force_generate = TRUE # Set to true to reset on each start
+    force_generate = FALSE # Set to true to reset on each start
     if (str_starts(active_config, "test") || force_generate) {
       gg = generate_sample_classification(test_users, force = TRUE,
                 expert_complete = TRUE, add_consensus = TRUE)
       # Simulate history
       dbExecute(g$pool, "DELETE FROM history")
-      h = add_history_record()
-      simulate_backward_history(h)
+      simulate_backward_history(add_history_record())
 
       if (!str_starts(active_config, "test"))
         log_it(gg)

@@ -4,20 +4,23 @@ plot_history = function() {
     "left join user u on u.user = h.user ",
     "where `group` != 'admins'"
     )
-  hist_stat = dbGetQuery(g$pool, sql) |>
+  hist_stat = dbGetQuery(g$pool, sql)   |>
     mutate(
-      finalized = factor(1-finalized, labels = c("finalized", "saved" ))
+      finalized = factor(1 - finalized, labels = c("finalized", "saved" )),
+      history_date = as.Date(history_date)
     )
 
   ggplot(hist_stat,
-         aes(x = as.POSIXct(history_date),
+         aes(x = history_date,
              y = cnt,
+             linetype = finalized,
              color = method,
-             group = method)) +
+             group = interaction(method, finalized))) +
     geom_line() +
-    geom_jitter(alpha = 0.5, aes(shape = method)) +
-    #scale_x_date(guide = guide_axis(check.overlap = TRUE)) +
+    geom_point(alpha = 0.5, aes(shape = method)) +
+    scale_x_date(guide = guide_axis(check.overlap = TRUE)) +
     facet_wrap(~user) +
-    xlab("Finalized ratings") +
-    ylab("Date of backup")
+    ylab("Ratings of all users over time") +
+    xlab("Number of all users' ratings")
+
 }

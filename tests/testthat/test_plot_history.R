@@ -3,7 +3,8 @@ globals()
 withr::defer(cleanup_test_data())
 
 test_that("Can create history plot", {
-  print(plot_history())
-  expect_true(TRUE)
+  gg = plot_history()
+  expect_equal(length(gg$labels),  5)
+  expect_equal(names(gg$data), c('history_date','user','method','finalized','cnt'))
 })
 
