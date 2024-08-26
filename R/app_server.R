@@ -37,7 +37,7 @@ app_server = function(input, output, session) {
   log_it(glue("Session start user {app_user} at {login_time} "),
          force_console = FALSE)
 
-  add_history_record_if_required() # does nothing when not at least 1 day ago
+  add_history_record_if_required(12) # does nothing when not at least 12 hours ago
 
   # ----------- Allow display of results -----------
   expert_classification = NULL

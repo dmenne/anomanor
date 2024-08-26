@@ -1,13 +1,14 @@
-add_history_record_if_required = function(min_days_since = 1) {
-  latest_hist = latest_history_date()
-  days_since = as.numeric(ifelse(is.null(latest_hist), 1000,
-     difftime(as.POSIXlt(Sys.time()), as.POSIXlt(latest_hist), units = "days")))
-  log_it(glue("{days_since} days since last history"))
-  if (days_since > min_days_since) {
-    log_it(glue("Added history after {days_since} days"))
+add_history_record_if_required = function(min_hours_since = 24) {
+  latest_hist = as.POSIXlt(latest_history_date(), format = "%Y-%m-%dT%H:%M")
+  hours_since = round(as.numeric(ifelse(is.null(latest_hist), 1000,
+     difftime(as.POSIXlt(Sys.time()), latest_hist, units = "hours"))))
+  # TODO: remove this when checked
+  log_it(glue("{hours_since} hours since last history update"))
+  if (hours_since > min_hours_since) {
+    log_it(glue("Updated history after {hours_since} hours"))
     add_history_record()
   }
-  return(days_since)
+  return(hours_since)
 }
 
 
