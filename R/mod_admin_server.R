@@ -426,6 +426,12 @@ mod_admin_server = function(id, app_user) {
       update_record_choices()
     })
 
+    # History page
+    output$history_plot = renderPlot({
+      input$refresh_users
+      plot_history()
+    }, res = 96)
+
   })
 
 }

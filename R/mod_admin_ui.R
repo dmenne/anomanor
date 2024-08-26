@@ -138,9 +138,15 @@ mod_admin_ui = function(id, ...) {
               width = col_width, height = 60
             ),
           )
- #       ),
         ),
-      ) # tabPanel
+      ), # management tabPanel
+      tabPanel(
+        id = ns("history_panel"),
+        "History",
+        fillPage(
+          plotOutput(ns("history_plot"))
+        )
+      )  # history tabPanel
     ) #tabsetPanel
   )# tagList
 }

@@ -19,8 +19,9 @@ plot_history = function() {
     geom_line() +
     geom_point(alpha = 0.5, aes(shape = method)) +
     scale_x_date(guide = guide_axis(check.overlap = TRUE)) +
-    facet_wrap(~user) +
-    ylab("Ratings of all users over time") +
-    xlab("Number of all users' ratings")
-
+    facet_wrap(~user, ncol = 5) +
+    ylab("Number of ratings") +
+    xlab("Date") +
+    ggtitle(glue("History - last updated {max(hist_stat$history_date)}"))
 }
+
