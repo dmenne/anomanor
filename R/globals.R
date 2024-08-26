@@ -191,11 +191,11 @@ globals = function(){
   initial_record_cache()
 
   if (active_config != "keycloak_production") {
-    test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
     # Generate data set when "test..." is active
     #### Danger #####
     force_generate = FALSE # Set to true to reset on each start
     if (str_starts(active_config, "test") || force_generate) {
+      test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
       gg = generate_sample_classification(test_users, force = TRUE,
                 expert_complete = TRUE, add_consensus = TRUE)
       # Simulate history

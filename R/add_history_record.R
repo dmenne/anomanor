@@ -1,10 +1,17 @@
 add_history_record_if_required = function(min_hours_since = 24) {
-  latest_hist = as.POSIXlt(latest_history_date(), format = "%Y-%m-%dT%H:%M")
-  hours_since = round(as.numeric(ifelse(is.null(latest_hist), 1000,
-     difftime(as.POSIXlt(Sys.time()), latest_hist, units = "hours"))))
+  latest_hist = latest_history_date()
+
+  if (is.null(latest_hist) || is.na(latest_hist)) {
+    log_it(glue("Initial history added", TRUE))
+    add_history_record()
+    return(-1)
+  }
+  latest_hist = as.POSIXlt(latest_hist, format = "%Y-%m-%dT%H:%M")
+  hours_since = round(as.numeric(
+    difftime(as.POSIXlt(Sys.time()), latest_hist, units = "hours")))
   # TODO: remove this when checked
   log_it(glue("{hours_since} hours since last history update"))
-  if (hours_since > min_hours_since) {
+  if (hours_since >= min_hours_since) {
     log_it(glue("Updated history after {hours_since} hours"))
     add_history_record()
   }
@@ -25,7 +32,7 @@ first_history_date = function() {
 }
 
 add_history_record = function(history = NULL) {
-  # For empty history, generates a statistics summary table from today
+  # For history == NULL, generates a statistics summary table from today
   # and write it to the database
   # If a data frame for history is passed, these data are written to database directly
   if (is.null(history)) {
@@ -38,7 +45,8 @@ add_history_record = function(history = NULL) {
       history_date = format_ISO8601(now()),
       dbGetQuery(g$pool, sql))
   }
-  ret = dbAppendTable(g$pool, "history", history)
+  # Avoid problems with unique constraints when data are too close
+  ret = try(dbAppendTable(g$pool, "history", history), silent = TRUE)
   history
 }
 
