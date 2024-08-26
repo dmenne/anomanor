@@ -45,6 +45,7 @@ RUN install2.r --error --ncpus 4 --skipinstalled \
     pingr \
     DT \
     visNetwork \
+    lubridate \
     scales \
     flextable \
     icr \
@@ -59,6 +60,9 @@ RUN install2.r --error --ncpus 4 --skipinstalled \
     golem \
     ragg \
     keys
+
+RUN install2.r --error --ncpus 4 --skipinstalled \
+    ggplot2
 
 RUN R -e 'remotes::install_github("JohnCoene/tippy")'
 

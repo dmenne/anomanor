@@ -6,15 +6,19 @@
 # sudo usermod -aG docker $USER
 # Must be run after each server reboot
 #sudo chown $USER:docker /var/run/docker.sock
+# shellcheck shell=bash
 
 # https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -euxo pipefail
+# shellcheck disable=SC1091
 source ./chown_docker_sock.sh
 dos2unix ./.Renviron
 
 
 # Make sure that ./.Renviron is valid
 set -a
+# shellcheck disable=SC1090
+# shellcheck disable=SC2002
 source <(cat ./.Renviron | sed -e '/^#/d;/^\s*$/d' -e "s/'/'\\\''/g" -e "s/=\(.*\)/='\1'/g")
 set +a
 
@@ -26,7 +30,7 @@ then
   exit 1
 fi
 
-echo $R_CONFIG_ACTIVE
+echo "$R_CONFIG_ACTIVE"
 
 if [[ $R_CONFIG_ACTIVE = "keycloak_production" ]]; then
   ln -sf ./inst/Renviron_production ./.env
@@ -36,6 +40,8 @@ else
 fi
 
 set -a
+# shellcheck disable=SC1090
+# shellcheck disable=SC2002
 source <(cat ./.env | sed -e '/^#/d;/^\s*$/d' -e "s/'/'\\\''/g" -e "s/=\(.*\)/='\1'/g")
 set +a
 
@@ -70,7 +76,7 @@ then
   image_build_time=$(docker inspect --format='{{.Created}}' anomanor_shiny-shinyproxy | xargs date +%s -d)
 
   # Compare the times and remove the image if application.yml is newer
-  if [ $app_mod_time -gt $image_build_time ]
+  if [ "$app_mod_time" -gt "$image_build_time" ]
   then
       docker rmi -f anomanor_shiny-shinyproxy
   fi
