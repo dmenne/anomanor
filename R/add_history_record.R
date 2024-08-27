@@ -43,7 +43,7 @@ add_history_record = function(history = NULL) {
       "group by u.user, method, finalized")
     hs = dbGetQuery(g$pool, sql)
     if (nrow(hs) == 0) return(hs)
-    history = cbind( hs, # using lubridate functions
+    history = cbind( # using lubridate functions
       history_date = format_ISO8601(now()),
       hs)
   }
