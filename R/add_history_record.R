@@ -1,6 +1,5 @@
 add_history_record_if_required = function(min_hours_since = 24) {
   latest_hist = latest_history_date()
-
   if (is.null(latest_hist) || is.na(latest_hist)) {
     log_it(glue("Initial history added", TRUE))
     add_history_record()
@@ -31,6 +30,20 @@ first_history_date = function() {
   h[1,]
 }
 
+
+tryCatch.W.E <- function(expr)
+{
+  W <- NULL
+  w.handler <- function(w) { # warning handler
+  W <<- w
+  invokeRestart("muffleWarning")
+  }
+  list(value = withCallingHandlers(
+    tryCatch(expr, error = function(e) e),
+  	warning = w.handler), warning = W)
+}
+
+
 add_history_record = function(history = NULL) {
   # For history == NULL, generates a statistics summary table from today
   # and write it to the database
@@ -41,9 +54,11 @@ add_history_record = function(history = NULL) {
       "left join user u on u.user = c.user ",
       "where `group` != 'admins'",
       "group by u.user, method, finalized")
-    history = cbind( # using lubridate functions
+    hs = dbGetQuery(g$pool, sql)
+    if (nrow(hs) == 0) return(hs)
+    history = cbind( hs, # using lubridate functions
       history_date = format_ISO8601(now()),
-      dbGetQuery(g$pool, sql))
+      hs)
   }
   # Avoid problems with unique constraints when data are too close
   ret = try(dbAppendTable(g$pool, "history", history), silent = TRUE)

@@ -28,10 +28,12 @@ globals = function(){
                    "test_expert", "keycloak_devel",
                    "keycloak_test",
                    "keycloak_production", "sa_random_trainee" )
-  if (!active_config %in% valid_config)
-    stop("Please set environment variable R_CONFIG_ACTIVE, ",
-         "currently '", active_config, "' to one of ",
-         paste(valid_config, collapse = ", "),call. = FALSE)
+  if (!active_config %in% valid_config){
+    msg = glue("You must set environment variable R_CONFIG_ACTIVE, ",
+    "currently '{active_config}' to one of ",
+    paste(valid_config, collapse = ", "))
+    stop(msg, call. = FALSE)
+  }
   # Renviron_production is not saved in git
   is_windows = Sys.info()['sysname'] == 'Windows'
   env_file_base =  case_when(
