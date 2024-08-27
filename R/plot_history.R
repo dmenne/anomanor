@@ -6,7 +6,7 @@ plot_history = function() {
     )
   hist_stat = dbGetQuery(g$pool, sql)   |>
     mutate(
-      finalized = factor(1 - finalized, labels = c("finalized", "saved" )),
+      finalized = if_else(finalized == 1, "finalized", "saved" ),
       history_date = as.Date(history_date)
     )
 

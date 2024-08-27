@@ -31,19 +31,6 @@ first_history_date = function() {
 }
 
 
-tryCatch.W.E <- function(expr)
-{
-  W <- NULL
-  w.handler <- function(w) { # warning handler
-  W <<- w
-  invokeRestart("muffleWarning")
-  }
-  list(value = withCallingHandlers(
-    tryCatch(expr, error = function(e) e),
-  	warning = w.handler), warning = W)
-}
-
-
 add_history_record = function(history = NULL) {
   # For history == NULL, generates a statistics summary table from today
   # and write it to the database
