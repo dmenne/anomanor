@@ -1,4 +1,4 @@
-add_history_record_if_required = function(min_hours_since = 24) {
+add_history_record_if_required = function(min_hours_since = 1) {
   latest_hist = latest_history_date()
   if (is.null(latest_hist) || is.na(latest_hist)) {
     log_it(glue("Initial history added", TRUE))

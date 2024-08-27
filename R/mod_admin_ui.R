@@ -145,7 +145,7 @@ mod_admin_ui = function(id, ...) {
         "History",
         fillPage(
           plotOutput(ns("history_plot")),
-          helpText("History is updated every 12 hours only; latest items may not yet show.")
+          helpText("History is refreshed every hour on restart; latest changes may not yet show.")
         )
       )  # history tabPanel
     ) #tabsetPanel

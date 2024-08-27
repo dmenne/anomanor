@@ -7,11 +7,12 @@ plot_history = function() {
   hist_stat = dbGetQuery(g$pool, sql)   |>
     mutate(
       finalized = if_else(finalized == 1, "finalized", "saved" ),
-      history_date = as.Date(history_date)
+      history_date_only = as.Date(history_date),
+      history_date = str_replace(history_date, "T", " ")
     )
-
+  if (nrow(hist_stat) == 0) return(NULL)
   ggplot(hist_stat,
-         aes(x = history_date,
+         aes(x = history_date_only,
              y = cnt,
              linetype = finalized,
              color = method,
