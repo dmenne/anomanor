@@ -15,24 +15,17 @@ globals = function(){
 
   # Default configuration must set globally
   # By default, user is sa_admin
-  active_config = Sys.getenv("R_CONFIG_ACTIVE")
+  active_config = str_trim(Sys.getenv("R_CONFIG_ACTIVE"))
   # See .Renviron file for settings
   # Do not use the default in Sys.getenv here, problem later
-  if (active_config == '') {
-    Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
-    active_config = Sys.getenv("R_CONFIG_ACTIVE")
-  }
-  checked_patients = ""
   # See valid values in config.yml
   valid_config = c("sa_trainee", "sa_admin", "sa_expert", "test",
                    "test_expert", "keycloak_devel",
                    "keycloak_test",
                    "keycloak_production", "sa_random_trainee" )
   if (!active_config %in% valid_config){
-    msg = glue("You must set environment variable R_CONFIG_ACTIVE, ",
-    "currently '{active_config}' to one of ",
-    paste(valid_config, collapse = ", "))
-    stop(msg, call. = FALSE)
+    Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
+    active_config = Sys.getenv("R_CONFIG_ACTIVE")
   }
   # Renviron_production is not saved in git
   is_windows = Sys.info()['sysname'] == 'Windows'

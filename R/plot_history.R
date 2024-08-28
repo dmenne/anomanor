@@ -24,7 +24,7 @@ plot_history = function() {
     facet_wrap(~user, ncol = 5) +
     ylab("Number of ratings") +
     xlab("Date") +
-    ggtitle(glue("History - last updated {max_history_date}"))
+    ggtitle(glue("History - last updated {max_history_date}")) +
     theme(panel.spacing = unit(1, "lines"))
 }
 
