@@ -20,49 +20,47 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     curl
 
 RUN install2.r --error --ncpus 4 --skipinstalled \
+    DBI \
+    DT \
+    R6 \
+    RSQLite \
+    Rcpp \
+    checkmate \
+    colorspace \
+    config \
+    corrplot \
+    digest \
+    dplyr \
+    flextable \
+    ggplot2 \
+    golem \
+    httr \
+    icr \
+    keys \
+    later \
+    lubridate \
+    magick \
+    markdown \
+    pingr \
+    png \
+    pool \
+    purrr \
+    ragg \
+    readr \
+    readxl \
     remotes \
+    rprojroot \
+    scales \
     shiny \
+    shinyWidgets \
     shinyjs \
     shinyvalidate \
     stinepack \
-    shinyWidgets \
-    corrplot \
-    xtable \
-    readr \
-    readxl \
-    dplyr \
-    checkmate \
-    DBI \
-    purrr \
     stringr \
-    RSQLite \
-    magick \
-    markdown \
-    config \
     tidyr \
-    httr \
-    R6 \
-    pingr \
-    DT \
     visNetwork \
-    lubridate \
-    scales \
-    flextable \
-    icr \
     withr \
-    rprojroot \
-    Rcpp \
-    digest \
-    png \
-    colorspace \
-    pool \
-    later \
-    golem \
-    ragg \
-    keys
-
-RUN install2.r --error --ncpus 4 --skipinstalled \
-    ggplot2
+    xtable
 
 RUN R -e 'remotes::install_github("JohnCoene/tippy")'
 
