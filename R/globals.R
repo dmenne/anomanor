@@ -28,10 +28,12 @@ globals = function(){
                    "test_expert", "keycloak_devel",
                    "keycloak_test",
                    "keycloak_production", "sa_random_trainee" )
-  if (!active_config %in% valid_config)
-    stop("Please set environment variable R_CONFIG_ACTIVE, ",
-         "currently '", active_config, "' to one of ",
-         paste(valid_config, collapse = ", "),call. = FALSE)
+  if (!active_config %in% valid_config){
+    msg = glue("You must set environment variable R_CONFIG_ACTIVE, ",
+    "currently '{active_config}' to one of ",
+    paste(valid_config, collapse = ", "))
+    stop(msg, call. = FALSE)
+  }
   # Renviron_production is not saved in git
   is_windows = Sys.info()['sysname'] == 'Windows'
   env_file_base =  case_when(
@@ -191,13 +193,17 @@ globals = function(){
   initial_record_cache()
 
   if (active_config != "keycloak_production") {
-    test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
     # Generate data set when "test..." is active
     #### Danger #####
     force_generate = FALSE # Set to true to reset on each start
     if (str_starts(active_config, "test") || force_generate) {
+      test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz")
       gg = generate_sample_classification(test_users, force = TRUE,
-                                          expert_complete = TRUE, add_consensus = TRUE)
+                expert_complete = TRUE, add_consensus = TRUE)
+      # Simulate history
+      dbExecute(g$pool, "DELETE FROM history")
+      simulate_backward_history(add_history_record())
+
       if (!str_starts(active_config, "test"))
         log_it(gg)
     }

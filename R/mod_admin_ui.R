@@ -138,9 +138,16 @@ mod_admin_ui = function(id, ...) {
               width = col_width, height = 60
             ),
           )
- #       ),
         ),
-      ) # tabPanel
+      ), # management tabPanel
+      tabPanel(
+        id = ns("history_panel"),
+        "History",
+        fillPage(
+          plotOutput(ns("history_plot")),
+          helpText("History is refreshed every hour on restart; latest changes may not yet show. Administrator ratings are not shown.")
+        )
+      )  # history tabPanel
     ) #tabsetPanel
   )# tagList
 }

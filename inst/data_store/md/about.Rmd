@@ -22,7 +22,7 @@ The results will be published. All those completing all cases will be
 acknowledged. This information will also inform the development of
 version 2.0 of the London classification.
 
-* Version: `r packageVersion("anomanor")`
+* Version: `r desc::desc_get_version()`
 ```{r, echo = FALSE, results = 'asis'}
 desc::description$new()$get_authors() |> 
 purrr::walk(

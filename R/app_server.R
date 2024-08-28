@@ -12,6 +12,7 @@ app_server = function(input, output, session) {
   is_admin = str_detect(app_groups, "admins")
   n_classified = number_of_classifications(app_user)
 
+
   # ---------------- Admin Server and UI ---------------------------
   if (is_admin) {
     mod_admin_server("admin", app_user)
@@ -36,6 +37,7 @@ app_server = function(input, output, session) {
   log_it(glue("Session start user {app_user} at {login_time} "),
          force_console = FALSE)
 
+  add_history_record_if_required(1) # does nothing when not at least 1 hours ago
 
   # ----------- Allow display of results -----------
   expert_classification = NULL

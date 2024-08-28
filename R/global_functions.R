@@ -204,3 +204,16 @@ tippy_all = function() {
   )
   invisible(apply(tippy_main_text, 1, function(x) tippyThis(x["id"], x["text"])))
 }
+
+tryCatch.W.E <- function(expr)
+{
+  W <- NULL
+  w.handler <- function(w) { # warning handler
+    W <<- w
+    invokeRestart("muffleWarning")
+  }
+  list(value = withCallingHandlers(
+    tryCatch(expr, error = function(e) e),
+    warning = w.handler), warning = W)
+}
+

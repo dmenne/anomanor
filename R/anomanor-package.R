@@ -3,13 +3,15 @@
 #' @import visNetwork
 #' @import stringr
 #' @import graphics
-#' @importFrom DBI dbGetQuery dbExecute
+#' @import ggplot2
+#' @importFrom DBI dbGetQuery dbExecute dbAppendTable
 #' @importFrom purrr map pluck set_names map2 map2_chr map_chr map_dfr map_lgl map_int
 #' @importFrom magrittr %>%
 #' @importFrom glue glue glue_sql
 #' @importFrom dplyr case_when mutate select n left_join filter full_join summarize
 #' @importFrom dplyr group_by rename if_else  bind_rows transmute group_modify
 #' @importFrom dplyr arrange all_of pull right_join
+#' @importFrom lubridate days format_ISO8601 hours now as_datetime
 #' @importFrom tidyr pivot_wider replace_na drop_na
 #' @importFrom tidyselect ends_with
 #' @importFrom tibble tibble tribble as_tibble rownames_to_column
@@ -50,8 +52,10 @@ utils::globalVariables(c(
   "classification.y",
   "classification_phase",
   "color",
+  "cnt",
   "email",
   "emailVerified",
+  "history_date",
   "finalized",
   "firstName",
   "group",
