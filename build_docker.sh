@@ -18,7 +18,8 @@ set +o allexport
 
 export DOCKER_ANOMANOR_STANDALONE=TRUE
 echo "Active configuration: $R_CONFIG_ACTIVE DOCKER_ANOMANOR_STANDALONE=$DOCKER_ANOMANOR_STANDALONE"
-TAG="1.2.5"
+TAG=$(awk -v RS='\r\n' '/^Version/ {print $2}' DESCRIPTION)
+echo Version from DESCRIPTION: ${TAG}
 
 docker rm -f anomanor 2> /dev/null
 # To force rebuild
@@ -47,7 +48,7 @@ docker build -f Dockerfile_anomanor \
 docker run -d -it  \
   --name anomanor \
   --restart unless-stopped \
-  --publish 3838:3838 \
+  --publish 4848:3838 \
   -v anomanor_data_db:${ANOMANOR_DATA}/db \
   -v anomanor_data_cache:${ANOMANOR_DATA}/cache \
   -v anomanor_data_data:${ANOMANOR_DATA}/data \
@@ -57,4 +58,4 @@ docker ps -l
 sleep 3s
 docker logs anomanor
 
-echo Connect with your browser at localhost:3838
+echo Connect with your browser at localhost:4848
