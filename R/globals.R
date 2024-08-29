@@ -221,6 +221,7 @@ globals = function(){
   assign("g", mget(ls()), envir = .GlobalEnv)
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency
-  check_patient_records()
+  cp = check_patient_records()
   log_it(paste("Startup time (s):" , round((proc.time() - ptm)[3],2)))
+  cp
 }
