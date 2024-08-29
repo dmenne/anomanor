@@ -205,6 +205,11 @@ tippy_all = function() {
   invisible(apply(tippy_main_text, 1, function(x) tippyThis(x["id"], x["text"])))
 }
 
+getenv_r_config_active = function(){
+  stringr::str_trim(Sys.getenv("R_CONFIG_ACTIVE"))
+}
+
+
 tryCatch.W.E <- function(expr)
 {
   W <- NULL

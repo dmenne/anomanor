@@ -27,7 +27,7 @@ copy_test_data = function(gg){
 }
 
 cleanup_test_data = function(){
-  if (Sys.getenv("R_CONFIG_ACTIVE") == 'test') {
+  if (getenv_r_config_active() == 'test') {
     ano_poolClose()
     unlink(g$anomanor_data_base, recursive = TRUE)
   }

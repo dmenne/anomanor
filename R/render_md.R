@@ -8,7 +8,7 @@ render_md = function(markdown_file){
   if (!file.exists(markdown_html) ||
       (md_time > file.info(markdown_html)$mtime) ) {
     if (!rmarkdown::pandoc_available())  {
-      if (Sys.getenv("R_CONFIG_ACTIVE") != "test")
+      if (getenv_r_config_active() != "test")
         shinyWidgets::show_alert(title = "Pandoc missing",
                  text = "Cannot show this help text because Pandoc is not installed",
                  type = "warning")

@@ -15,7 +15,7 @@ globals = function(){
 
   # Default configuration must set globally
   # By default, user is sa_admin
-  active_config = str_trim(Sys.getenv("R_CONFIG_ACTIVE"))
+  active_config = getenv_r_config_active()
   # See .Renviron file for settings
   # Do not use the default in Sys.getenv here, problem later
   # See valid values in config.yml
@@ -25,7 +25,7 @@ globals = function(){
                    "keycloak_production", "sa_random_trainee" )
   if (!active_config %in% valid_config){
     Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
-    active_config = Sys.getenv("R_CONFIG_ACTIVE")
+    active_config = getenv_r_config_active()
   }
   # Renviron_production is not saved in git
   is_windows = Sys.info()['sysname'] == 'Windows'
@@ -41,9 +41,12 @@ globals = function(){
     stop(paste(dir(root_dir), collapse  = "\n"), call. = FALSE)
 #    stop("Environment file ", env_file, " does not exist", call. = FALSE)
   readRenviron(env_file)
-  if (Sys.getenv("R_CONFIG_ACTIVE") != active_config)
+  if (getenv_r_config_active() != active_config){
+    cat("R_CONFIG_ACTIVE --", getenv_r_config_active(), "--  ", active_config,"\n")
     stop("The value of R_CONFIG_ACTIVE must not be changed in environment files",
          call. = FALSE)
+
+  }
 
   # Set by Dockerfile_anomanor
   in_docker = Sys.getenv("ANOMANOR_DOCKER") == "TRUE"

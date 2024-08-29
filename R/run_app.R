@@ -14,7 +14,7 @@ run_app = function() {
     },
     options = list(
       host = "0.0.0.0",
-      port = if (Sys.getenv("R_CONFIG_ACTIVE") == "keycloak_production" ||
+      port = if (getenv_r_config_active() == "keycloak_production" ||
                  Sys.getenv("DOCKER_ANOMANOR_STANDALONE") == "TRUE")  3838 else 4848),
     enableBookmarking = NULL,
     uiPattern = "/"
