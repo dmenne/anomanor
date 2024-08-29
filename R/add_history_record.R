@@ -9,7 +9,7 @@ add_history_record_if_required = function(min_hours_since = 1) {
   hours_since = round(as.numeric(
     difftime(as.POSIXlt(Sys.time()), latest_hist, units = "hours")))
   # TODO: remove this when checked
-  log_it(glue("{hours_since} hours since last history update"))
+  # log_it(glue("{hours_since} hours since last history update"))
   if (hours_since >= min_hours_since) {
     log_it(glue("Updated history after {hours_since} hours"))
     add_history_record()

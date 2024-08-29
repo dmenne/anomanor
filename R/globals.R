@@ -9,6 +9,7 @@ utils::globalVariables("g")
 
 globals = function(){
 #  options(warn = 2)
+  ptm = proc.time()
   options(shiny.error = browser)
   # https://github.com/rstudio/shiny/issues/3626
   options(shiny.useragg = TRUE)
@@ -221,4 +222,5 @@ globals = function(){
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency
   check_patient_records()
+  log_it(paste("Startup time (s):" , round((proc.time() - ptm)[3],2)))
 }
