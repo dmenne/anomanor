@@ -32,6 +32,13 @@ You can infer the status of individual classifications from the icon:
 <span class="fa fa-check fa-lg"></span> Saved, 
 <span class="fa fa-flag-checkered fa-lg"></span> Finalized
 
+
+## Example cases `$ex1..$ex5`
+
+There are 5 example cases at the top of the dropdown, marked `$ex1..$ex5` for which the balloon expulsion success is not given. These cases are just there so that you can practice with the analysis software. As and when you are happy with the controls you can skip any remaining examples, because they do not count toward study completion.
+
+To get the example cases away from the top of the list, just dummy-rate these. Nobody gets fired for rating all examples normals.
+
 ## Navigation
 - Use the cursor keys or arrow buttons to move to next protocol section of the selected phase.
 - Press the F11 button for a full screen view to avoid scrolling. 
