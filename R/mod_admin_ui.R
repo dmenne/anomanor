@@ -145,7 +145,7 @@ mod_admin_ui = function(id, ...) {
         "History",
         fillPage(
           plotOutput(ns("history_plot")),
-          helpText("History is refreshed every hour on restart; latest changes may not yet show. Administrator ratings are not shown.")
+          helpText("History is refreshed every hour on restart; latest changes may not yet be included. Administrator ratings are not shown.")
         )
       )  # history tabPanel
     ) #tabsetPanel
