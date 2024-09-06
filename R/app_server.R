@@ -570,11 +570,10 @@ app_server = function(input, output, session) {
   })
 
   observeEvent(rvalues$classification, {
-    # The delay is needed Bug??
-    delay(2,
-          visNetworkProxy(ns_ano("network")) %>%
-            visSelectNodes(rvalues$classification, clickEvent = TRUE)
-    )
+    sel = if (rvalues$classification == 0) list() else rvalues$classification;
+    # There was a 2 ms delay required in earlier versions.
+    visNetworkProxy(ns_ano("network")) %>%
+      visSelectNodes(sel, clickEvent = TRUE)
   })
 
   # ----------- Click event vis ------------------------------------
