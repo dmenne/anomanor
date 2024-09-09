@@ -17,7 +17,7 @@ The results will be published. All those completing all cases will be
 acknowledged. This information will also inform the development of
 version 2.0 of the London classification.
 
-- Version: 1.3.2
+- Version: 1.3.3
 - Dieter Menne (aut, cre)
 - Mark Fox (fnd, ctb)
 - Isabella Bielicki (ctb)

@@ -46,7 +46,6 @@ app_server = function(input, output, session) {
     expert_classification = expert_classification_from_database()
     complete_expert_ratings = attr(expert_classification, "complete_expert_ratings")
   }
-#  if (!is_admin)   delay(2000, ano_modal("sorry"))
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
       !g$config$show_testbuttons &&
@@ -419,6 +418,8 @@ app_server = function(input, output, session) {
     ww = rvalues$window_width
     js$canvas_resize(ww, g$image_height)
     showElement("patient_panel")
+
+    # TODO: set phase_label as attribute for css
     phase_cache(
       record(),
       classification_method(),
@@ -438,7 +439,8 @@ app_server = function(input, output, session) {
     req(src)
     if (!is.null(rvalues$section_line) && !is.na(rvalues$section_line$x1))
       rvalues$request_draw_section = isolate(rvalues$request_draw_section) + 1L
-    list(src = src)
+    # alt can serve as identifier for cypress e2e testing
+    list(src = src, alt = basename(src))
   },
   deleteFile = FALSE
   )
