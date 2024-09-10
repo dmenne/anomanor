@@ -32,10 +32,10 @@ create_tables = list(
 
 "CREATE TABLE IF NOT EXISTS classification (
   user           CHAR    REFERENCES user (user) ON DELETE CASCADE
-  ON UPDATE NO ACTION
+  ON UPDATE CASCADE
   NOT NULL,
   record         CHAR  REFERENCES record (record) ON DELETE CASCADE
-  ON UPDATE NO ACTION
+  ON UPDATE CASCADE
   NOT NULL,
   method         CHAR (1) NOT NULL,
   finalized      BOOLEAN NOT NULL DEFAULT FALSE,
