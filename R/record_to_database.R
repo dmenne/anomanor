@@ -21,10 +21,15 @@ record_to_database = function(file, markers, time_step){
   # REPLACE if record is already there
   anon_h = anon_from_record(record, "h")
   anon_l = anon_from_record(record, "l")
+  # The following is required to avoid loosing classifications
+  dbExecute(g$pool, "BEGIN TRANSACTION")
+  dbExecute(g$pool, "PRAGMA FOREIGN_KEYS=OFF")
   ins_q = glue_sql(
     "INSERT OR REPLACE INTO record (record, anon_h, anon_l, file_mtime, timestep) ",
     "VALUES({record},{anon_h},{anon_l},{file_mtime},{time_step})", .con = g$pool)
   dbExecute(g$pool, ins_q)
+  dbExecute(g$pool, "PRAGMA FOREIGN_KEYS=ON")
+  dbExecute(g$pool, "COMMIT")
   log_it(ins_q, force_console = force_console)
   del_sql = glue_sql("DELETE from marker where record = {record}",
                      .con = g$pool)
