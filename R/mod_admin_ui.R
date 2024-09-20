@@ -9,6 +9,7 @@ mod_admin_ui = function(id, ...) {
         "Users",
         wellPanel(
           id = ns("new_user_panel"),
+          h2("Invite Users"),
           splitLayout(
             cellWidths = c(280, 160, 130),
             textInput(ns("new_user_email"), "New user email ",
@@ -31,9 +32,10 @@ mod_admin_ui = function(id, ...) {
           )),
           ),
         # wellPanels
+        h2("Classification summary"),
         shinyWidgets::actionBttn(ns("refresh_users"), "Refresh"),
         helpText(HTML(glue(
-        "To see the user table, at least one classification must be present. ",
+#        "To see the user table, at least one classification must be present. ",
         "Number of classifications do not include $ex-samples."
         ))),
         DT::DTOutput(ns("user_table"))
@@ -146,8 +148,8 @@ mod_admin_ui = function(id, ...) {
         "History",
         fillPage(
           plotOutput(ns("history_plot")),
-          helpText("History is refreshed every hour on restart; latest changes may not yet be included. Administrator ratings are not shown.")
-        )
+        ),
+        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data before 20.9.2025 were inconsistently calculated and should be considered estimates only.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Administrator and $ex-sample ratings are not shown.</li></ul>"))
       )  # history tabPanel
     ) #tabsetPanel
   )# tagList

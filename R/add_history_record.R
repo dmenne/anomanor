@@ -36,16 +36,13 @@ add_history_record = function(history = NULL) {
   # and write it to the database
   # If a data frame for history is passed, these data are written to database directly
   if (is.null(history)) {
-    sql = glue::glue(
-      "select u.user, method, finalized, count(*) as cnt from classification c ",
-      "left join user u on u.user = c.user ",
-      "where `group` != 'admins'",
-      "group by u.user, method, finalized")
+    sql = classification_user_query()
     hs = dbGetQuery(g$pool, sql)
+    # Historically, column name was cnt, not n
+    hs = hs |> rename(cnt = n)
     if (nrow(hs) == 0) return(hs)
     history = cbind( # using lubridate functions
-      history_date = format_ISO8601(now()),
-      hs)
+      history_date = format_ISO8601(now()), hs)
   }
   # Avoid problems with unique constraints when data are too close
   ret = try(dbAppendTable(g$pool, "history", history), silent = TRUE)

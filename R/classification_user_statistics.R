@@ -1,4 +1,4 @@
-classification_user_statistics = function() {
+classification_user_query = function() {
   q = glue("
     SELECT user, method, finalized, count(finalized) as n
     FROM classification c
@@ -7,6 +7,10 @@ classification_user_statistics = function() {
     where r.anon_l not like '$%' and r.anon_h not like '$%'
     GROUP By user, method, finalized
 ")
+
+}
+classification_user_statistics = function() {
+  q = classification_user_query()
   stat = dbGetQuery(g$pool, q)  %>%
     mutate(
       state = ifelse(finalized == 0, "saved", "finalized" ),

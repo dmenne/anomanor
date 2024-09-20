@@ -18,8 +18,10 @@ plot_history = function() {
              linetype = finalized,
              color = method,
              group = interaction(method, finalized))) +
-    geom_line() +
-    geom_point(alpha = 0.5, aes(shape = method)) +
+    geom_hline(yintercept = 99, linetype = "dashed", color = "green") +
+    geom_step() +
+    ylim(0,120) +
+    #geom_point(alpha = 0.5, aes(shape = method)) +
     scale_x_date(guide = guide_axis(check.overlap = TRUE)) +
     facet_wrap(~user, ncol = 5) +
     ylab("Number of ratings") +
