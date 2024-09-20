@@ -29,12 +29,13 @@ mod_admin_ui = function(id, ...) {
               "user must be done from the {g$keycloak_site}."
             )
           )),
-          helpText(HTML("To see the user table, at least one classification
-                        must be present"
-          ))
           ),
         # wellPanels
         shinyWidgets::actionBttn(ns("refresh_users"), "Refresh"),
+        helpText(HTML(glue(
+        "To see the user table, at least one classification must be present. ",
+        "Number of classifications do not include $ex-samples."
+        ))),
         DT::DTOutput(ns("user_table"))
       ),
       # tabPanel record summary
