@@ -28,6 +28,11 @@ generate_sample_classification = function(users, force = TRUE,
   end_nodes = nodes %>%
     filter(group != "a") %>%
     select(phase, id)
+  # Generate one test record
+  q = "update record set anon_h= '$ex1', anon_l = '$ex1' where record =  (
+select record from record limit 1)"
+  dbExecute(g$pool, q)
+
   q = "SELECT record from record where valid = 1"
   records = dbGetQuery(g$pool, q)$record
   phases = unique(end_nodes$phase)
