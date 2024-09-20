@@ -31,7 +31,7 @@ development of version 2.0 of the London classification.
 
 ## Credits
 
-- Version: 1.3.3
+- Version: 1.3.5
 - Dieter Menne (aut, cre)
 - Mark Fox (fnd, ctb)
 - Isabella Bielicki (ctb)
