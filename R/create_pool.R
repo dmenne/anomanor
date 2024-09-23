@@ -82,6 +82,21 @@ LEFT JOIN user u ON u.user = c.user
 WHERE c.finalized = 1 AND u.[group] <> 'admins';
 ",
 
+"CREATE VIEW IF NOT EXISTS anon AS
+SELECT record,
+anon_h AS anon,
+'h' AS method
+FROM record
+WHERE anon NOT LIKE '$ex%'
+UNION
+SELECT record,
+anon_l AS anon,
+'l' AS method
+FROM record
+WHERE anon NOT LIKE '$ex%';
+",
+
+
 "CREATE TABLE marker_classification_phase (
   marker               CHAR PRIMARY KEY,
   classification_phase CHAR,
