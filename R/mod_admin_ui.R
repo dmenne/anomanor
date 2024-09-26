@@ -149,7 +149,7 @@ mod_admin_ui = function(id, ...) {
         fillPage(
           plotOutput(ns("history_plot")),
         ),
-        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data before 20.9.2025 were inconsistently calculated and should be considered estimates only.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Administrator and $ex-sample ratings are not shown.</li></ul>"))
+        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data points are vertically jittered to separate overlapping curves.</li><li>Data before 20.9.2025 were inconsistently calculated and should be considered estimates only.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Administrator and $ex-sample ratings are not shown.</li></ul>"))
       )  # history tabPanel
     ) #tabsetPanel
   )# tagList
