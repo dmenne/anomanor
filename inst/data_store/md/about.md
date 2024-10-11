@@ -17,7 +17,7 @@ The results will be published. All those completing all cases will be
 acknowledged. This information will also inform the development of
 version 2.0 of the London classification.
 
-- Version: 1.3.5
+- Version: 1.3.6
 - Dieter Menne (aut, cre)
 - Mark Fox (fnd, ctb)
 - Isabella Bielicki (ctb)
@@ -31,5 +31,5 @@ version 2.0 of the London classification.
 *aut, cre, cph, …* see [Library of Congress Code List for
 Relators](https://www.loc.gov/marc/relators/relaterm.html)
 
-The code is Open-Source and available on
+The code is published under MIT license and available on
 [github](https://github.com/dmenne/anomanor).

@@ -38,4 +38,4 @@ purrr::walk(
 _aut, cre, cph, ..._ see [Library of Congress Code List for Relators](https://www.loc.gov/marc/relators/relaterm.html) 
 
 
-The code is Open-Source and available on [github](https://github.com/dmenne/anomanor).
+The code is published under MIT license and available on [github](https://github.com/dmenne/anomanor).
