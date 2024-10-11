@@ -107,7 +107,7 @@ log_it = function(msg, force_console = FALSE, severity = "info") {
   tm = as.POSIXlt(Sys.time(), "UTC")
   force_console = force_console || g$config$force_console
   if (force_console || (!is.null(g$config) && is.list(g$config) && g$config$force_console))
-    cat(file = stderr(), msg, "\n")
+    cat(file = stderr(), "\n", msg, "\n")
   if (!is.null(g$pool) && DBI::dbIsValid(g$pool)) {
     op <- options(digits.secs = 2)
     iso = strftime(tm , tz = "Europe/Berlin", "%Y-%m-%d %H:%M:%OS")
@@ -220,5 +220,10 @@ tryCatch.W.E <- function(expr)
   list(value = withCallingHandlers(
     tryCatch(expr, error = function(e) e),
     warning = w.handler), warning = W)
+}
+
+n_classifications = function() {
+  q = "SELECT COUNT() as n from classification as n"
+  dbGetQuery(g$pool, q)$n
 }
 

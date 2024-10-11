@@ -18,23 +18,24 @@ record_to_database = function(file, markers, time_step){
       return(NULL)
     }
   }
+  log_it(paste("Record to database", basename(file)))
   # REPLACE if record is already there
   anon_h = anon_from_record(record, "h")
   anon_l = anon_from_record(record, "l")
   # The following is required to avoid loosing classifications
-  dbExecute(g$pool, "BEGIN TRANSACTION")
   dbExecute(g$pool, "PRAGMA FOREIGN_KEYS=OFF")
+  dbExecute(g$pool, "BEGIN TRANSACTION")
   ins_q = glue_sql(
     "INSERT OR REPLACE INTO record (record, anon_h, anon_l, file_mtime, timestep) ",
     "VALUES({record},{anon_h},{anon_l},{file_mtime},{time_step})", .con = g$pool)
   dbExecute(g$pool, ins_q)
-  dbExecute(g$pool, "PRAGMA FOREIGN_KEYS=ON")
   dbExecute(g$pool, "COMMIT")
+  dbExecute(g$pool, "PRAGMA FOREIGN_KEYS=ON")
   log_it(ins_q, force_console = force_console)
   del_sql = glue_sql("DELETE from marker where record = {record}",
                      .con = g$pool)
   deleted_markers = dbExecute(g$pool, del_sql)
-  log_it(glue("{deleted_markers} markers were deleted"), force_console = force_console)
+  #log_it(glue("{deleted_markers} markers were deleted"), force_console = force_console)
   for (i in 1:nrow(markers)) {
     ins_q = glue_sql(
       "INSERT INTO marker (record, sec, indx, annotation) VALUES(",
@@ -43,7 +44,7 @@ record_to_database = function(file, markers, time_step){
 #    log_it(ins_q)
     dbExecute(g$pool, ins_q)
   }
-  log_it(glue("Inserted {record} with {nrow(markers)} markers"),
+  log_it(glue("Inserted {record} with {nrow(markers)} markers, deleted {deleted_markers}"),
          force_console = force_console)
 }
 

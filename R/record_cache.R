@@ -42,6 +42,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
     return(files)
   }
   # One file is missing or test_hook exists: remove all cached files
+  log_it(paste("Created cache for", basename(file)))
   unlink(cache_file)
   unlink(png_hrm_file)
   unlink(png_line_file)

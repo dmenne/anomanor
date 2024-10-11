@@ -2,8 +2,7 @@ Sys.setenv("R_CONFIG_ACTIVE" = "test")
 globals()
 withr::defer(cleanup_test_data())
 
-
-test_that("Examples are not overwritten", {
+test_that("Examples and classifications are not overwritten", {
   file = "test1.txt"
   markers = tibble::tribble(
     ~sec, ~index, ~annotation,
@@ -11,7 +10,7 @@ test_that("Examples are not overwritten", {
     2, 2, "RAIR"
   )
   time_step = 0.15
-
+  n_classifications_1 = n_classifications()
   record = file_path_sans_ext(file)
   sql_markers = glue_sql(
     "SELECT COUNT() as n_markers from marker where record = {record}",
@@ -21,6 +20,8 @@ test_that("Examples are not overwritten", {
 
   # Write with new markers
   record_to_database(file, markers, time_step)
+  n_classifications_2 = n_classifications()
+  expect_equal(n_classifications_1, n_classifications_2)
   # check if time_step was updated, others should be same
   sql = "SELECT timestep from record where record = 'test1'"
   expect_equal(as.numeric(dbGetQuery(g$pool, sql)), time_step)
@@ -41,6 +42,8 @@ test_that("Examples are not overwritten", {
   expect_equal(test1_rec$anon_h, '$ex1')
   expect_equal(test1_rec$anon_l, '$ex1')
   expect_equal(test1_rec$timestep, time_step)
+  n_classifications_3 = n_classifications()
+  expect_equal(n_classifications_1, n_classifications_3)
 })
 
 
