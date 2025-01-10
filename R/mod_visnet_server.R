@@ -38,7 +38,7 @@ moduleServer(
         visOptions(
           autoResize = TRUE,
           highlightNearest = list(
-            algorithm = "hierarchical",
+#            algorithm = "hierarchical",
             hover = TRUE,
             labelOnly = TRUE,
             enabled = TRUE,
@@ -69,6 +69,7 @@ moduleServer(
       vis_def()
     })
 
+    # Disable buttons if finalized
     observe({
       js = ifelse(finalized(),
         glue::glue("$('#{ns_network}').addClass('noclick')"),

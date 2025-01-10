@@ -44,7 +44,8 @@ app_server = function(input, output, session) {
   complete_expert_ratings = FALSE
   if (g$config$show_results_to_experts || !str_detect(app_groups, "experts")) {
     expert_classification = expert_classification_from_database()
-    complete_expert_ratings = attr(expert_classification, "complete_expert_ratings")
+    complete_expert_ratings = g$config$show_results_to_experts # Workaround
+      # attr(expert_classification, "complete_expert_ratings") This code is wrong
   }
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
@@ -529,14 +530,19 @@ app_server = function(input, output, session) {
     ifelse(nrow(vis_selected) == 0, 0, vis_selected$id[1])
   })
 
+
+
   # ----------- when to update network edges ---------------------------
   update_network = reactive({
-    req(record(), complete_expert_ratings, rvalues$finalized)
-    req(expert_classification)
-    list(classification_phase(),
+    req(complete_expert_ratings, rvalues$finalized,
+        expert_classification)
+    list(
+         classification_phase(),
          record(),
-         input[[ns_ano("network_initialized")]])
+         input[[ns_ano("network_initialized")]]
+    )
   })
+
 
   # ----------- update network edges ---------------------------
   observeEvent(update_network(), {
@@ -552,6 +558,7 @@ app_server = function(input, output, session) {
       filter(method == cm) %>%
       select(classification, percent, expert_classification) %>%
       left_join(ed, by = c("classification" = "to"))
+    req(nrow(ec) > 0)
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100
     ec = ec %>%
@@ -563,12 +570,12 @@ app_server = function(input, output, session) {
           TRUE ~ "darkgray"),
         width = percent/12 + 1,
       ) %>%
-      select(id, label, color, width)
-    req(nrow(ec) > 0)
-    # Setting selection here does not work!
-    # There is no event "update_finalized"
-    visNetworkProxy(ns_ano("network")) %>%
-      visUpdateEdges(ec)
+      select(id, label, color, width)#
+    # This delay should be replaced by an completion event
+    delay(10,
+      visNetworkProxy(ns_ano("network")) %>%
+        visUpdateEdges(ec)
+    )
   })
 
   observeEvent(rvalues$classification, {

@@ -21,11 +21,13 @@ expert_classification_from_database = function() {
   } else {
     expert_classification$expert_classification = FALSE
   }
-
   n_experts_ratings = n_experts_ratings$n
+  # TODO: This code is wrong
   complete_expert_ratings = all(n_experts_ratings == 2*n_rec*n_experts)
   attr(expert_classification, "n_experts") = n_experts
   attr(expert_classification, "n_rec") = n_rec
+  # DEBUG
+  complete_expert_ratings = TRUE
   attr(expert_classification, "complete_expert_ratings") = complete_expert_ratings
   expert_classification %>%
     mutate( percent = round(100*n/n_experts))
