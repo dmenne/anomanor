@@ -571,7 +571,7 @@ app_server = function(input, output, session) {
         width = percent/12 + 1,
       ) %>%
       select(id, label, color, width)#
-    # This delay should be replaced by an completion event
+    # This delay should be replaced by a completion event
     delay(10,
       visNetworkProxy(ns_ano("network")) %>%
         visUpdateEdges(ec)

@@ -29,19 +29,19 @@ moduleServer(
           zoomView = FALSE,
           selectable = TRUE
         ) %>%
-        visEdges(arrows = list(
-          to = list(enabled = TRUE, scaleFactor = 0.3)),
+        visEdges(
+          arrows = list(
+            to = list(enabled = TRUE, scaleFactor = 0.3)),
           shadow = TRUE,
           width =  1,
-          arrowStrikethrough = FALSE,
           font = list(size = 18)) %>%
         visOptions(
           autoResize = TRUE,
           highlightNearest = list(
-#            algorithm = "hierarchical",
+            algorithm = "hierarchical",
             hover = TRUE,
             labelOnly = TRUE,
-            enabled = TRUE,
+            enabled = FALSE,
             degree = 3,
             hideColor = "rgba(20, 20, 20, 0.1)"
           )
