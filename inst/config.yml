@@ -27,6 +27,10 @@ sa_expert:
   app_user: x_bertha
   app_groups: experts
 
+sa_consensus:
+  app_user: x_consensus
+  app_groups: experts
+
 sa_random_trainee:
   app_user: random # Replaced by random name
   app_groups: trainee

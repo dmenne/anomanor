@@ -23,11 +23,10 @@ globals = function(){
   valid_config = c("sa_trainee", "sa_admin", "sa_expert", "test",
                    "test_expert", "keycloak_devel",
                    "keycloak_test",
+                   "sa_consensus",
                    "keycloak_production", "sa_random_trainee" )
-  if (!active_config %in% valid_config){
-    Sys.setenv("R_CONFIG_ACTIVE" = "sa_admin")
-    active_config = getenv_r_config_active()
-  }
+  stopifnot(active_config %in% valid_config)
+
   # Renviron_production is not saved in git
   is_windows = Sys.info()['sysname'] == 'Windows'
   env_file_base =  case_when(

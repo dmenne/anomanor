@@ -32,9 +32,12 @@ moduleServer(
         visEdges(
           arrows = list(
             to = list(enabled = TRUE, scaleFactor = 0.3)),
+          # using arrowStrikethrough = FALSE would look better,
+          # put results in awkward position of label
+#          arrowStrikethrough = FALSE,
           shadow = TRUE,
           width =  1,
-          font = list(size = 18)) %>%
+          font = list(size = 18, align = "middle", vadajust = 3)) %>%
         visOptions(
           autoResize = TRUE,
           highlightNearest = list(
