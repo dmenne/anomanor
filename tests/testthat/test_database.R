@@ -94,7 +94,7 @@ test_that("classification_phase_summary with invalid user/group returns question
 
 test_that("classification_statistics returns valid user stats of hrm", {
   ret = classification_statistics(method = 'h')
-  expect_equal(nrow(ret), 16)
+  expect_equal(nrow(ret), 14)
   expect_s3_class(ret, "tbl_df")
   expect_equal(names(ret), c("record", "group", "phase",
                              "classification", "n", "short"))
@@ -202,7 +202,8 @@ test_that("classification_user_statistics returns tibble", {
 
 test_that("consensus_classification_from_database returns tibble", {
   ret = consensus_classification_from_database()
-  expect_equal(names(ret), c("record", "classification_phase", "classification"))
+  expect_equal(names(ret), c("record", "classification_phase", "method",
+                             "classification"))
   checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
   checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
 })
@@ -213,7 +214,7 @@ test_that("expert_classification_from_database returns tibble with attributes", 
     c("record", "classification_phase", "method", "classification", "n",
       "expert_classification", "percent"))
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-  expect_equal(sum(ret$expert_classification), 12)
+  expect_equal(sum(ret$expert_classification), 11)
   nret = ret %>% left_join(
     nodes %>% filter(group != 'a') %>% select(phase, id),
     by = c("classification_phase" = "phase", "classification" = "id"))

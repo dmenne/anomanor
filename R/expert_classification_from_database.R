@@ -12,7 +12,8 @@ expert_classification_from_database = function() {
   consensus_classification = consensus_classification_from_database()
   if (!is.null(consensus_classification)) {
     expert_classification = expert_classification %>%
-      left_join(consensus_classification, by = c("record", "classification_phase")) %>%
+      left_join(consensus_classification,
+                by = c("record", "classification_phase", "method")) %>%
       mutate(
         expert_classification = classification.x == classification.y,
         classification.y = NULL
