@@ -555,9 +555,9 @@ app_server = function(input, output, session) {
     ec = expert_classification %>%
       filter(classification_phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
-      filter(method == cm) %>%
-      select(classification, percent, expert_classification) %>%
-      left_join(ed, by = c("classification" = "to"))
+      filter(method == cm) |>
+      select(consensus_classification, percent, expert_classification) |>
+      left_join(ed, by = c("expert_classification" = "to"))
     req(nrow(ec) > 0)
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100
@@ -565,11 +565,13 @@ app_server = function(input, output, session) {
       mutate(
         label = glue("{label}\n{percent}%" ),
         color = case_when(
-          expert_classification ~ "green",
+          consensus_classification == expert_classification ~ "green",
           percent == max_percent ~ "orange",
           TRUE ~ "darkgray"),
-        width = percent/12 + 1,
-      ) %>%
+        width = if_else(
+          consensus_classification == expert_classification, 7,
+          percent/12 + 1)
+      )  %>%
       select(id, label, color, width)#
     # This delay should be replaced by a completion event
     delay(10,

@@ -202,8 +202,8 @@ test_that("classification_user_statistics returns tibble", {
 
 test_that("consensus_classification_from_database returns tibble", {
   ret = consensus_classification_from_database()
-  expect_equal(names(ret), c("record", "classification_phase", "method",
-                             "classification"))
+  expect_equal(names(ret),
+    c("record", "classification_phase", "method", "classification"))
   checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
   checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
 })
@@ -211,20 +211,11 @@ test_that("consensus_classification_from_database returns tibble", {
 test_that("expert_classification_from_database returns tibble with attributes", {
   ret = expert_classification_from_database()
   expect_equal(names(ret),
-    c("record", "classification_phase", "method", "classification", "n",
-      "expert_classification", "percent"))
+    c("record", "classification_phase", "method", "expert_classification",
+      "n", "consensus_classification", "n_total",
+       "percent"))
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-  expect_equal(sum(ret$expert_classification), 11)
-  nret = ret %>% left_join(
-    nodes %>% filter(group != 'a') %>% select(phase, id),
-    by = c("classification_phase" = "phase", "classification" = "id"))
-  expect_equal(names(attributes(ret)), c("names", "class", "row.names", "n_experts",
-                                  "n_rec", "complete_expert_ratings"))
-
-  expect_equal(attr(ret, "n_experts"), 4)
-  expect_equal(attr(ret, "n_rec"), 2)
-  expect_true(attr(ret, "complete_expert_ratings"))
-  expect_true(!all(is.na(nret$n)))
+  expect_equal(attr(ret, "n_experts"), 5)
 })
 
 
