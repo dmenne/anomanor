@@ -608,6 +608,16 @@ app_server = function(input, output, session) {
 
   # ----------- Help-related functions --------------------
 
+  observeEvent(input$help_about, {
+    ano_modal("about")
+  })
+
+  # ----------- Legend text --------------------
+  output$legend_text = renderUI({
+    req(update_network())
+    HTML('<small>Arrows<small> Percentages: expert classifications. <span style="color:orange">Orange:</span>majority. <span style="color:green">Green:</span> consensus if available</small></small>')
+  })
+
   # ----------- Patient text --------------------
   output$patient_text = renderUI({
     req(record())
@@ -681,10 +691,6 @@ app_server = function(input, output, session) {
         "Expert ratings not complete"
       glue("User: {app_user}/{ag} {indocker} {g$active_config}/{use_keycloak}; {xr}")
     }
-  })
-
-  observeEvent(input$help_about, {
-    ano_modal("about")
   })
 
   # classification_method() with ignoreInit

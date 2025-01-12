@@ -77,6 +77,7 @@ app_ui = function() {
            fluidRow(
              id = "patient_panel",
              column(12, uiOutput("patient_text")),
+             column(12, uiOutput("legend_text")),
              column(10, mod_visnet_ui("ano", height = 300)),
              column(2,
                id = "save_panel",
