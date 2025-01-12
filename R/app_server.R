@@ -11,6 +11,7 @@ app_server = function(input, output, session) {
   app_groups = get_app_groups(app_user)
   is_admin = str_detect(app_groups, "admins")
   n_classified = number_of_classifications(app_user)
+  complete_expert_ratings = g$config$complete_experts_ratings
 
 
   # ---------------- Admin Server and UI ---------------------------
@@ -40,13 +41,6 @@ app_server = function(input, output, session) {
   add_history_record_if_required(1) # does nothing when not at least 1 hours ago
 
   # ----------- Allow display of results -----------
-  expert_classification = NULL
-  complete_expert_ratings = FALSE
-  if (g$config$show_results_to_experts || !str_detect(app_groups, "experts")) {
-    expert_classification = expert_classification_from_database()
-    complete_expert_ratings = g$config$show_results_to_experts # Workaround
-      # attr(expert_classification, "complete_expert_ratings") This code is wrong
-  }
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
       !g$config$show_testbuttons &&
@@ -70,7 +64,13 @@ app_server = function(input, output, session) {
     section_pars = NULL,
     section_line = NULL, # from database
     request_draw_section = 0L,
-    window_width = NULL)
+    window_width = NULL,
+    expert_classification = NULL
+  )
+
+  if (complete_expert_ratings) {
+    rvalues$expert_classification = expert_classification_from_database()
+  }
 
   # Display message
   if (exists("checked_patients", where = g) && g$checked_patients != "")
@@ -178,6 +178,11 @@ app_server = function(input, output, session) {
     toggle_button_state(FALSE)
     update_classification_phase_icons(FALSE) # Keep previous settings
     update_record_icons()
+    # Must update expert_classifications for x_consensus display
+    if (app_user == "x_consensus" && complete_expert_ratings) {
+      rvalues$expert_classification = expert_classification_from_database()
+    }
+
   }
 
   # ----------- Enable/Disable Save/Cancel/Finalize ---------------
@@ -534,8 +539,10 @@ app_server = function(input, output, session) {
 
   # ----------- when to update network edges ---------------------------
   update_network = reactive({
-    req(complete_expert_ratings, rvalues$finalized,
-        expert_classification)
+    req(!is.null(rvalues$expert_classification))
+    req( (app_groups == "experts" && g$config$show_results_to_experts) ||
+          app_user == 'x_consensus' )
+    req(rvalues$finalized || app_user == 'x_consensus' )
     list(
          classification_phase(),
          record(),
@@ -552,7 +559,7 @@ app_server = function(input, output, session) {
     req(cp, cm)
     ed = edges %>%
       filter(phase == cp)
-    ec = expert_classification %>%
+    ec = rvalues$expert_classification %>%
       filter(classification_phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
       filter(method == cm) |>
@@ -669,8 +676,7 @@ app_server = function(input, output, session) {
     if (g$active_config == "keycloak_production" && !is_admin) {
       glue("User: {app_user}/{ag}")
     } else {
-      xr = if (is.null(complete_expert_ratings))
-        {"No expert ratings"} else  if (complete_expert_ratings)
+      xr = if (complete_expert_ratings)
         {"Expert ratings complete"} else
         "Expert ratings not complete"
       glue("User: {app_user}/{ag} {indocker} {g$active_config}/{use_keycloak}; {xr}")
