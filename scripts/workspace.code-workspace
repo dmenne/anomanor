@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\..\\..\\..\\tmp"
+		}
+	],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "previewLimit": 50,
+        "driver": "SQLite",
+        "name": "naperge",
+        "database": "${workspaceFolder:naperg}/server/prisma/dev.db"
+      }
+    ],
+    "git.ignoreLimitWarning": true,
+    "python.pythonPath": "python"
+  },
+  "extensions": {
+    "recommendations": [
+      "platformio.platformio-ide"
+    ]
+  }
+}

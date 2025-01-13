@@ -539,10 +539,11 @@ app_server = function(input, output, session) {
 
   # ----------- when to update network edges ---------------------------
   update_network = reactive({
-    req(!is.null(rvalues$expert_classification))
+    req(classification_phase())
+    req(rvalues$expert_classification)
     req( (app_groups == "experts" && g$config$show_results_to_experts) ||
-          app_user == 'x_consensus' )
-    req(rvalues$finalized || app_user == 'x_consensus' )
+          app_user == 'x_consensus' ||
+          (app_groups == "trainees" && rvalues$finalized ))
     list(
          classification_phase(),
          record(),
@@ -554,6 +555,7 @@ app_server = function(input, output, session) {
   # ----------- update network edges ---------------------------
   observeEvent(update_network(), {
     # edges is internal package global data
+    browser()
     cp = classification_phase()
     cm = classification_method()
     req(cp, cm)

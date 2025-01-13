@@ -1,0 +1,17 @@
+-- delete from ano_logs where message like 'Session%';
+delete from ano_logs where message like 'Rendered%';
+delete from ano_logs where message like '%re-authenticate%';
+-- delete from ano_logs where message like 'Initial%';
+-- delete from ano_logs where message like 'Inserted%';
+delete from ano_logs where message like '%user test%';
+delete from ano_logs where message like 'Both%';
+delete from ano_logs where message like '0%';
+delete from ano_logs where message like 'Session start user anomanor%';
+delete from ano_logs where message like 'Session ended user anomanor%';
+delete from ano_logs where message like 'Executed%';
+delete from ano_logs where message like '%anton%';
+delete from ano_logs where message like 'Initially copied%';
+delete from ano_logs where message like '%since last history%';
+delete from ano_logs where message like 'Startup%';
+delete from ano_logs where message like '%history%';
+delete from ano_logs where message like 'Updated hi%';

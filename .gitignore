@@ -21,7 +21,6 @@ letsencrypt
 log
 dev
 testthat*.rds
-scripts/
 covr/
 *.gcno
 *.gcda
