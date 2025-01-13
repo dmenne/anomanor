@@ -17,7 +17,7 @@ expert_classification_from_database = function() {
       left_join(consensus_classification,
                 by = c("record", "classification_phase", "method")) %>%
       rename(
-        expert_classification = classification.x,
+        classification = classification.x,
         consensus_classification = classification.y
       )
   } else {

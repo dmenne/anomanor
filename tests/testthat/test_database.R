@@ -211,7 +211,7 @@ test_that("consensus_classification_from_database returns tibble", {
 test_that("expert_classification_from_database returns tibble with attributes", {
   ret = expert_classification_from_database()
   expect_equal(names(ret),
-    c("record", "classification_phase", "method", "expert_classification",
+    c("record", "classification_phase", "method", "classification",
       "n", "consensus_classification", "n_total",
        "percent"))
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))

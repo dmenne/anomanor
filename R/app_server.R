@@ -555,7 +555,6 @@ app_server = function(input, output, session) {
   # ----------- update network edges ---------------------------
   observeEvent(update_network(), {
     # edges is internal package global data
-    browser()
     cp = classification_phase()
     cm = classification_method()
     req(cp, cm)
@@ -564,9 +563,11 @@ app_server = function(input, output, session) {
     ec = rvalues$expert_classification %>%
       filter(classification_phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
-      filter(method == cm) |>
-      select(consensus_classification, percent, expert_classification) |>
-      left_join(ed, by = c("expert_classification" = "to"))
+      filter(method == cm)
+    ec = ec |>
+      select(consensus_classification, percent, classification)
+    ec = ec |>
+      left_join(ed, by = c("classification" = "to"))
     req(nrow(ec) > 0)
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100
@@ -574,11 +575,11 @@ app_server = function(input, output, session) {
       mutate(
         label = glue("{label}\n{percent}%" ),
         color = case_when(
-          consensus_classification == expert_classification ~ "green",
+          consensus_classification == classification ~ "green",
           percent == max_percent ~ "orange",
           TRUE ~ "darkgray"),
         width = if_else(
-          consensus_classification == expert_classification, 7,
+          consensus_classification == classification, 9,
           percent/12 + 1)
       )  %>%
       select(id, label, color, width)#
