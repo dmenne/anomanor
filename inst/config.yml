@@ -23,7 +23,7 @@ sa_trainee:
 sa_admin:
   app_user: anton
   app_groups: admins
-  complete_experts_ratings: FALSE
+  complete_experts_ratings: TRUE
 
 sa_expert:
   app_user: x_bertha

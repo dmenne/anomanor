@@ -67,7 +67,6 @@ app_server = function(input, output, session) {
     window_width = NULL,
     expert_classification = NULL
   )
-
   if (complete_expert_ratings) {
     rvalues$expert_classification = expert_classification_from_database()
   }
@@ -541,7 +540,7 @@ app_server = function(input, output, session) {
   update_network = reactive({
     req(classification_phase())
     req(rvalues$expert_classification)
-    req( (app_groups == "experts" && g$config$show_results_to_experts) ||
+    req( (app_groups %in% c("experts", "admins") && g$config$show_results_to_experts) ||
           app_user == 'x_consensus' ||
           (app_groups == "trainees" && rvalues$finalized ))
     list(
