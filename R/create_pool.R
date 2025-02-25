@@ -69,12 +69,6 @@ create_tables = list(
   message  CHAR NOT NULL
 );",
 
-"CREATE VIEW IF NOT EXISTS expert_classification AS
-SELECT record, classification_phase, method, classification, count(classification) AS n
-FROM user u LEFT JOIN classification c ON u.user = c.user
-WHERE finalized = 1 AND [group] = 'experts' AND u.user <> 'x_consensus'
-GROUP BY classification, classification_phase, method, record",
-
 "CREATE VIEW IF NOT EXISTS krippendorff AS
 SELECT c.user,[group],method,record,classification_phase,classification
 FROM classification c

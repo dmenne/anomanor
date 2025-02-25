@@ -5,6 +5,38 @@ withr::defer(cleanup_test_data())
 valid_fa = c("fa-battery-2", "fa-battery-1", "fa-battery-3",
   "fa-question", "fa-flag-checkered", "fa-check")
 
+test_that("helper function return state of table", {
+  ex =  check_if_table_exists(g$pool, "ano_logs")
+  expect_true(ex)
+  ex =  check_if_table_exists(g$pool, "nonsense")
+  expect_false(ex)
+})
+
+test_that("expert_classification cache table is created", {
+  ex = check_if_table_exists(g$pool, "expert_classification")
+  expect_false(ex)
+  ex_db = expert_classification_from_database(g$pool)
+  expect_gt(nrow(ex_db), 10)
+  ex = check_if_table_exists(g$pool, "expert_classification")
+  expect_true(ex)
+  dbExecute(g$pool, "DROP TABLE expert_classification")
+  ex = check_if_table_exists(g$pool, "expert_classification")
+  expect_false(ex)
+})
+
+test_that("cleaned_expert_classification cache table is created", {
+  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
+  expect_false(ex)
+  ex_db = cleaned_expert_classification_from_database(g$pool)
+  expect_gt(nrow(ex_db), 10)
+  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
+  expect_true(ex)
+  dbExecute(g$pool, "DROP TABLE cleaned_expert_classification")
+  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
+  expect_false(ex)
+})
+
+
 test_that("timestamp is updated when classification is saved and no data deleted",{
   # This is an unsaved record
   ret = classification_from_database("x_bertha", "test1", 'l', "tone", 0.17)
@@ -201,21 +233,20 @@ test_that("classification_user_statistics returns tibble", {
 })
 
 test_that("consensus_classification_from_database returns tibble", {
-  ret = consensus_classification_from_database()
+  ret = consensus_classification_from_database(g$pool)
   expect_equal(names(ret),
     c("record", "classification_phase", "method", "classification"))
   checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
   checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
 })
 
-test_that("expert_classification_from_database returns tibble with attributes", {
-  ret = expert_classification_from_database()
+test_that("expert_classification_from_database returns tibble", {
+  ret = expert_classification_from_database(g$pool)
   expect_equal(names(ret),
     c("record", "classification_phase", "method", "classification",
       "n", "consensus_classification", "n_total",
        "percent"))
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-  expect_equal(attr(ret, "n_experts"), 5)
 })
 
 
@@ -278,7 +309,7 @@ test_that("is_example returns logical", {
 # Deletes, must be last
 test_that("consensus_classification_from_database w/o consensus data returns NULL", {
   dbExecute(g$pool, "DELETE from classification where user = 'x_consensus'")
-  ret = consensus_classification_from_database()
+  ret = consensus_classification_from_database(g$pool)
   expect_null(ret)
 })
 
