@@ -227,3 +227,11 @@ n_classifications = function() {
   dbGetQuery(g$pool, q)$n
 }
 
+
+check_if_table_exists = function(con, table_name) {
+  sql = "SELECT name FROM sqlite_master WHERE type='table' AND name={table_name}";
+  tb = dbGetQuery(con, glue_sql(sql, .con = con))
+  nrow(tb) > 0
+}
+
+
