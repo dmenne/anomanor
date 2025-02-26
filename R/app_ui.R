@@ -1,4 +1,4 @@
-app_ui = function() {
+app_ui = function(request) {
   addResourcePath('www', app_sys('app/www'))
   tagList(
     shinyjs::useShinyjs(),
@@ -65,6 +65,7 @@ app_ui = function() {
           tags$a(href = "/logout", "Logout"),
           shinyWidgets::actionBttn("help_about", NULL, icon = icon("info")),
           textOutput("user"),
+          bookmarkButton(),
           width = 3
         ), # sidebarPanel
         mainPanel(

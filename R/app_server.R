@@ -750,6 +750,14 @@ app_server = function(input, output, session) {
               " height="{g$image_height}px"></canvas>'))
   })
 
+  onRestored(function(state){
+#    http://127.0.0.1:4848/?_inputs_&dm-record=%22430511_ib.txt%22&dm-classification_method=true&dm-classification_phase=%22tone%22
+    record_restore = state$input$`dm-record`
+    # TODO This  flickers!
+    browser()
+    shinyWidgets::updatePickerInput(session, "dm-record", selected = record_restore)
+  })
+
 
   session$onSessionEnded(function() {
     in_session_time = Sys.time() - login_time
