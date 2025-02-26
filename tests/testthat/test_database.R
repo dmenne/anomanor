@@ -12,23 +12,26 @@ test_that("helper function return state of table", {
   expect_false(ex)
 })
 
-test_that("expert_classification cache table is created", {
-  ex = check_if_table_exists(g$pool, "expert_classification")
+test_that("raw_expert_classification cache table is created", {
+  ex = check_if_table_exists(g$pool, "raw_expert_classification")
   expect_false(ex)
-  ex_db = expert_classification_from_database(g$pool)
+  ex_db = raw_expert_classification_from_database(g$pool)
   expect_gt(nrow(ex_db), 10)
-  ex = check_if_table_exists(g$pool, "expert_classification")
+  ex = check_if_table_exists(g$pool, "raw_expert_classification")
   expect_true(ex)
-  dbExecute(g$pool, "DROP TABLE expert_classification")
-  ex = check_if_table_exists(g$pool, "expert_classification")
+  dbExecute(g$pool, "DROP TABLE raw_expert_classification")
+  ex = check_if_table_exists(g$pool, "raw_expert_classification")
   expect_false(ex)
 })
 
-test_that("cleaned_expert_classification cache table is created", {
+test_that("cleaned_expert_classification cache table is created and is cleaned", {
   ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
   expect_false(ex)
-  ex_db = cleaned_expert_classification_from_database(g$pool)
-  expect_gt(nrow(ex_db), 10)
+  raw_ex_db = raw_expert_classification_from_database(g$pool)
+  percent_threshold = 25
+  cleaned_ex_db = cleaned_expert_classification_from_database(g$pool, percent_threshold)
+  expect_gt(nrow(raw_ex_db), nrow(cleaned_ex_db))
+  expect_gt(min(cleaned_ex_db$percent),  percent_threshold)
   ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
   expect_true(ex)
   dbExecute(g$pool, "DROP TABLE cleaned_expert_classification")
@@ -240,14 +243,24 @@ test_that("consensus_classification_from_database returns tibble", {
   checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
 })
 
-test_that("expert_classification_from_database returns tibble", {
-  ret = expert_classification_from_database(g$pool)
+test_that("raw_expert_classification_from_database returns tibble", {
+  ret = raw_expert_classification_from_database(g$pool)
   expect_equal(names(ret),
     c("record", "classification_phase", "method", "classification",
       "n", "consensus_classification", "n_total",
        "percent"))
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
 })
+
+test_that("cleaned_expert_classification_from_database returns tibble", {
+  ret = cleaned_expert_classification_from_database(g$pool)
+  expect_equal(names(ret),
+               c("record", "classification_phase", "method", "classification",
+                 "n", "consensus_classification", "n_total",
+                 "percent"))
+  checkmate::expect_set_equal(ret$record, c("test1", "test2"))
+})
+
 
 
 test_that("classification_from_database returns list", {

@@ -68,7 +68,7 @@ app_server = function(input, output, session) {
     expert_classification = NULL
   )
   if (complete_expert_ratings) {
-    rvalues$expert_classification = expert_classification_from_database(g$pool)
+    rvalues$expert_classification = cleaned_expert_classification_from_database(g$pool)
   }
 
   # Display message
@@ -179,7 +179,7 @@ app_server = function(input, output, session) {
     update_record_icons()
     # Must update expert_classifications for x_consensus display
     if (app_user == "x_consensus" && complete_expert_ratings) {
-      rvalues$expert_classification = expert_classification_from_database(g$pool)
+      rvalues$expert_classification = cleaned_expert_classification_from_database(g$pool)
     }
 
   }
