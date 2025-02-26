@@ -369,6 +369,13 @@ mod_admin_server = function(id, app_user) {
       log_it("Cache cleared")
     })
 
+    # Manage page
+    observeEvent(input$clear_classifications, {
+      dbExecute(g$pool, "DROP TABLE cleaned_expert_classification;")
+      dbExecute(g$pool, "DROP TABLE raw_expert_classification;")
+      log_it("Classification tables dropped to force recompute")
+    })
+
     observeEvent(input$reset_me, {
       dbExecute(
         g$pool,

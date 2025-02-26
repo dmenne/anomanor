@@ -102,6 +102,12 @@ mod_admin_ui = function(id, ...) {
           ),
           fillRow(
             flex = c(1,3),
+            shinyWidgets::actionBttn(ns("clear_classifications"), "Classifications"),
+            helpText("Drops tables raw_expert_classification and cleaned_expert_classification. This will recompute the expert classification summaries on the next run."),
+            width = col_width,  height = 70
+          ),
+          fillRow(
+            flex = c(1,3),
             shinyWidgets::actionBttn(ns("reset_me"), "Reset me"),
             helpText(HTML("This will delete all classifications for the currently logged in Admin user. No relevant information will be destroyed, because classifications entered by admin users are only stored, but discarded in the statistics. Use this if you want to reset your classification for a demonstration, so that your and only your ratings are back to <b>?</b>-status.")),
             width = col_width,  height = 70
