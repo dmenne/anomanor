@@ -1,6 +1,6 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 1.4.0
+Version: 1.5.0
 Date/Publication:	12.01.2025
 Author: Dieter Menne
 Authors@R: c(
@@ -23,7 +23,7 @@ Description: Provides online training for physicians and other practitioners
   performance against a reference standard set by the lead authors of this
   classification system. Data acquired during this training will be used to
   assess inter-observer agreement between practitioners.
-License: MIT + file LICENSE
+License: GPL-3
 Depends:
     R (>= 4.4.0)
 Imports:

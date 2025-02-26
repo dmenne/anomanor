@@ -10,7 +10,7 @@
 #' @importFrom glue glue glue_sql
 #' @importFrom dplyr case_when mutate select n left_join filter full_join summarize
 #' @importFrom dplyr group_by rename if_else  bind_rows transmute group_modify
-#' @importFrom dplyr arrange all_of pull right_join inner_join join_by
+#' @importFrom dplyr arrange all_of pull right_join inner_join join_by across
 #' @importFrom lubridate days format_ISO8601 hours now as_datetime
 #' @importFrom tidyr pivot_wider replace_na drop_na
 #' @importFrom tidyselect ends_with
@@ -52,6 +52,7 @@ utils::globalVariables(c(
   "classification.y",
   "classification_phase",
   "color",
+  "consensus_classification",
   "cnt",
   "email",
   "emailVerified",
@@ -69,6 +70,7 @@ utils::globalVariables(c(
   "mtime_dest",
   "mtime_store",
   "mtype",
+  "n_total",
   "patient.x",
   "patient.y",
   "percent",
