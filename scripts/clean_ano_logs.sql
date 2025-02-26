@@ -15,3 +15,6 @@ delete from ano_logs where message like '%since last history%';
 delete from ano_logs where message like 'Startup%';
 delete from ano_logs where message like '%history%';
 delete from ano_logs where message like 'Updated hi%';
+delete from ano_logs where message like '%cache%';
+delete from ano_logs where message like 'Classification tables%';
+delete from ano_logs where message like '%clean_expert_classification%';
