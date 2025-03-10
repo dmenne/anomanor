@@ -2,7 +2,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   # Read text file, interpolate it and create cache
   # Prepare names, create cache dir, and delete old cache file
   # When file has a "/" or a backslash, it is assumed that it is
-  # already full qualified
+  # already fully qualified
   # Full path is used for testing
   records_file = ifelse(str_detect(file, "[/\\\\]"), file,
     file.path(g$record_dir, file))

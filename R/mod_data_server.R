@@ -220,7 +220,9 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       })
 
       observeEvent(input$help, {
-        ano_modal("readout")
+        shinyWidgets::updatePickerInput(session, "record", selected = '413319_ib.txt')
+
+        #ano_modal("readout")
       })
 
       observeEvent(input$london_classification, {

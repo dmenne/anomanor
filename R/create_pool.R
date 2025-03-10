@@ -90,8 +90,26 @@ FROM record
 WHERE anon NOT LIKE '$ex%';
 ",
 
+"CREATE VIEW IF NOT EXISTS section AS
+  SELECT record,
+         classification_phase,
+         protocol_phase,
+         classification,
+         t1,
+         t2,
+         pos1,
+         pos2,
+         user
+  FROM classification
+  WHERE t1 IS NOT NULL AND
+        finalized = 1
+  ORDER BY record,
+           classification_phase,
+           protocol_phase,
+           user;
+",
 
-"CREATE TABLE marker_classification_phase (
+"CREATE TABLE IF NOT EXISTS marker_classification_phase (
   marker               CHAR PRIMARY KEY,
   classification_phase CHAR,
   mtype CHAR(1)
@@ -115,7 +133,7 @@ VALUES
 ('r','tone','Squeeze 2');
 ",
 
-"CREATE TABLE history (
+"CREATE TABLE IF NOT EXISTS history (
     history_date TEXT    NOT NULL,
     user         TEXT    NOT NULL,
     method       TEXT    NOT NULL,
@@ -124,7 +142,7 @@ VALUES
 );
 ",
 
-"CREATE UNIQUE INDEX unique_history ON history (
+"CREATE UNIQUE INDEX IF NOT EXISTS unique_history ON history (
     history_date,
     user,
     method,
