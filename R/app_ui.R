@@ -61,11 +61,11 @@ app_ui = function(request) {
               value = FALSE,
               size = "small"),
               "View results. Only available when logged in as administrator"),
-          ),
+            bookmarkButton()
+         ),
           tags$a(href = "/logout", "Logout"),
           shinyWidgets::actionBttn("help_about", NULL, icon = icon("info")),
           textOutput("user"),
-          bookmarkButton(),
           width = 3
         ), # sidebarPanel
         mainPanel(

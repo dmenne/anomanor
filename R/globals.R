@@ -1,8 +1,6 @@
 # This is file globals(sic!).R, not Shiny special global.R
 # Variables in this function are can be accessed via g$,
 # as defined in run_app.R
-# I have no idea why the following two lines are
-# needed to keep Check quiet. Probably error in roxygen2
 # Not needed to run without Check
 # Warning: globals: no visible binding for global variable g
 utils::globalVariables("g")

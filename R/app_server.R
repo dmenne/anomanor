@@ -650,6 +650,7 @@ app_server = function(input, output, session) {
   observe({
     req(classification_phase() != 'all')
     rvalues$classification = 0 # Protect against transitory invalid
+    rvalues$finalized = FALSE # Protect against priority call problems
     cf = stored_classification()
     if (!is.null(cf)) {
       rvalues$finalized = cf$finalized
@@ -657,7 +658,7 @@ app_server = function(input, output, session) {
       updateTextAreaInput(session, "comment", value = cf$comment)
       rvalues$classification = cf$classification
     } else {
-      rvalues$finalized = FALSE
+#      rvalues$finalized = FALSE
       rvalues$classification = 0 # Nothing selected
       rvalues$section_line = NULL
       rvalues$section_pars = NULL
