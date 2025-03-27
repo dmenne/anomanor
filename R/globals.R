@@ -1,5 +1,5 @@
 # This is file globals(sic!).R, not Shiny special global.R
-# Variables in this function are can be accessed via g$,
+# Variables in this function can be accessed via g$,
 # as defined in run_app.R
 # Not needed to run without Check
 # Warning: globals: no visible binding for global variable g
@@ -39,7 +39,7 @@ globals = function(){
     stop(paste(dir(root_dir), collapse  = "\n"), call. = FALSE)
 #    stop("Environment file ", env_file, " does not exist", call. = FALSE)
   readRenviron(env_file)
-  if (getenv_r_config_active() != active_config){
+  if (getenv_r_config_active() != active_config) {
     cat("R_CONFIG_ACTIVE --", getenv_r_config_active(), "--  ", active_config,"\n")
     stop("The value of R_CONFIG_ACTIVE must not be changed in environment files",
          call. = FALSE)
@@ -177,8 +177,6 @@ globals = function(){
   # Required and optional markers
   mcp = dbGetQuery(g$pool,
      "SELECT marker, classification_phase, mtype from marker_classification_phase order by marker")
-
-  krip_text = HTML("Krippendorff's &alpha; <ul><li>&alpha; =1 indicates perfect inter-rater reliability</li><li>&alpha; =0 indicates the absence of inter-rater reliability. Units and the values assigned to them are statistically unrelated.</li><li>&alpha; &#60; 0 when disagreements are systematic and exceed what can be expected by chance.</li></ul>95% confidence intervals (CI 95%) were calculated using the bootstrap.")
 
   tippy_global_theme("translucent")
 

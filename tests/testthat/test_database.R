@@ -12,33 +12,6 @@ test_that("helper function return state of table", {
   expect_false(ex)
 })
 
-test_that("raw_expert_classification cache table is created", {
-  ex = check_if_table_exists(g$pool, "raw_expert_classification")
-  expect_false(ex)
-  ex_db = raw_expert_classification_from_database(g$pool)
-  expect_gt(nrow(ex_db), 10)
-  ex = check_if_table_exists(g$pool, "raw_expert_classification")
-  expect_true(ex)
-  dbExecute(g$pool, "DROP TABLE raw_expert_classification")
-  ex = check_if_table_exists(g$pool, "raw_expert_classification")
-  expect_false(ex)
-})
-
-test_that("cleaned_expert_classification cache table is created and is cleaned", {
-  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
-  expect_false(ex)
-  raw_ex_db = raw_expert_classification_from_database(g$pool)
-  percent_threshold = 25
-  cleaned_ex_db = cleaned_expert_classification_from_database(g$pool, percent_threshold)
-  expect_gt(nrow(raw_ex_db), nrow(cleaned_ex_db))
-  expect_gt(min(cleaned_ex_db$percent),  percent_threshold)
-  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
-  expect_true(ex)
-  dbExecute(g$pool, "DROP TABLE cleaned_expert_classification")
-  ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
-  expect_false(ex)
-})
-
 
 test_that("timestamp is updated when classification is saved and no data deleted",{
   # This is an unsaved record
@@ -127,113 +100,6 @@ test_that("classification_phase_summary with invalid user/group returns question
   expect_equal(unique(ret$icon), "fa-question")
 })
 
-test_that("classification_statistics returns valid user stats of hrm", {
-  ret = classification_statistics(method = 'h')
-  expect_equal(nrow(ret), 14)
-  expect_s3_class(ret, "tbl_df")
-  expect_equal(names(ret), c("record", "group", "phase",
-                             "classification", "n", "short"))
-  checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-  checkmate::expect_set_equal(ret$group,  c("experts", "trainees"))
-  checkmate::expect_set_equal(ret$phase,  c("coord", "rair", "tone"))
-  expect_true(all(ret$classification >= 1))
-  # nodes are package-internal data
-  shorts = unique(na.omit(nodes$short))
-  expect_true(all(ret$short %in% shorts))
-})
-
-test_that("classification_statistics with method 'l' return valid user stats of line", {
-  ret = classification_statistics(method = 'l')
-  expect_gte(nrow(ret), 18)
-  shorts = unique(na.omit(nodes$short))
-  expect_true(all(ret$short %in% shorts))
-})
-
-test_that("classification_statistics with use_group given returns stats of hrm", {
-  ret = classification_statistics(use_group = "experts", method = 'h')
-  expect_equal(nrow(ret), 10)
-  checkmate::expect_set_equal(ret$group, "experts")
-})
-
-test_that("classification_statistics with invalid use_group raises", {
-  expect_error(classification_statistics(use_group = "blub", method = 'h'))
-})
-
-test_that("classification_statistics_wide with default arguments returns list of tables with method hrm", {
-  ret = classification_statistics_wide(method = 'h')
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  rair = ret$rair
-  expect_s3_class(rair, "tbl_df")
-  expect_true(all(names(rair) %in% c('record', 'Areflexia_experts',
-  'Areflexia_trainees','Ok_experts','Ok_trainees','sum_experts','sum_trainees')))
-})
-
-test_that("classification_statistics_wide with method 'l' returns list of tables with method line", {
-  ret = classification_statistics_wide(method = "l")
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  rair = ret$rair
-  expect_s3_class(rair, "tbl_df")
-  expect_true(all(names(rair) %in% c('record', 'Areflexia_experts',
-                                     'Areflexia_trainees','Ok_experts','Ok_trainees','sum_experts','sum_trainees')))
-})
-
-
-test_that("classification_statistics_wide with invalid use_group raises", {
-  expect_error(classification_statistics_wide(use_group = "blub", method = 'h'))
-})
-
-test_that("classification_statistics_wide with invalid classification name raises", {
-  expect_error(classification_statistics_wide(classification_name = "blub",
-                                              method = 'h'))
-})
-
-
-test_that("classification_statistics_wide with one group returns restricted wide list", {
-  ret = classification_statistics_wide(use_group = "experts", method = 'h')
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  rair = ret$rair
-  expect_s3_class(rair, "tbl_df")
-  checkmate::expect_subset(names(rair), c('record', 'Areflexia_experts',
-                              'Ok_experts','sum_experts', 'sum_trainees'))
-})
-
-test_that("classification_statistics_wide with explicit classification name", {
-  ret = classification_statistics_wide(classification_name = "classification")
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  rair = ret$rair
-  expect_s3_class(rair, "tbl_df")
-  checkmate::expect_subset(names(rair),  c('record', '2_experts', '2_trainees',
-     '3_experts', '3_trainees', 'sum_experts', 'sum_trainees'))
-})
-
-test_that("View 'krippendorff' returns valid data", {
-  kr = krippendorff_alpha(method = 'h')
-  expect_equal(names(kr),
-   c('classification_phase', 'group', 'estimate', 'lower', 'upper', 'n_raters'))
-  kr_l = krippendorff_alpha(method = 'l')
-  expect_equal(nrow(kr), nrow(kr_l))
-
-})
-
-test_that("classification_statistics_html returns valid data", {
-  ret = classification_statistics_html(method = 'h')
-  checkmate::expect_list(ret)
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  expect_true(all(purrr::map_chr(ret, class) == "flextable"))
-})
-
-test_that("classification_user_statistics returns tibble", {
-  ret = classification_user_statistics()
-  expect_s3_class(ret, "tbl_df")
-  expect_equal(names(ret),
-    c('user', 'email', 'name', 'verified', 'group', 'method', 'saved', 'finalized'))
-  checkmate::expect_set_equal(ret$method, c("l", "h"))
-  expect_gte(nrow(ret), 4)
-  expert_saved = ret %>%
-    filter(group == "experts")
-  expect_equal(sum(expert_saved$saved), 0)
-  expect_true(all(expert_saved$finalized == 6))
-})
 
 test_that("consensus_classification_from_database returns tibble", {
   ret = consensus_classification_from_database(g$pool)
@@ -242,26 +108,6 @@ test_that("consensus_classification_from_database returns tibble", {
   checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
   checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
 })
-
-test_that("raw_expert_classification_from_database returns tibble", {
-  ret = raw_expert_classification_from_database(g$pool)
-  expect_equal(names(ret),
-    c("record", "classification_phase", "method", "classification",
-      "n", "consensus_classification", "n_total",
-       "percent"))
-  checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-})
-
-test_that("cleaned_expert_classification_from_database returns tibble", {
-  ret = cleaned_expert_classification_from_database(g$pool)
-  expect_equal(names(ret),
-               c("record", "classification_phase", "method", "classification",
-                 "n", "consensus_classification", "n_total",
-                 "percent"))
-  checkmate::expect_set_equal(ret$record, c("test1", "test2"))
-})
-
-
 
 test_that("classification_from_database returns list", {
   ret = classification_from_database("x_bertha", "test1", 'l', "tone", 0.17)

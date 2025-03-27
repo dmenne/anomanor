@@ -50,36 +50,6 @@ mod_admin_server = function(id, app_user) {
       record_summary_table()
     }, rownames = FALSE, options = list(paging = FALSE, searching = FALSE), )
 
-    # -------------- Classification tables HRM ----------------
-    classification_table_h = reactive({
-      input$refresh_statistics_h
-      ret = classification_statistics_html(method = 'h')
-      req(ret)
-      map(ret, function(x) {
-        if (length(x) != 0)
-          htmltools_value(x, ft.align = "left")
-      })
-    })
-
-    output$classification_table_h = renderUI({
-      classification_table_h()
-    })
-
-    # -------------- Classification tables Line plot ----------------
-    classification_table_l = reactive({
-      input$refresh_statistics_l
-      ret = classification_statistics_html(method = 'l')
-      req(ret)
-      map(ret, function(x) {
-        if (length(x) != 0)
-          htmltools_value(x, ft.align = "left")
-      })
-    })
-
-    output$classification_table_l = renderUI({
-      classification_table_l()
-    })
-
     # -------------- Invite user ----------------
     observeEvent(input$invite_user, {
       simul = if (!is.null(g$keycloak) &&

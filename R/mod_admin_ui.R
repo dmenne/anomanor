@@ -47,21 +47,6 @@ mod_admin_ui = function(id, ...) {
         shinyWidgets::actionBttn(ns("refresh_record_summary"), "Refresh"),
         DT::DTOutput(ns("record_summary_table"), width = "300px")
       ),
-      # tabPanel User
-      tabPanel(
-        id = ns("classification_panel_h"),
-        "HRM Classification",
-        shinyWidgets::actionBttn(ns("refresh_statistics_h"), "Refresh"),
-        uiOutput(ns("classification_table_h")),
-        helpText(g$krip_text)
-      ),
-      tabPanel(
-        id = ns("classification_panel_l"),
-        "Line Classification",
-        shinyWidgets::actionBttn(ns("refresh_statistics_l"), "Refresh"),
-        uiOutput(ns("classification_table_l")),
-        helpText(g$krip_text)
-      ),
       # tabPanel upload
       tabPanel(
         id = ns("upload_panel"),
