@@ -11,8 +11,9 @@
 #' @importFrom glue glue glue_sql
 #' @importFrom dplyr case_when mutate select n left_join filter full_join summarize
 #' @importFrom dplyr group_by rename if_else  bind_rows transmute group_modify
-#' @importFrom dplyr arrange all_of pull right_join inner_join join_by across
+#' @importFrom dplyr arrange all_of pull right_join inner_join join_by across ungroup
 #' @importFrom lubridate days format_ISO8601 hours now as_datetime
+#' @importFrom dplyr collect tbl
 #' @importFrom tidyr pivot_wider replace_na drop_na
 #' @importFrom tidyselect ends_with
 #' @importFrom tibble tibble tribble as_tibble rownames_to_column

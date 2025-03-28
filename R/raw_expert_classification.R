@@ -1,4 +1,4 @@
-raw_expert_classification = function(con, nodes) {
+raw_expert_classification = function(con) {
   # To force a regenerate, DROP TABLE raw_expert_classification
   table_exists = check_if_table_exists(con, "raw_expert_classification")
   if (!table_exists) {
@@ -11,7 +11,7 @@ raw_expert_classification = function(con, nodes) {
               by = "record") |>
     collect() |>
     mutate(user = str_sub(str_replace_all(user, "[aeiou\\.]", ""), 1, 4)) |>
-    left_join(nodes |> select(id, caption, phase),
+    left_join(tbl(con, "nodes") |> select(id, caption, phase),
               join_by(classification == id, phase == phase)) |>
     mutate(anon = if_else(method == 'l', anon_l, anon_h)) |>
     left_join(balloon_success, join_by("record")) |>

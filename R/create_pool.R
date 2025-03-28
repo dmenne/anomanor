@@ -172,7 +172,8 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   if (file.exists(sqlite_path) && file.info(sqlite_path)$size == 0)
     unlink(sqlite_path)
   required_tables = c('ano_logs', 'classification', 'history', 'marker',
-                      'marker_classification_phase', 'record', 'user')
+                      'marker_classification_phase', 'record', 'user',
+                      'edges', 'nodes')
   if (file.exists(sqlite_path)) {
     # Check if tables valid
     pool_temp = create_pool(sqlite_path)
@@ -212,3 +213,6 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   log_it(res)
   pool
 }
+
+
+

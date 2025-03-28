@@ -1,4 +1,4 @@
-cleaned_expert_classification_from_database = function(con, percent_threshold = 12) {
+cleaned_expert_classification = function(con, percent_threshold = 12) {
   # The results of this query are cached in table "cleaned_expert_classification"
   # To force a refresh, simply drop the table
   table_exists = check_if_table_exists(con, "cleaned_expert_classification")
