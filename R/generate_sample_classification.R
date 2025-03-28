@@ -16,6 +16,9 @@ generate_sample_classification = function(users, force = TRUE,
     us = dbGetQuery(g$pool, "SELECT distinct user from classification")$user
     if (all(users %in% us)) return("Test run: Sample data not overwritten")
   }
+  # Add edges from excel sheet nodes_edges.xlsx
+  c(nodes, edges) %<-% nodes_edges(g$pool)
+
   # Remove old
   dbExecute(g$pool, "DELETE FROM classification")
 

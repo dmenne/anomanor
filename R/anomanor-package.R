@@ -4,6 +4,7 @@
 #' @import stringr
 #' @import graphics
 #' @import ggplot2
+#' @import zeallot
 #' @importFrom DBI dbGetQuery dbExecute dbAppendTable
 #' @importFrom purrr map pluck set_names map2 map2_chr map_chr map_dfr map_lgl map_int
 #' @importFrom magrittr %>%

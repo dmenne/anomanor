@@ -2,6 +2,18 @@ Sys.setenv("R_CONFIG_ACTIVE" = "test")
 globals()
 withr::defer(cleanup_test_data())
 
+test_that("nodes and edges are tables in test database",{
+  expect_true(check_if_table_exists(g$pool, "nodes"))
+  expect_true(check_if_table_exists(g$pool, "edges"))
+  c(nodes0, edges0) %<-%  nodes_edges(g$pool)
+  dbExecute(g$pool, "DROP TABLE nodes")
+  dbExecute(g$pool, "DROP TABLE edges")
+  c(nodes, edges) %<-% nodes_edges(g$pool)
+  expect_equal(nodes0, nodes)
+  expect_equal(edges0, edges)
+})
+
+
 test_that("marker_classification_phase table exists and has values", {
   q = "SELECT * from marker_classification_phase "
   ret = dbGetQuery(g$pool, q)

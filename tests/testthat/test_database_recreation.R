@@ -1,6 +1,6 @@
 Sys.setenv("R_CONFIG_ACTIVE" = "test")
 globals()
-#withr::defer(cleanup_test_data())
+withr::defer(cleanup_test_data())
 
 test_that("Database is recreated when a table is missing",{
   q = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'"

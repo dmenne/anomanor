@@ -341,8 +341,10 @@ mod_admin_server = function(id, app_user) {
 
     # Manage page
     observeEvent(input$clear_classifications, {
-      dbExecute(g$pool, "DROP TABLE cleaned_expert_classification;")
-      dbExecute(g$pool, "DROP TABLE raw_expert_classification;")
+#     dbExecute(g$pool, "DROP TABLE cleaned_expert_classification;")
+#     dbExecute(g$pool, "DROP TABLE raw_expert_classification;")
+      dbExecute(g$pool, "DROP TABLE edges")
+      dbExecute(g$pool, "DROP TABLE nodes")
       log_it("Classification tables dropped to force recompute")
     })
 

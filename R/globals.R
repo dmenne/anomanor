@@ -100,6 +100,8 @@ globals = function(){
   sqlite_path = file.path(database_dir, "anomanor.sqlite")
   # Does nothing if already there
   pool = create_tables_and_pool(sqlite_path, record_cache_dir)
+  # Make nodes and edges globals
+  c(nodes, edges) %<-% nodes_edges(pool)
 
   if (!file_test("-d", data_dir))
     log_stop("No data directory found :", data_dir)

@@ -67,7 +67,8 @@ Imports:
     tippy,
     tools,
     visNetwork,
-    xtable
+    xtable,
+    zeallot
 Suggests:
     spelling,
     checkmate,

@@ -205,6 +205,7 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
     dbExecute(pool, x)
     invisible(NULL)
   })
+  nodes_edges(pool) # Creates tables nodes and edges if these do no exist
   q = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'"
   table_names = dbGetQuery(pool, q)$name
   res = paste("Available database tables ", paste(table_names, collapse = ", "))
