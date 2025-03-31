@@ -1,5 +1,5 @@
 cleaned_expert_classification_to_df = function(con, percent_threshold = 12) {
-  ecr = raw_expert_classification(con)
+  ecr = raw_expert_classification(con, g$nodes)
   ec = ecr |> filter(percent > percent_threshold)
 
   log_it(paste0("Computed clean_expert_classification. Raw: ",

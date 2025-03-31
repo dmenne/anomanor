@@ -11,12 +11,12 @@ raw_expert_classification = function(con) {
               by = "record") |>
     collect() |>
     mutate(user = str_sub(str_replace_all(user, "[aeiou\\.]", ""), 1, 4)) |>
-    left_join(tbl(con, "nodes") |> select(id, caption, phase),
-              join_by(classification == id, phase == phase)) |>
+    left_join(nodes |> select(id, caption, phase),
+              join_by(classification == id, phase == phase))   |>
     mutate(anon = if_else(method == 'l', anon_l, anon_h)) |>
     left_join(balloon_success, join_by("record")) |>
     select(-classification, -anon_l, -anon_h) |>
-    rename(classification  = caption) |>
+    rename(classification  = caption)   |>
     group_by(record, method, classification) |>
     mutate(
       n = n(),
@@ -24,7 +24,7 @@ raw_expert_classification = function(con) {
     ) |>
     ungroup()
 
-    DBI::dbWriteTable(con, "raw_expert_classification", cs_raw)
+    dbWriteTable(con, "raw_expert_classification", cs_raw)
     log_it("raw_expert_classification written to database cache")
   } else  {
     cs_raw = dbGetQuery(con, "SELECT * from raw_expert_classification")

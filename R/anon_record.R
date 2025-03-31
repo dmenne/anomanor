@@ -5,13 +5,13 @@ anon_from_record = function(record, method) {
   record = paste0(
     tolower(basename(file_path_sans_ext(basename(record)))),
     "_", method)
-  encode32(digest::digest2int(record),4)  
+  encode32(digest::digest2int(record),4)
 }
 
 record_from_anon = function(anon, method){
   # This function accesses table record in database
   stopifnot(method %in% c("l", "h"))
-  q = glue_sql("SELECT record from record where anon_{DBI::SQL(method)} = {anon}", 
+  q = glue_sql("SELECT record from record where anon_{DBI::SQL(method)} = {anon}",
                .con = g$pool)
   dbGetQuery(g$pool, q)
 }
