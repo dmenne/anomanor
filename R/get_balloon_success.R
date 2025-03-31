@@ -14,7 +14,7 @@ get_balloon_success = function(con){
   bs
 }
 
-extract_success = function (pat_file) {
+extract_success = function(pat_file) {
   txt = read_file(pat_file)[1]
   record = basename(pat_file)
   success = case_when(

@@ -2,12 +2,12 @@ Sys.setenv("R_CONFIG_ACTIVE" = "test")
 globals()
 withr::defer(cleanup_test_data())
 
-test_that("cleaned_expert_classification table if it does not exist", {
+test_that("cleaned_expert_classification created db-table if it does not exist", {
   table_exists = check_if_table_exists(g$pool, "cleaned_expert_classification")
   expect_false(table_exists)
   cl_ex = cleaned_expert_classification(g$pool)
-  cl_names = c('record','classification_phase','method','classification','n',
-        'consensus_classification','n_total','percent')
+  cl_names = c('user', 'group', 'record', 'method', 'phase', 'classification',
+  'anon','success','n','impute','n_total','percent')
   expect_identical(cl_names, names(cl_ex))
   table_exists = check_if_table_exists(g$pool, "cleaned_expert_classification")
   expect_true(table_exists)

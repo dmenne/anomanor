@@ -26,5 +26,4 @@ test_that("Can show record summary table", {
   })
 })
 
-})
 
