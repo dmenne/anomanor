@@ -514,10 +514,9 @@ app_server = function(input, output, session) {
   })
 
   # ----------- Selection network ------------------------------
-  mod_visnet_server("ano", nodes, edges,
+  mod_visnet_server("ano", g$nodes, g$edges,
                reactive(classification_phase()),
                reactive(rvalues$finalized))
-  # nodes and edges are package internal data from R/sysdata.rda
 
   # ----------- vis_click ---------------------------------------------
   vis_selected = reactive({

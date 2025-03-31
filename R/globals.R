@@ -100,7 +100,7 @@ globals = function(){
   sqlite_path = file.path(database_dir, "anomanor.sqlite")
   # Does nothing if already there
   pool = create_tables_and_pool(sqlite_path, record_cache_dir)
-  # Make nodes and edges globals
+  # Make nodes and edges globals (using %<-% from zeallot)
   c(nodes, edges) %<-% nodes_edges(pool)
 
   if (!file_test("-d", data_dir))
