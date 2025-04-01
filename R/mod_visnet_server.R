@@ -16,7 +16,6 @@ moduleServer(
     ns_network = ns("network")
     click_event = glue::glue("function(nodes){{Shiny.setInputValue(",
       "'{ns('vis_click')}', nodes.nodes[0], {{priority: 'event'}});}}")
-
     vis_def = reactive({
       nodes = vis_nodes %>%
         dplyr::filter(phase == classification_phase())

@@ -526,7 +526,7 @@ app_server = function(input, output, session) {
     cp = classification_phase()
     req(cp)
     # nodes are package-internal data
-    vis_selected = nodes %>%
+    vis_selected = g$nodes %>%
       filter(phase == cp)  %>%
       filter(id == node) %>%
       filter(group != 'a')  # only terminal nodes
@@ -552,16 +552,18 @@ app_server = function(input, output, session) {
 
   # ----------- update network edges ---------------------------
   observeEvent(update_network(), {
-    # edges is internal package global data
     cp = classification_phase()
     cm = classification_method()
     req(cp, cm)
-    ed = edges %>%
+    ed = g$edges %>%
       filter(phase == cp)
+    if (nrow(ed) == 0) return(NULL)
     ec = rvalues$expert_classification %>%
-      filter(classification_phase == cp) %>%
+      filter(phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
       filter(method == cm)
+    if (nrow(ec) == 0) return(NULL)
+    browser()
     ec = ec |>
       select(consensus_classification, percent, classification)
     ec = ec |>

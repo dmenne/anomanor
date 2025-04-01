@@ -41,6 +41,7 @@
 #' @importFrom stringi stri_rand_strings
 #' @importFrom scales col_numeric
 #' @importFrom DBI dbReadTable dbWriteTable
+#' @importFrom pool poolWithTransaction
 #' @importFrom readr read_file
 # @importFrom withr defer
 #' @useDynLib anomanor, .registration = TRUE

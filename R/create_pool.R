@@ -172,8 +172,7 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   if (file.exists(sqlite_path) && file.info(sqlite_path)$size == 0)
     unlink(sqlite_path)
   required_tables = c('ano_logs', 'classification', 'history', 'marker',
-                      'marker_classification_phase', 'record', 'user',
-                      'edges', 'nodes')
+                      'marker_classification_phase', 'record', 'user'                    )
   if (file.exists(sqlite_path)) {
     # Check if tables valid
     pool_temp = create_pool(sqlite_path)
@@ -184,11 +183,13 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
     if (length(available_tables) > 0 &&
         length(setdiff(required_tables, available_tables)) == 0)
       return(pool_temp)
-    # if tables are incomplete, restart
+    # if tables are incomplete, do not continue
     pool::poolClose(pool_temp)
-    cat(glue("Database incomplete, recreated as ",
-                "{file_path_as_absolute(sqlite_path)}\n"))
-    unlink(sqlite_path, force = TRUE)
+#    cat(glue("Database incomplete, recreated as ",
+#                "{file_path_as_absolute(sqlite_path)}\n"))
+#    unlink(sqlite_path, force = TRUE)
+    msg = glue("Database incomplete {file_path_as_absolute(sqlite_path)}\n")
+    stop(msg, .call = FALSE)
   }
   # Delete all cached files when the database is created
   unlink(glue("{record_cache_dir}/*.rds"))
