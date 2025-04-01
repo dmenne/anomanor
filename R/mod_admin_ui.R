@@ -87,8 +87,8 @@ mod_admin_ui = function(id, ...) {
           ),
           fillRow(
             flex = c(1,3),
-            shinyWidgets::actionBttn(ns("clear_classifications"), "Classifications"),
-            helpText("Drops tables raw_expert_classification and cleaned_expert_classification. This will recompute the expert classification summaries on the next run."),
+            shinyWidgets::actionBttn(ns("drop_cache_tables"), "Drop cache"),
+            helpText("Drops auxillary tables. Tables are recomputed at the next full restart."),
             width = col_width,  height = 70
           ),
           fillRow(

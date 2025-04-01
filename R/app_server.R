@@ -525,7 +525,6 @@ app_server = function(input, output, session) {
     req(node)
     cp = classification_phase()
     req(cp)
-    # nodes are package-internal data
     vis_selected = g$nodes %>%
       filter(phase == cp)  %>%
       filter(id == node) %>%
