@@ -188,8 +188,10 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
 #    cat(glue("Database incomplete, recreated as ",
 #                "{file_path_as_absolute(sqlite_path)}\n"))
 #    unlink(sqlite_path, force = TRUE)
-    msg = glue("Database incomplete {file_path_as_absolute(sqlite_path)}\n")
-    stop(msg, .call = FALSE)
+    ms = paste(setdiff(required_tables, available_tables), sep = "\n")
+    msg = glue("Database incomplete {file_path_as_absolute(sqlite_path)}\n",
+    "Missing:{ms}")
+    stop(msg, call. = FALSE)
   }
   # Delete all cached files when the database is created
   unlink(glue("{record_cache_dir}/*.rds"))

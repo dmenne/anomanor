@@ -16,7 +16,7 @@ get_balloon_success = function(con){
 
 extract_success = function(pat_file) {
   txt = read_file(pat_file)[1]
-  record = basename(pat_file)
+  record = file_path_sans_ext(basename(pat_file))
   success = case_when(
     str_detect(txt, "not succ") ~ "no",
     str_detect(txt, "skip") ~ NA,

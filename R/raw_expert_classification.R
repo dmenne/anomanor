@@ -7,7 +7,8 @@ raw_expert_classification = function(con) {
       filter(user != "x_consensus") |>
       left_join(tbl(con, "user"), by = "user") |>
       filter(group == "experts") |>
-      select(user, group, record, method, phase = classification_phase, classification) |>
+      select(user, group, record, method,
+             phase = classification_phase, classification) |>
       left_join(tbl(con, "record") |> select(record, anon_h, anon_l),
                 by = "record") |>
       collect() |>
@@ -15,22 +16,20 @@ raw_expert_classification = function(con) {
       left_join(g$nodes |> select(id, caption, phase),
                 join_by(classification == id, phase == phase))   |>
       mutate(anon = if_else(method == 'l', anon_l, anon_h)) |>
-      left_join(balloon_success, join_by("record")) |>
       select(-classification, -anon_l, -anon_h) |>
       rename(classification  = caption)   |>
-      group_by(record, method, classification) |>
+      group_by(record, method, phase, classification) |>
       mutate(
         n = n(),
         impute = n == 1
       ) |>
-      ungroup()
-
-    n_experts_ratings = cs_raw  |>
-      group_by(across(c(record, phase, method))) %>%
-      summarize(n_total = sum(n), .groups = "drop")
-    cs_raw = cs_raw |>
-      inner_join(n_experts_ratings, join_by(record, phase, method) ) |>
-      mutate( percent = round(100*n/n_total))
+      group_by(record, method, phase) |>
+      mutate(
+        n_total = n(),
+        percent = round(100*n/n_total)
+      ) |>
+      ungroup() |>
+      left_join(balloon_success, join_by("record"))
 
     dbWriteTable(con, "raw_expert_classification", cs_raw)
     log_it("raw_expert_classification written to database cache")

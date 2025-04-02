@@ -2,23 +2,29 @@ cleaned_expert_classification = function(con, percent_threshold = 12) {
 
   table_exists = check_if_table_exists(con, "cleaned_expert_classification")
   if (!table_exists) {
-    ecr = raw_expert_classification(con)
-    ec = ecr |> filter(percent > percent_threshold)
+    rec1 = raw_expert_classification(con)
 
-    log_it(paste0("Computed clean_expert_classification. Raw: ",
-                  nrow(ecr), " rows, cleaned: ", nrow(ec), " rows. Threshold ",
-                  percent_threshold, "%"))
-    n_experts_ratings = ec  |>
-      group_by(across(c(record, phase, method))) %>%
-      summarize(n_total = sum(n), .groups = "drop")
-    ec = ec |>
-      select(-n_total, -percent) |>
-      inner_join(n_experts_ratings, join_by(record, phase, method) ) |>
-      mutate( percent = round(100*n/n_total))
-    dbWriteTable(con, "cleaned_expert_classification", ec)
+    # Impute entries with count = 1
+    set.seed(4711)
+    rec = rec1 |>
+      group_by(record, method, phase) |>
+      mutate(
+        classification = ifelse(impute, NA, classification),
+        classification = ifelse(is.na(classification),
+                                sample(na.omit(classification),1),
+                                classification)
+      ) |>
+      group_by(record, method, phase, classification) |>
+      mutate(n = n()) |>
+      group_by(record, method, phase) |>
+      mutate(
+        n_total = n(),
+        percent = round(100*n/n_total)
+      )
+    dbWriteTable(con, "cleaned_expert_classification", rec)
     log_it("cleaned_expert_classification written to database cache")
   } else {
-    ec = dbGetQuery(con, "SELECT * from cleaned_expert_classification")
+    rec = dbGetQuery(con, "SELECT * from cleaned_expert_classification")
   }
-  return(ec)
+  return(rec)
 }

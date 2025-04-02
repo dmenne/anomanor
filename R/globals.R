@@ -8,9 +8,10 @@ utils::globalVariables("g")
 globals = function(){
 #  options(warn = 2)
   ptm = proc.time()
-  #options(shiny.error = browser)
+  options(shiny.error = browser)
   # https://github.com/rstudio/shiny/issues/3626
   options(shiny.useragg = TRUE)
+  options(shiny.deprecation.messages = TRUE)
   # Default configuration must set globally
   # By default, user is sa_admin
   active_config = getenv_r_config_active()
