@@ -101,8 +101,8 @@ test_that("classification_phase_summary with invalid user/group returns question
 })
 
 
-test_that("consensus_classification_from_database returns tibble", {
-  ret = consensus_classification_from_database(g$pool)
+test_that("consensus_classification returns tibble", {
+  ret = consensus_classification(g$pool)
   expect_equal(names(ret),
     c("record", "classification_phase", "method", "classification"))
   checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
@@ -166,9 +166,9 @@ test_that("is_example returns logical", {
 })
 
 # Deletes, must be last
-test_that("consensus_classification_from_database w/o consensus data returns NULL", {
+test_that("consensus_classification w/o consensus data returns NULL", {
   dbExecute(g$pool, "DELETE from classification where user = 'x_consensus'")
-  ret = consensus_classification_from_database(g$pool)
+  ret = consensus_classification(g$pool)
   expect_null(ret)
 })
 

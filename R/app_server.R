@@ -68,7 +68,7 @@ app_server = function(input, output, session) {
     expert_classification = NULL
   )
   if (complete_expert_ratings) {
-    rvalues$expert_classification = cleaned_expert_classification(g$pool)
+    export_summary = expert_summary(g$pool)
   }
 
   # Display message
@@ -179,7 +179,7 @@ app_server = function(input, output, session) {
     update_record_icons()
     # Must update expert_classifications for x_consensus display
     if (app_user == "x_consensus" && complete_expert_ratings) {
-      rvalues$expert_classification = cleaned_expert_classification(g$pool)
+      export_summary = expert_summary(g$pool)
     }
 
   }
@@ -537,7 +537,7 @@ app_server = function(input, output, session) {
   # ----------- when to update network edges ---------------------------
   update_network = reactive({
     req(classification_phase())
-    req(rvalues$expert_classification)
+    req(export_summary)
     req( (app_groups %in% c("experts", "admins") && g$config$show_results_to_experts) ||
           app_user == 'x_consensus' ||
           (app_groups == "trainees" && rvalues$finalized ))
@@ -557,16 +557,14 @@ app_server = function(input, output, session) {
     ed = g$edges %>%
       filter(phase == cp)
     if (nrow(ed) == 0) return(NULL)
-    ec = rvalues$expert_classification %>%
+    ec = export_summary %>%
       filter(phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
       filter(method == cm)
     if (nrow(ec) == 0) return(NULL)
     browser()
     ec = ec |>
-      select(consensus_classification, percent, classification)
-    ec = ec |>
-      left_join(ed, by = c("classification" = "to"))
+      left_join(ed, by = c("consensus_id" = "to"))
     req(nrow(ec) > 0)
     max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
     if (max_percent == -Inf) max_percent = 100

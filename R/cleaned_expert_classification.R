@@ -26,5 +26,8 @@ cleaned_expert_classification = function(con, percent_threshold = 12) {
   } else {
     rec = dbGetQuery(con, "SELECT * from cleaned_expert_classification")
   }
+  cc = consensus_classification(con)
+  rec = rec |>
+    left_join(cc, by = join_by(record, phase, method) )
   return(rec)
 }
