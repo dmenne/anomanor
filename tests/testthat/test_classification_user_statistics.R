@@ -14,20 +14,6 @@ test_that("classification_user_statistics returns valid data",{
 })
 
 
-test_that("classification_statistic returns valid data", {
-  # Requires davidgohel/flextable 7.2 with 4.2.0
-  ret = classification_statistics_html(method = 'h')
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  expect_true(all(map_chr(ret, function(x) class(x) ) == "flextable"))
-  rh = map(ret, function(x) htmltools_value(x, ft.align = "left") )
-  expect_equal(names(rh), c("rair", "tone", "coord"))
-  expect_true(class(rh) == "list")
-
-  ret = classification_statistics_html(method = 'l')
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  expect_true(all(map_chr(ret, function(x) class(x) ) == "flextable"))
-})
-
 test_that("number_of_classification returns valid integer", {
   ret = number_of_classifications(g$test_users[1])
   expect_gt(ret, 1)
@@ -36,21 +22,3 @@ test_that("number_of_classification returns valid integer", {
   expect_equal(ret, 0)
 })
 
-# This must be last because data are deleted
-test_that("classification returns null without data", {
-  cu0 = classification_user_statistics()
-  delete_record("test2", delete_classifications = TRUE)
-  delete_record("test1", delete_classifications = FALSE)
-  cu1 = classification_user_statistics()
-  expect_equal(cu0[,1:6], cu1[,1:6])
-  expect_equal(dir(g$png_dir), "scale_100_h.png")
-
-  ret = classification_statistics_html(method = 'h')
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  expect_s3_class(ret$rair, "flextable")
-
-  delete_record("test1", delete_classifications = TRUE)
-  ret = classification_user_statistics()
-  expect_true(all(map_lgl(ret, is.null)))
-  expect_null(ret)
-})

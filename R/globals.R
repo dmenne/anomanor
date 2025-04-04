@@ -178,8 +178,6 @@ globals = function(){
   mcp = dbGetQuery(g$pool,
      "SELECT marker, classification_phase, mtype from marker_classification_phase order by marker")
 
-  krip_text = HTML("Krippendorff's &alpha; <ul><li>&alpha; =1 indicates perfect inter-rater reliability</li><li>&alpha; =0 indicates the absence of inter-rater reliability. Units and the values assigned to them are statistically unrelated.</li><li>&alpha; &#60; 0 when disagreements are systematic and exceed what can be expected by chance.</li></ul>95% confidence intervals (CI 95%) were calculated using the bootstrap.")
-
   tippy_global_theme("translucent")
 
   # Requires temporary g assigned above

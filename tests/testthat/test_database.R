@@ -206,22 +206,6 @@ test_that("classification_statistics_wide with explicit classification name", {
      '3_experts', '3_trainees', 'sum_experts', 'sum_trainees'))
 })
 
-test_that("View 'krippendorff' returns valid data", {
-  kr = krippendorff_alpha(method = 'h')
-  expect_equal(names(kr),
-   c('classification_phase', 'group', 'estimate', 'lower', 'upper', 'n_raters'))
-  kr_l = krippendorff_alpha(method = 'l')
-  expect_equal(nrow(kr), nrow(kr_l))
-
-})
-
-test_that("classification_statistics_html returns valid data", {
-  ret = classification_statistics_html(method = 'h')
-  checkmate::expect_list(ret)
-  expect_equal(names(ret), c("rair", "tone", "coord"))
-  expect_true(all(purrr::map_chr(ret, class) == "flextable"))
-})
-
 test_that("classification_user_statistics returns tibble", {
   ret = classification_user_statistics()
   expect_s3_class(ret, "tbl_df")

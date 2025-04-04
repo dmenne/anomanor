@@ -26,21 +26,4 @@ test_that("Can show record summary table", {
   })
 })
 
-test_that("Can show HRM summary table", {
-  shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
-    session$setInputs(refresh_statistics_h = 2)
-    dt = classification_table_h()
-    expect_type(dt, "list")
-    expect_equal(names(dt), c("rair", "tone", "coord"))
-  })
-})
-
-  test_that("Can show conventional summary table", {
-    shiny::testServer(mod_admin_server, args = list(app_user = "sa_admin"), expr = {
-      session$setInputs(refresh_statistics_l = 2)
-      dt = classification_table_l()
-      expect_type(dt, "list")
-      expect_equal(names(dt), c("rair", "tone", "coord"))
-    })
-})
 

@@ -69,13 +69,6 @@ create_tables = list(
   message  CHAR NOT NULL
 );",
 
-"CREATE VIEW IF NOT EXISTS krippendorff AS
-SELECT c.user,[group],method,record,classification_phase,classification
-FROM classification c
-LEFT JOIN user u ON u.user = c.user
-WHERE c.finalized = 1 AND u.[group] <> 'admins';
-",
-
 "CREATE VIEW IF NOT EXISTS anon AS
 SELECT record,
 anon_h AS anon,
