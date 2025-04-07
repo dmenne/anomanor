@@ -65,7 +65,8 @@ app_server = function(input, output, session) {
     section_line = NULL, # from database
     request_draw_section = 0L,
     window_width = NULL,
-    expert_classification = NULL
+    expert_classification = NULL,
+    old_selected_record = NULL
   )
   if (complete_expert_ratings) {
     rvalues$expert_classification = cleaned_expert_classification_from_database(g$pool)
@@ -194,8 +195,8 @@ app_server = function(input, output, session) {
   # ----------- Save button action ----------------------------------
   observeEvent(input$save, {
     req(rvalues$classification != 0) # Should be Ok anyway
-    # TODO isolate classification_method?
-    if (classification_method() == 'l' || !is.null(rvalues$section_pars)) {
+    # TODO "isolate" was added - observe
+    if (isolate(classification_method()) == 'l' || !is.null(rvalues$section_pars)) {
       save_classification() # Save without asking
     } else {
       shinyWidgets::ask_confirmation("confirm_save",
@@ -226,18 +227,51 @@ app_server = function(input, output, session) {
     rvalues$cancelled = TRUE # Forces reload
   })
 
+  # ------------------- show_expulsion_query ------------------------------
+  show_expulsion_query = function(){
+    cls_phase = isolate(classification_phase())
+    if (cls_phase == "rair") return(FALSE) # no restrictions for rair
+    if (cls_phase == "tone") return(FALSE) # no restrictions for tone
+
+    # assume "coord"
+    rec = str_replace(isolate(record()), ".txt", ".md")
+    expulsion = g$balloon_success |>
+      filter(record == rec) |>
+      pull(var = 2)
+    if (is.na(expulsion))  return(FALSE) # No expulsion given
+    cls = isolate(rvalues$classification)
+    # Abnexdyssynergia 5
+    # Abnexnormpattern 4
+    # Abnexpp 7
+    # Abnexppdys 8
+    # Expulsion successful
+    if (expulsion == "yes")
+      return(cls %in% c(4, 5, 7, 8))
+
+    # Expulsion not successful
+    return(cls %in% c(10,11))
+  }
+
+
+
   # ----------- Finalize button action -----------------------------
   observeEvent(input$finalize, {
     no_profile = ""
-    # TODO Isolate?
-    if (classification_method() == 'h' && is.null(rvalues$section_pars))
+    ex_txt = ""
+    title = "Confirm Finalization"
+    if (show_expulsion_query()) {
+      ex_txt = "<p style='color:red'>Considering the balloon expansion status, are you  sure this is the best choice, ?</p>"
+      title = "Ooops..."
+    }
+    if (ex_txt == "" &&
+        classification_method() == 'h' &&
+        is.null(rvalues$section_pars))
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"
     shinyWidgets::ask_confirmation(inputId = "confirm_finalize",
-     title = "Confirm Finalization",
-     text = HTML(paste0(no_profile,
-    "After finalization you can no longer change your selection.",
-    "Trainees will be shown expert classification on the edge text")),
+     title = title,
+     text = HTML(paste0(ex_txt, no_profile,
+    "After finalization you can no longer change your selection. ")),
                      btn_labels = c( "I will think it over", "Finalize!"),
                      btn_colors = c( "#e08e0b", "#000000"),
                      html = TRUE
@@ -424,7 +458,6 @@ app_server = function(input, output, session) {
     js$canvas_resize(ww, g$image_height)
     showElement("patient_panel")
 
-    # TODO: set phase_label as attribute for css
     phase_cache(
       record(),
       classification_method(),
@@ -490,7 +523,7 @@ app_server = function(input, output, session) {
   # ----------- toggle_button_state ------------------------------
   toggle_button_state = function(vs){
     vs = as.logical(vs)
-    rvalues$can_save = vs # Needed for todo
+    rvalues$can_save = vs
     toggleState("save", vs)
     toggleState("cancel", vs)
     shinyWidgets::updateSwitchInput(session, "classification_method", disabled = vs)
@@ -514,10 +547,9 @@ app_server = function(input, output, session) {
   })
 
   # ----------- Selection network ------------------------------
-  mod_visnet_server("ano", nodes, edges,
+  mod_visnet_server("ano", g$nodes, g$edges,
                reactive(classification_phase()),
                reactive(rvalues$finalized))
-  # nodes and edges are package internal data from R/sysdata.rda
 
   # ----------- vis_click ---------------------------------------------
   vis_selected = reactive({
@@ -526,8 +558,7 @@ app_server = function(input, output, session) {
     req(node)
     cp = classification_phase()
     req(cp)
-    # nodes are package-internal data
-    vis_selected = nodes %>%
+    vis_selected = g$nodes %>%
       filter(phase == cp)  %>%
       filter(id == node) %>%
       filter(group != 'a')  # only terminal nodes
@@ -540,52 +571,41 @@ app_server = function(input, output, session) {
   update_network = reactive({
     req(classification_phase())
     req(rvalues$expert_classification)
-    req( (app_groups %in% c("experts", "admins") && g$config$show_results_to_experts) ||
-          app_user == 'x_consensus' ||
-          (app_groups == "trainees" && rvalues$finalized ))
-    list(
+    req(
+      (app_groups %in% c("experts", "admins") && g$config$show_results_to_experts) ||
+       app_user == 'x_consensus' ||
+       (app_groups == "trainees" && rvalues$finalized )
+    )
+    req(input[[ns_ano("network_initialized")]])
+    up = list(
          classification_phase(),
          record(),
          input[[ns_ano("network_initialized")]]
     )
+    up
   })
 
 
   # ----------- update network edges ---------------------------
   observeEvent(update_network(), {
-    # edges is internal package global data
     cp = classification_phase()
     cm = classification_method()
     req(cp, cm)
-    ed = edges %>%
+    ed = g$edges %>%
       filter(phase == cp)
     ec = rvalues$expert_classification %>%
       filter(classification_phase == cp) %>%
       filter(record == str_replace(record(), '.txt', '')) %>%
       filter(method == cm)
     ec = ec |>
-      select(consensus_classification, percent, classification)
-    ec = ec |>
+      select( classification, percent, majority_classification, clinical_classification) |>
       left_join(ed, by = c("classification" = "to"))
     req(nrow(ec) > 0)
-    max_percent =  suppressWarnings(max(ec$percent, na.rm = TRUE))
-    if (max_percent == -Inf) max_percent = 100
-    ec = ec %>%
-      mutate(
-        label = glue("{label}\n{percent}%" ),
-        color = case_when(
-          consensus_classification == classification ~ "green",
-          percent == max_percent ~ "orange",
-          TRUE ~ "darkgray"),
-        width = if_else(
-          consensus_classification == classification, 9,
-          percent/12 + 1)
-      )  %>%
-      select(id, label, color, width)#
+    ec_labs = edge_labels(ec, g$edges)
     # This delay should be replaced by a completion event
     delay(10,
       visNetworkProxy(ns_ano("network")) %>%
-        visUpdateEdges(ec)
+        visUpdateEdges(ec_labs)
     )
   })
 
@@ -617,7 +637,7 @@ app_server = function(input, output, session) {
   # ----------- Legend text --------------------
   output$legend_text = renderUI({
     req(update_network())
-    HTML('<small>Arrows<small> Percentages: expert classifications. <span style="color:orange">Orange:</span>majority. <span style="color:green">Green:</span> consensus if available</small></small>')
+    HTML('<small>Arrows<small> Percentages: expert classifications. <span style="color:green">Green: </span>majority vote. <span style="color:red">Red: </span> clinical diagnosis if different from majority vote.</small></small>')
   })
 
   # ----------- Patient text --------------------
@@ -684,6 +704,9 @@ app_server = function(input, output, session) {
   output$user = renderText({
     record()
     ag = paste(app_groups, collapse = ", ")
+    # Renamed to avoid that someone is offended
+    # Name is changed only here, not in variable names
+    ag = str_replace(ag, "trainee", "participant")
     indocker = ifelse(g$in_docker, 'D', 'ND')
     use_keycloak = ifelse(keycloak_available(), 'K', 'NK')
     if (g$active_config == "keycloak_production" && !is_admin) {
@@ -710,7 +733,6 @@ app_server = function(input, output, session) {
   # Second listener for classification_method() does not ignoreInit
   observe({
     mp = isolate(input$max_p)
-    # TODO: Check if can be moved to mod_data_server
     # TODO: Remove update_classification_phase_icons export if so
     update_classification_phase_icons()
     if (classification_method() == 'l') { # conventional
@@ -750,14 +772,6 @@ app_server = function(input, output, session) {
     HTML(glue('<canvas id="canvas{cv}" width="{ww}px",
               " height="{g$image_height}px"></canvas>'))
   })
-
-  onRestored(function(state){
-#    http://127.0.0.1:4848/?_inputs_&dm-record=%22430511_ib.txt%22&dm-classification_method=true&dm-classification_phase=%22tone%22
-    record_restore = isolate(state$input$`dm-record`)
-    # TODO This  flickers!
-    shinyWidgets::updatePickerInput(session, "dm-record", selected = record_restore)
-  })
-
 
   session$onSessionEnded(function() {
     in_session_time = Sys.time() - login_time

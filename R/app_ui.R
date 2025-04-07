@@ -60,8 +60,7 @@ app_ui = function(request) {
               "Administrator",
               value = FALSE,
               size = "small"),
-              "View results. Only available when logged in as administrator"),
-            bookmarkButton()
+              "View results. Only available when logged in as administrator")
          ),
           tags$a(href = "/logout", "Logout"),
           shinyWidgets::actionBttn("help_about", NULL, icon = icon("info")),

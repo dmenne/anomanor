@@ -11,8 +11,9 @@
 #' @importFrom dplyr case_when mutate select n left_join filter full_join summarize
 #' @importFrom dplyr group_by rename if_else  bind_rows transmute group_modify
 #' @importFrom dplyr arrange all_of pull right_join inner_join join_by across
+#' @importFrom dplyr rows_update distinct pull relocate
 #' @importFrom lubridate days format_ISO8601 hours now as_datetime
-#' @importFrom tidyr pivot_wider replace_na drop_na
+#' @importFrom tidyr pivot_wider replace_na drop_na pivot_longer
 #' @importFrom tidyselect ends_with
 #' @importFrom tibble tibble tribble as_tibble rownames_to_column
 #' @importFrom flextable flextable autofit bg
@@ -21,6 +22,7 @@
 #' @importFrom magick image_blank image_composite image_annotate image_write image_read
 #' @importFrom magick image_info image_crop geometry_area geometry_point image_append
 #' @importFrom magick image_join image_graph image_resize image_montage
+#' @importFrom readr read_file
 #' @importFrom tippy tippy tippy_global_theme tippyThis
 #' @importFrom tools file_path_sans_ext file_path_as_absolute file_ext
 #' @importFrom stats setNames na.omit time
@@ -38,6 +40,8 @@
 #' @importFrom flextable htmltools_value
 #' @importFrom stringi stri_rand_strings
 #' @importFrom scales col_numeric
+#' @importFrom conflicted conflicts_prefer
+#' @importFrom zeallot "%<-%"
 # @importFrom withr defer
 #' @useDynLib anomanor, .registration = TRUE
 ## usethis namespace: end

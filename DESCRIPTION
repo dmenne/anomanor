@@ -1,7 +1,7 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 1.6.0
-Date/Publication:	04.04.2025
+Version: 1.6.1
+Date/Publication:	28.05.2025
 Author: Dieter Menne
 Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",
@@ -29,6 +29,7 @@ Depends:
 Imports:
     colorspace,
     config (>= 0.3.1),
+    conflicted,
     corrplot,
     DBI,
     digest,
@@ -66,7 +67,8 @@ Imports:
     tippy,
     tools,
     visNetwork,
-    xtable
+    xtable,
+    zeallot
 Suggests:
     spelling,
     checkmate,

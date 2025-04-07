@@ -25,13 +25,13 @@ check_valid_record = function(file, source_file = NULL) {
 
   required_markers =  g$mcp %>%
     filter(mtype == "r") %>%
-    dplyr::pull(marker)
+    pull(marker)
   optional_markers =  g$mcp %>%
     filter(mtype == "o") %>%
-    dplyr::pull(marker)
+    pull(marker)
   default_markers =  g$mcp %>%
     filter(mtype != "o") %>%
-    dplyr::pull(marker)
+    pull(marker)
 
   markers = pm$markers$annotation
   duplicates = markers[duplicated(markers)]

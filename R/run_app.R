@@ -16,7 +16,6 @@ run_app = function() {
       host = "0.0.0.0",
       port = if (getenv_r_config_active() == "keycloak_production" ||
                  Sys.getenv("DOCKER_ANOMANOR_STANDALONE") == "TRUE")  3838 else 4848),
-    enableBookmarking = "url",
     uiPattern = "/"
   )
 }

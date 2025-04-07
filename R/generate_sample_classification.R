@@ -10,7 +10,8 @@
 #' is cleared, and users with sample classifications are added.
 #' @export
 generate_sample_classification = function(users, force = TRUE,
-                            expert_complete = FALSE, add_consensus = FALSE){
+                            expert_complete = FALSE, add_consensus = FALSE,
+                            nodes = g$nodes){
   stopifnot(is.list(g)) # Globals
   if (!force) {
     us = dbGetQuery(g$pool, "SELECT distinct user from classification")$user
@@ -24,7 +25,6 @@ generate_sample_classification = function(users, force = TRUE,
   p_finalized = 0.7 # Probability of finalized
   p_missing = 0.2
   p_no_section = 0.3
-  # nodes are package-internal data
   end_nodes = nodes %>%
     filter(group != "a") %>%
     select(phase, id)

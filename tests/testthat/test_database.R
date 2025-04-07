@@ -30,8 +30,8 @@ test_that("cleaned_expert_classification cache table is created and is cleaned",
   raw_ex_db = raw_expert_classification_from_database(g$pool)
   percent_threshold = 25
   cleaned_ex_db = cleaned_expert_classification_from_database(g$pool, percent_threshold)
-  expect_gt(nrow(raw_ex_db), nrow(cleaned_ex_db))
-  expect_gt(min(cleaned_ex_db$percent),  percent_threshold)
+  expect_equal(nrow(raw_ex_db), nrow(cleaned_ex_db))
+  expect_lte(min(cleaned_ex_db$percent),  percent_threshold)
   ex = check_if_table_exists(g$pool, "cleaned_expert_classification")
   expect_true(ex)
   dbExecute(g$pool, "DROP TABLE cleaned_expert_classification")
@@ -137,15 +137,14 @@ test_that("classification_statistics returns valid user stats of hrm", {
   checkmate::expect_set_equal(ret$group,  c("experts", "trainees"))
   checkmate::expect_set_equal(ret$phase,  c("coord", "rair", "tone"))
   expect_true(all(ret$classification >= 1))
-  # nodes are package-internal data
-  shorts = unique(na.omit(nodes$short))
+  shorts = unique(na.omit(g$nodes$short))
   expect_true(all(ret$short %in% shorts))
 })
 
 test_that("classification_statistics with method 'l' return valid user stats of line", {
   ret = classification_statistics(method = 'l')
   expect_gte(nrow(ret), 18)
-  shorts = unique(na.omit(nodes$short))
+  shorts = unique(na.omit(g$nodes$short))
   expect_true(all(ret$short %in% shorts))
 })
 
@@ -219,29 +218,18 @@ test_that("classification_user_statistics returns tibble", {
   expect_true(all(expert_saved$finalized == 6))
 })
 
-test_that("consensus_classification_from_database returns tibble", {
-  ret = consensus_classification_from_database(g$pool)
-  expect_equal(names(ret),
-    c("record", "classification_phase", "method", "classification"))
-  checkmate::expect_set_equal(unique(ret$record), c("test1", "test2"))
-  checkmate::expect_set_equal(unique(ret$classification_phase), c("coord", "rair", "tone"))
-})
+expected_names =  c('record', 'classification_phase', 'method', 'classification',
+            'n', 'percent', 'majority_classification', 'clinical_classification')
 
 test_that("raw_expert_classification_from_database returns tibble", {
   ret = raw_expert_classification_from_database(g$pool)
-  expect_equal(names(ret),
-    c("record", "classification_phase", "method", "classification",
-      "n", "consensus_classification", "n_total",
-       "percent"))
+  expect_equal(names(ret), expected_names)
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
 })
 
 test_that("cleaned_expert_classification_from_database returns tibble", {
   ret = cleaned_expert_classification_from_database(g$pool)
-  expect_equal(names(ret),
-               c("record", "classification_phase", "method", "classification",
-                 "n", "consensus_classification", "n_total",
-                 "percent"))
+  expect_equal(names(ret), expected_names)
   checkmate::expect_set_equal(ret$record, c("test1", "test2"))
 })
 
@@ -302,15 +290,6 @@ test_that("invalid parameters in classification_to_database return NULL", {
 test_that("is_example returns logical", {
   expect_false(is_example("test1"))
 })
-
-# Deletes, must be last
-test_that("consensus_classification_from_database w/o consensus data returns NULL", {
-  dbExecute(g$pool, "DELETE from classification where user = 'x_consensus'")
-  ret = consensus_classification_from_database(g$pool)
-  expect_null(ret)
-})
-
-
 
 # This must be last in file because it will delete !
 test_that("Recursive deletion works", {

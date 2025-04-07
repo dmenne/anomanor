@@ -7,6 +7,9 @@ utils::globalVariables("g")
 
 globals = function(){
 #  options(warn = 2)
+  conflicts_prefer(dplyr::filter, dplyr::lag, .quiet = TRUE)
+  conflicts_prefer(dplyr::intersect, dplyr::setdiff, dplyr::setequal, dplyr::union,
+                   .quiet = TRUE)
   ptm = proc.time()
   options(shiny.error = browser)
   # https://github.com/rstudio/shiny/issues/3626
@@ -184,6 +187,9 @@ globals = function(){
   assign("g", mget(ls()), envir = .GlobalEnv)
   initial_record_cache()
 
+  # Uses package zeallot. Access as g$nodes and g$edges
+  c(nodes, edges) %<-% nodes_edges(pool)
+
   if (active_config != "keycloak_production") {
     # Generate data set when "test..." is active
     #### Danger #####
@@ -192,7 +198,7 @@ globals = function(){
       test_users = c("aaron", "x_bertha", "caesar", "x_dora", "x_emil", "x_franz",
                      "x_consensus")
       gg = generate_sample_classification(test_users, force = TRUE,
-                expert_complete = TRUE, add_consensus = TRUE)
+                expert_complete = TRUE, add_consensus = TRUE, nodes = nodes)
       # Simulate history
       dbExecute(g$pool, "DELETE FROM history")
       simulate_backward_history(add_history_record())
@@ -201,7 +207,6 @@ globals = function(){
         log_it(gg)
     }
   }
-
   # Write log number of copied data
   if (n_copied_patient > 0)
     log_it(
@@ -213,6 +218,8 @@ globals = function(){
     log_it(glue(
       "Initially copied  {n_copied_md} static data records and images (md, txt)"))
   rm(n_copied_md, n_copied_record, n_copied_patient)
+  # Write table of balloon success if it does not exist
+  balloon_success = get_balloon_success(g$pool)
 
   assign("g", mget(ls()), envir = .GlobalEnv)
   # Check if all patients have records and reports. Returns a

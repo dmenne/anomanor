@@ -39,7 +39,7 @@ copy_from_data_store = function(dest_dir, if_empty_only = TRUE){
       select(file, rowname, mtime_store = mtime) %>%
       left_join(dest_info, by = "file") %>%
       filter(is.na(mtime_dest) | mtime_dest < mtime_store) %>%
-      dplyr::pull(rowname.x)
+      pull(rowname.x)
   }
   file.copy(to_copy, dest_dir, recursive = TRUE)
   length(to_copy)

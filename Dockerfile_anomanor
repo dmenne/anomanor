@@ -28,6 +28,7 @@ RUN install2.r --error --ncpus 4 --skipinstalled \
     checkmate \
     colorspace \
     config \
+    conflicted \
     corrplot \
     digest \
     dplyr \
@@ -60,7 +61,8 @@ RUN install2.r --error --ncpus 4 --skipinstalled \
     tidyr \
     visNetwork \
     withr \
-    xtable
+    xtable \
+    zeallot
 
 RUN R -e 'remotes::install_github("JohnCoene/tippy")'
 

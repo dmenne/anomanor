@@ -1,8 +1,9 @@
 cleaned_expert_classification_from_database = function(con, percent_threshold = 12) {
   # The results of this query are cached in table "cleaned_expert_classification"
   # To force a refresh, simply drop the table
-  table_exists = check_if_table_exists(con, "cleaned_expert_classification")
-  if (!table_exists) {
+  exists_cleaned = check_if_table_exists(con, "cleaned_expert_classification")
+
+  if (!exists_cleaned) {
     cl_ex_class = cleaned_expert_classification_to_df(con, percent_threshold)
     DBI::dbWriteTable(con, "cleaned_expert_classification", cl_ex_class)
     log_it("cleaned_expert_classification written to database cache")
@@ -11,4 +12,3 @@ cleaned_expert_classification_from_database = function(con, percent_threshold = 
   }
   cl_ex_class
 }
-

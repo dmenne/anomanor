@@ -6,6 +6,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
     is.reactive(time_zoom),
     is.reactivevalues(rvalues)
   )
+  old_selected_record = NA
 
   moduleServer(
     id,
@@ -44,7 +45,8 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         rvalues$request_clear = TRUE
         previous_phase = mk$index[previous_phase_index(mk)]
         req(previous_phase) # Do nothing on null
-        updateSelectizeInput(session, "protocol_phase_start", selected = previous_phase)
+        updateSelectizeInput(session, "protocol_phase_start",
+                             selected = previous_phase)
       })
 
 
@@ -63,8 +65,19 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
 
       # ----------- Update record items function ---------------------
       update_record_icons = function(){
+        selected_record = isolate(input$record)
+        req(selected_record)
+        old_selected_record = isolate(rvalues$old_selected_record)
+        if (is.null(old_selected_record) || selected_record == old_selected_record) {
+          rvalues$old_selected_record = selected_record
+          return(NULL)
+        }
+        # cat(selected_record, " ", old_selected_record, "\n")
+
         crs = records()
         req(crs)
+
+        # Progress
         # $ex are not counted for completion state
         crs_no_sex = crs |>
           filter(!str_starts(anon, "\\$"))
@@ -76,11 +89,13 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
           value = ncompleted,
           total = ntotal,
           status = ifelse(ncompleted == ntotal, "success", "primary"))
+
+        # Choices
         choices = selectize_record_choices(crs)
         shinyWidgets::updatePickerInput(
           session = session,
           inputId = "record",
-          selected =  isolate(input$record),
+          selected = selected_record,
           choices = choices$choices,
           choicesOpt = list(icon = choices$icon)
         )
@@ -164,7 +179,8 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         req(nrow(mk) > 0)
         # When there are markers
         marker_choices = setNames(mk$index, mk$annotation)
-        updateSelectizeInput(session, "protocol_phase_start", choices = marker_choices)
+        updateSelectizeInput(session, "protocol_phase_start",
+                             choices = marker_choices)
         mk
       })
 
@@ -219,11 +235,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         'Add section<br><img src = "www/section.png"><br>'
       })
 
-      observeEvent(input$help, {
-        shinyWidgets::updatePickerInput(session, "record", selected = '413319_ib.txt')
-
-        #ano_modal("readout")
-      })
+      observeEvent(input$help, {ano_modal("readout")})
 
       observeEvent(input$london_classification, {
         cp = input$classification_phase

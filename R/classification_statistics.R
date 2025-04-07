@@ -22,8 +22,7 @@ classification_statistics = function(use_group = "all", method = "h" ) {
                classification ",
                "FROM classification where finalized = 1 ",
                "and method = {method}", .con = g$pool)
-  # nodes are package-internal data
-  nodes_short = nodes %>%
+  nodes_short = g$nodes %>%
     filter(group != "a") %>%
     select(phase, id, short)
   dbGetQuery(g$pool, q) %>%
@@ -78,7 +77,7 @@ alpha_text = function(alpha, classification_phase_sel){
   tr = ap_c %>% filter(group == "trainees")
   if (nrow(tr) == 1 )
     alpha_ret = glue(
-     "{alpha_ret} from {tr$n_raters} trainee raters, \u3B1={tr$estimate}, ",
+     "{alpha_ret} from {tr$n_raters} participant, \u3B1={tr$estimate}, ",
      "CI 95% ({tr$lower} to {tr$upper})")
   alpha_ret
 }
