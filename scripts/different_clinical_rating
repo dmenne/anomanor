@@ -1,0 +1,9 @@
+select distinct c.record,classification_phase, anon_h,
+  majority_classification, clinical_classification
+ 
+from cleaned_expert_classification c
+left join record r
+on  r.record = c.record
+where clinical_classification is not null
+and majority_classification <> clinical_classification
+and method = 'h'

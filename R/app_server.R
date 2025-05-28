@@ -260,7 +260,7 @@ app_server = function(input, output, session) {
     ex_txt = ""
     title = "Confirm Finalization"
     if (show_expulsion_query()) {
-      ex_txt = "<p style='color:red'>Considering the balloon expansion status, are you  sure this is the best choice, ?</p>"
+      ex_txt = "<p style='color:red'>Considering the balloon expansion status, are you  sure this is the best choice?</p>"
       title = "Ooops..."
     }
     if (ex_txt == "" &&

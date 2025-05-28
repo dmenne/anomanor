@@ -19,9 +19,10 @@ update_consensus_classification = function(tbl) {
     arrange(max_n) |>
     filter(dplyr::row_number() == 1) # Take the first if there are multiple
 
-  # Get clinical
+  # Get clinically supported ratings - this file is not included in the distribution
+  # for privacy reasons
   clinical_file = rprojroot::find_package_root_file("data-raw", "clinical.xlsx")
-  clinical = readxl::read_xlsx(clinical_file, "clinical") %>%
+  clinical = read_xlsx(clinical_file, "clinical") %>%
     select(-category) |>
     mutate(record = paste0(record, "_ib")) |>
     tidyr::pivot_longer(cols = 2:4, names_to = "classification_phase",

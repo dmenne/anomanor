@@ -41,8 +41,9 @@
 #' @importFrom stringi stri_rand_strings
 #' @importFrom scales col_numeric
 #' @importFrom conflicted conflicts_prefer
+#' @importFrom readxl read_xlsx
 #' @importFrom zeallot "%<-%"
-# @importFrom withr defer
+#' @importFrom withr defer
 #' @useDynLib anomanor, .registration = TRUE
 ## usethis namespace: end
 NULL
@@ -51,29 +52,35 @@ utils::globalVariables(c(
   "<<-",
   "annotation",
   "anon",
+  "category",
   "classification",
   "classification.x",
   "classification.y",
   "classification_phase",
+  "clinical_classification",
+  "cnt",
   "color",
   "consensus_classification",
-  "cnt",
   "email",
   "emailVerified",
-  "history_date",
   "finalized",
   "firstName",
   "group",
+  "history_date",
   "id",
+  "impute",
   "isdir",
   "label",
   "lastName",
+  "majority_classification",
   "marker",
+  "max_n",
   "method",
   "mtime",
   "mtime_dest",
   "mtime_store",
   "mtype",
+  "n.x",
   "n_total",
   "patient.x",
   "patient.y",
@@ -85,9 +92,13 @@ utils::globalVariables(c(
   "rowname.x",
   "sec",
   "short",
+  "sum_n",
+  "sum_n.x",
   "user",
   "username",
   "verified",
-  "width"
+  "width",
+  "x",
+  "y"
 ))
 

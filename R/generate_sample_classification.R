@@ -5,6 +5,7 @@
 #' @param expert_complete Make expert classifications complete to show feedback for
 #' trainees
 #' @param add_consensus Add consensus user `x_consensus` as sample
+#' @param nodes Data frame of nodes read in from xlsx in globals
 #'
 #' @return Logged text if successful. As main side effect, database
 #' is cleared, and users with sample classifications are added.

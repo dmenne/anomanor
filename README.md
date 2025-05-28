@@ -36,8 +36,9 @@ development of version 2.0 of the London classification.
 - Mark Fox (fnd, ctb)
 - Isabella Bielicki (ctb)
 - Menne Biomed Consulting (cph)
+- Laborie Medical Technologies (fnd)
 - International Working Group for Disorders of Gastrointestinal Motility
-  and Function (fnd, dtc)
+  and Function, subgroup Anorectal Physiology (fnd, dtc)
 - EUGIM European Gastrointestinal Motility (fnd, dtc)
 - University Hospital of Zurich, Dep. Gastroenterology (dtc)
 - Klinik Arlesheim (dtc)

@@ -11,8 +11,8 @@ nodes_edges = function(con) {
   if (nodes_exists) dbExecute(con, "DROP TABLE nodes")
   if (edges_exists) dbExecute(con, "DROP TABLE edges")
   nodes_file = rprojroot::find_package_root_file("data-raw", "nodes_edges.xlsx")
-
-  nodes = readxl::read_xlsx(nodes_file, "nodes") %>%
+  stopifnot(file.exists(nodes_file))
+  nodes = read_xlsx(nodes_file, "nodes") %>%
     mutate(
       title = str_replace_all(str_wrap(title, 40), "\\n", "<br>"),
       x = x*280,
@@ -20,7 +20,7 @@ nodes_edges = function(con) {
     )
   DBI::dbWriteTable(con, "nodes", nodes )
 
-  edges = readxl::read_xlsx(nodes_file, "edges") %>%
+  edges = read_xlsx(nodes_file, "edges") %>%
     mutate(id = 1:n(), .before = "phase" )
   DBI::dbWriteTable(con, "edges", edges )
   list(nodes = nodes, edges = edges)

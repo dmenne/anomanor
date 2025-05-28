@@ -22,3 +22,4 @@ Renviron_production
 ^\.lintr
 ^\.gitkeep$
 .prettierrc
+^LICENSE\.md$

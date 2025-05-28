@@ -1,7 +1,7 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
 Version: 1.6.1
-Date/Publication:	28.05.2025
+Date/Publication: 28.05.2025
 Author: Dieter Menne
 Authors@R: c(
     person("Dieter", "Menne", email="dieter.menne@menne-biomed.de",
@@ -9,7 +9,8 @@ Authors@R: c(
     person("Mark", "Fox", role = c("fnd", "ctb")),
     person("Isabella", "Bielicki", role = c("ctb")),
     person("Menne Biomed Consulting", role = c("cph")),
-    person("International Working Group for Disorders of Gastrointestinal Motility and Function",
+    person("Laborie Medical Technologies", role = c("fnd")),           
+    person("International Working Group for Disorders of Gastrointestinal Motility and Function, subgroup Anorectal Physiology",
            email="hrmconsensus.org",  role = c("fnd", "dtc")),
     person("EUGIM European Gastrointestinal Motility", email = "info@EUGIM-Hub.eu",
             role = c("fnd", "dtc")),
@@ -17,13 +18,12 @@ Authors@R: c(
              role = c("dtc")),
     person("Klinik Arlesheim", role = c("dtc"))       
     )
-Description: Provides online training for physicians and other practitioners
+Description: Online training for physicians and other practitioners
   using high-resolution anorectal manometry and the London Classification for
-  disorders of anorectal function. It provides the opportunity to compare
+  Disorders of Anorectal Function. It provides the opportunity to compare
   performance against a reference standard set by the lead authors of this
   classification system. Data acquired during this training will be used to
   assess inter-observer agreement between practitioners.
-License: GPL-3
 Depends:
     R (>= 4.4.0)
 Imports:
@@ -46,6 +46,7 @@ Imports:
     pingr,
     pool,
     purrr,
+    readxl,
     rlang,
     keys,
     RSQLite,
@@ -54,7 +55,7 @@ Imports:
     rmarkdown,
     rprojroot,
     scales,
-    shiny (>= 1.8.1),
+    shiny (>= 1.10.0),
     shinyjs,
     shinyvalidate,
     shinyWidgets,
@@ -68,13 +69,13 @@ Imports:
     tools,
     visNetwork,
     xtable,
+    withr,
     zeallot
 Suggests:
     spelling,
     checkmate,
     vdiffr,
     png,
-    withr,
     testthat (>= 3.2.0),
     covr
 Encoding: UTF-8
@@ -88,4 +89,4 @@ SystemRequirements: pandoc
 LinkingTo:
     Rcpp
 RoxygenNote: 7.3.2
-
+License: MIT + file LICENSE
