@@ -118,6 +118,11 @@ log_it = function(msg, force_console = FALSE, severity = "info") {
   invisible(NULL)
 }
 
+log_it2 = function(msg) {
+  # To easily find some debug code
+#  log_it(msg, TRUE)
+}
+
 log_stop = function(...) {
   msg = paste0(...)
   log_it(msg = msg, force_console = FALSE, severity = "error")

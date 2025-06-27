@@ -1,6 +1,6 @@
 Package: anomanor
 Title: Anorectal Manometry Inter-Rater Agreement
-Version: 1.6.1
+Version: 1.6.2
 Date/Publication: 28.05.2025
 Author: Dieter Menne
 Authors@R: c(
@@ -55,7 +55,7 @@ Imports:
     rmarkdown,
     rprojroot,
     scales,
-    shiny (>= 1.10.0),
+    shiny (>= 1.11.0.9000),
     shinyjs,
     shinyvalidate,
     shinyWidgets,
@@ -81,7 +81,9 @@ Suggests:
 Encoding: UTF-8
 URL: https://github.com/dmenne/anomanor
 BugReports: https://github.com/dmenne/anomanor/issues
-Remotes: JohnCoene/tippy
+Remotes: 
+    JohnCoene/tippy,
+    rstudio/shiny
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Language: en-US

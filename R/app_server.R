@@ -13,10 +13,12 @@ app_server = function(input, output, session) {
   n_classified = number_of_classifications(app_user)
   complete_expert_ratings = g$config$complete_experts_ratings
 
+  # Temporary message
+#  if (!is_admin)
+#      delay(5000, ano_modal("sorry"))
 
   # ---------------- Admin Server and UI ---------------------------
   if (is_admin) {
-    mod_admin_server("admin", app_user)
     admin_panel =
       conditionalPanel(
         "input.admin  == true",

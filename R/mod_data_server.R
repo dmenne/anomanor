@@ -22,6 +22,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       data = reactive({
         rec = input$record
         req(rec)
+        log_it2(paste("mod_data_server reactive data", rec))
         cf = record_cache(rec, max_p(), time_zoom())$cache_file
         req(file.exists(cf))
         readRDS(cf)
