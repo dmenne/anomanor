@@ -22,7 +22,6 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       data = reactive({
         rec = input$record
         req(rec)
-        log_it2(paste("mod_data_server reactive data", rec))
         cf = record_cache(rec, max_p(), time_zoom())$cache_file
         req(file.exists(cf))
         readRDS(cf)
@@ -66,6 +65,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
 
       # ----------- Update record items function ---------------------
       update_record_icons = function(){
+
         selected_record = isolate(input$record)
         req(selected_record)
         old_selected_record = isolate(rvalues$old_selected_record)

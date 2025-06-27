@@ -19,6 +19,7 @@ app_server = function(input, output, session) {
 
   # ---------------- Admin Server and UI ---------------------------
   if (is_admin) {
+    mod_admin_server("admin", app_user)
     admin_panel =
       conditionalPanel(
         "input.admin  == true",

@@ -19,6 +19,13 @@ compare classification performance using High-Resolution-Manometry (HRM) and con
 
 The results will be published. All those completing all 50 cases will be acknowledged. The information obtained will contribute to the development of version 2.0 of the London classification.
 
+## Tutorial on Youtube
+
+[![Mark Fox' video tutorial on HRM ARM Inter-Rater Agreement](http://img.youtube.com/vi/OqKHUwizG-s/0.jpg)](http://www.youtube.com/watch?v=OqKHUwizG-s)
+
+Click for Mark Fox' YouTube tutorial on HRM ARM Inter-Rater Agreement.
+
+
 ## Credits
 
 * Version: `r packageVersion("anomanor")`
