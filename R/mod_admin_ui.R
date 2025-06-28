@@ -137,10 +137,10 @@ mod_admin_ui = function(id, ...) {
       tabPanel(
         id = ns("history_panel"),
         "History",
+        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data points are vertically jittered to separate overlapping curves.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Administrator and $ex-sample ratings are not shown.</li></ul>")),
         fillPage(
-          plotOutput(ns("history_plot")),
-        ),
-        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data points are vertically jittered to separate overlapping curves.</li><li>Data before 20.9.2025 were inconsistently calculated and should be considered estimates only.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Administrator and $ex-sample ratings are not shown.</li></ul>"))
+          plotOutput(ns("history_plot"), height = 1400),
+        )
       )  # history tabPanel
     ) #tabsetPanel
   )# tagList

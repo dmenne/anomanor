@@ -407,7 +407,7 @@ mod_admin_server = function(id, app_user) {
     output$history_plot = renderPlot({
       input$refresh_users
       plot_history()
-    }, res = 96)
+    }, res = 96 )
 
   })
 
