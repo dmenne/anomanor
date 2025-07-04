@@ -2,7 +2,7 @@ plot_history = function() {
   sql = glue(
     "select history_date, u.user, method, finalized, cnt from history h ",
     "left join user u on u.user = h.user ",
-    "where `group` != 'admins'"
+    "where `group` == 'trainees' "
     )
   hist_stat = dbGetQuery(g$pool, sql)
   max_history_date = str_replace(max(hist_stat$history_date), "T", " ")
