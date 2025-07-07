@@ -19,8 +19,7 @@ plot_history = function() {
              color = method,
              group = interaction(method, finalized))) +
     geom_hline(yintercept = 99, linetype = "dashed", color = "green") +
-    geom_step(alpha = 0.5,
-              position = position_jitter(width = 0, height = 1.5, seed = 1)) +
+    geom_step(alpha = 0.5) +
     ylim(0,120) +
     #geom_point(alpha = 0.5, aes(shape = method)) +
     scale_x_date(guide = guide_axis(check.overlap = TRUE)) +

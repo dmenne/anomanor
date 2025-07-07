@@ -137,7 +137,7 @@ mod_admin_ui = function(id, ...) {
       tabPanel(
         id = ns("history_panel"),
         "History",
-        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>Data points are vertically jittered to separate overlapping curves.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Only trainee/participant results are shown.</li></ul>")),
+        helpText(HTML("<ul><li>Green dashed lines show required number of classifications.</li><li>History is refreshed every hour on restart. Latest changes may not yet be included.</li><li>Only trainee/participant results are shown.</li></ul>")),
         fillPage(
           plotOutput(ns("history_plot"), height = 1400),
         )
