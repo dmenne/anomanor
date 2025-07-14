@@ -65,7 +65,7 @@ h2 {
 }
 
 #help_about {
-  align: right;
+  text-align: right;
 }
 #help_readout, #help_markers {
   float: right;
@@ -248,3 +248,6 @@ hr {
   height: 100px;
 }
 
+#patient_text > p {
+  font-size: 13px;
+}
