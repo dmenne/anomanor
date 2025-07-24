@@ -1,13 +1,12 @@
-get_balloon_success = function(con){
+get_balloon_success = function(con= g$pool){
   exists_sql =
     "SELECT name FROM sqlite_master WHERE type='table' AND name='balloon_success'"
   exists = nrow(dbGetQuery(con, exists_sql )) > 0
   if (exists)
     return(DBI::dbReadTable(con, "balloon_success"))
   # Table does not yet exist or was deleted
-  anomanor_db_file = Sys.getenv("ANOMANOR_DATABASE")
-  path = normalizePath(paste0(dirname(anomanor_db_file), "/../data/patients"))
-  pat_files =  dir(path, "*.md", full.names = TRUE)
+#  anomanor_db_file = Sys.getenv("ANOMANOR_DATABASE")
+  pat_files =  dir(g$patients_dir, "*.md", full.names = TRUE)
 
   bs = purrr::map_df(pat_files, extract_success)
   DBI::dbWriteTable(con, "balloon_success", bs)

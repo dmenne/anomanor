@@ -1,6 +1,7 @@
 #!/bin/bash
-
+# Backup PostgreSQL database for Keycloak
 # https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -x
 set -euxo pipefail
 
 export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
