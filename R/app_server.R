@@ -237,7 +237,7 @@ app_server = function(input, output, session) {
     if (cls_phase == "tone") return(FALSE) # no restrictions for tone
 
     # assume "coord"
-    rec = str_replace(isolate(record()), ".txt", ".md")
+    rec = str_replace(isolate(record()), ".txt", "")
     expulsion = g$balloon_success |>
       filter(record == rec) |>
       pull(var = 2)

@@ -36,7 +36,7 @@ Click for Mark Fox’ YouTube tutorial on HRM ARM Inter-Rater Agreement.
 
 ## Credits
 
-- Version: 1.6.2
+- Version: 1.6.3
 - Dieter Menne (aut, cre)
 - Mark Fox (fnd, ctb)
 - Isabella Bielicki (ctb)
