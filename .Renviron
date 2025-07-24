@@ -6,10 +6,10 @@
 # When new values are added, also update
 # the set of allowed values in globals.R/valid_config
 # Restart R to activate after changes
-R_CONFIG_ACTIVE=keycloak_production
+#R_CONFIG_ACTIVE=keycloak_production
 #R_CONFIG_ACTIVE=keycloak_test
 #R_CONFIG_ACTIVE=keycloak_devel
-#R_CONFIG_ACTIVE=sa_admin
+R_CONFIG_ACTIVE=sa_admin
 #R_CONFIG_ACTIVE=sa_trainee
 #R_CONFIG_ACTIVE=sa_expert
 #R_CONFIG_ACTIVE=test

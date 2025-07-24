@@ -1,6 +1,6 @@
 initial_record_cache = function() {
   stopifnot(is.list(g)) # requires globals
-  if (!file.exists(g$sqlite_path) || !g$pool$valid)
+  if (!database_exists(g$sqlite_path) || !g$pool$valid)
     log_stop("No database available")
   cmp_files = get_cmp_files()
   # We use the default value for max_p; for other values, the

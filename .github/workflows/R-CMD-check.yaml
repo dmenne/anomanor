@@ -3,7 +3,7 @@
 # Version May 2025
 on:
   push:
-    branches: [main, master, refactoring_globals]
+    branches: [main, master, inmemory_test]
   pull_request:
     branches: [main, master]
 

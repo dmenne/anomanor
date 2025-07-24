@@ -95,12 +95,15 @@ globals = function(){
     safe_create_dir(md_dir)
     gg = mget(ls())
     copy_test_data(gg) # Does nothing if not overridden
+    sqlite_path = ":memory:"
+  } else
+  {
+    # Database will be created if it does not exist
+    # Does nothing if database exists
+    # Deletes the record cache folder when a new database is created
+    sqlite_path = file.path(database_dir, "anomanor.sqlite")
   }
 
-  # Database will be created if it does not exist
-  # Does nothing if database exists
-  # Deletes the record cache folder when a new database is created
-  sqlite_path = file.path(database_dir, "anomanor.sqlite")
   # Does nothing if already there
   pool = create_tables_and_pool(sqlite_path, record_cache_dir)
 

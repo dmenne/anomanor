@@ -147,7 +147,7 @@ VALUES
 create_pool = function(sqlite_path) {
   ret = pool::dbPool(drv = RSQLite::SQLite(), dbname = sqlite_path,
             validateQuery = "SELECT name FROM sqlite_master")
-  if (!file.exists(sqlite_path))
+  if (!database_exists(sqlite_path))
     log_stop(glue("Creating  pool, database file {sqlite_path} does not exist"))
   if (!ret$valid) {
     log_stop("Database pool could not be created")
@@ -155,6 +155,10 @@ create_pool = function(sqlite_path) {
     dbExecute(ret, "PRAGMA foreign_keys=ON")
   }
   ret
+}
+
+database_exists = function(sqlite_path){
+  sqlite_path == ':memory:' || file.exists(sqlite_path)
 }
 
 ano_poolClose = function(){
@@ -169,26 +173,31 @@ ano_poolClose = function(){
 }
 
 create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
-  if (file.exists(sqlite_path) && file.info(sqlite_path)$size == 0)
-    unlink(sqlite_path)
-  required_tables = c('ano_logs', 'classification', 'history', 'marker',
-                      'marker_classification_phase', 'record', 'user')
-  if (file.exists(sqlite_path)) {
-    # Check if tables valid
-    pool_temp = create_pool(sqlite_path)
-    q =
-    "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'"
-    available_tables = dbGetQuery(pool_temp, q)$name
-    ano_poolClose()
-    if (length(available_tables) > 0 &&
-        length(setdiff(required_tables, available_tables)) == 0)
-      return(pool_temp)
-    # if tables are incomplete, restart
-    pool::poolClose(pool_temp)
-    cat(glue("Database incomplete, recreated as ",
-                "{file_path_as_absolute(sqlite_path)}\n"))
-    unlink(sqlite_path, force = TRUE)
-  }
+  if (sqlite_path != ":memory:" ) {
+    if (database_exists(sqlite_path)) {
+      if (file.info(sqlite_path)$size == 0) {
+        unlink(sqlite_path, force = TRUE)
+      } else {
+      # Check if tables valid
+      pool_temp = create_pool(sqlite_path)
+      q =
+      "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'"
+      available_tables = dbGetQuery(pool_temp, q)$name
+      ano_poolClose()
+      required_tables = c('ano_logs', 'classification', 'history', 'marker',
+                          'marker_classification_phase', 'record', 'user')
+      if (length(available_tables) > 0 &&
+          length(setdiff(required_tables, available_tables)) == 0)
+        return(pool_temp)
+      # if tables are incomplete, restart
+      pool::poolClose(pool_temp)
+      cat(glue("Database incomplete, recreated as ",
+                  "{file_path_as_absolute(sqlite_path)}\n"))
+      unlink(sqlite_path, force = TRUE)
+      }
+    }
+}
+
   # Delete all cached files when the database is created
   unlink(glue("{record_cache_dir}/*.rds"))
   stopifnot(dir.exists(record_cache_dir))
@@ -199,7 +208,7 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   # create_tables is a vector of SQL statements
   pool = create_pool(sqlite_path)
 
-  if (!file.exists(sqlite_path))
+  if (!database_exists(sqlite_path))
     log_stop(glue("Could not create database file {sqlite_path}"))
   lapply(create_tables, function(x) {
     dbExecute(pool, x)
