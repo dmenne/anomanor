@@ -157,8 +157,12 @@ create_pool = function(sqlite_path) {
   ret
 }
 
+in_memory_db = function(sqlite_path ) {
+  str_detect(sqlite_path, "file:anomanor")
+}
+
 database_exists = function(sqlite_path) {
-  sqlite_path == ":memory:" || file.exists(sqlite_path)
+   in_memory_db(sqlite_path) || file.exists(sqlite_path)
 }
 
 ano_pool_close = function() {
@@ -173,11 +177,12 @@ ano_pool_close = function() {
 }
 
 create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
-  if (sqlite_path != ":memory:") {
-    if (database_exists(sqlite_path)) {
-      if (file.info(sqlite_path)$size == 0) {
-        unlink(sqlite_path, force = TRUE)
-      } else {
+  if (!in_memory_db(sqlite_path)  &&
+      database_exists(sqlite_path) &&
+      file.info(sqlite_path)$size == 0) {
+    unlink(sqlite_path, force = TRUE)
+  }
+  if (database_exists(sqlite_path)) {
       # Check if tables valid
       pool_temp = create_pool(sqlite_path)
       q =
@@ -187,16 +192,15 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
       required_tables = c("ano_logs", "classification", "history", "marker",
                           "marker_classification_phase", "record", "user")
       if (length(available_tables) > 0 &&
-          length(setdiff(required_tables, available_tables)) == 0)
+          length(setdiff(required_tables, available_tables)) == 0){
+        cat("\n***", "Using existing database\n", sqlite_path, "\n")
         return(pool_temp)
+      }
       # if tables are incomplete, restart
       pool::poolClose(pool_temp)
-      cat(glue("Database incomplete, recreated as ",
-                  "{file_path_as_absolute(sqlite_path)}\n"))
-      unlink(sqlite_path, force = TRUE)
-      }
-    }
-}
+      if (!in_memory_db(sqlite_path))
+        unlink(sqlite_path)
+  }
 
   # Delete all cached files when the database is created
   unlink(glue("{record_cache_dir}/*.rds"))
@@ -206,6 +210,7 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
   sqlite_dir = dirname(sqlite_path)
   safe_create_dir(sqlite_dir)
   # create_tables is a vector of SQL statements
+  cat("\n***", "Creating new pool\n")
   pool = create_pool(sqlite_path)
 
   if (!database_exists(sqlite_path))

@@ -1,7 +1,7 @@
 app_server = function(input, output, session) {
 
   # ----------- Database ---------
-  if (database_exists(g$sqlite_path)) stop("No database available")
+  if (!database_exists(g$sqlite_path)) stop("No database available")
   #  new_marker_x = NULL
   max_p_hrm = 100 # Session settings
   max_p_line = 100

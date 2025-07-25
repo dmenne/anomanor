@@ -12,7 +12,7 @@ test_that("marker_classification_phase table exists and has values", {
 test_that("classification has the correct fields", {
   q = "SELECT * from classification"
   ret = dbGetQuery(g$pool, q)
-  expected_fields = c('user', 'record', 'method', 'finalized', 'protocol_phase', 'classification_phase', 'classification', 'duration', 'length', 'p_min', 'p_max', 'above_base', 't1', 't2', 'pos1', 'pos2', 'comment', 'timestamp')
+  expected_fields = c("user", "record", "method", "finalized", "protocol_phase", "classification_phase", "classification", "duration", "length", "p_min", "p_max", "above_base", "t1", "t2", "pos1", "pos2", "comment", "timestamp")
   expect_setequal(names(ret), expected_fields)
 })
 
@@ -20,7 +20,7 @@ test_that("New sqlite database is created",{
   q = "SELECT DISTINCT user from classification"
   ret = dbGetQuery(g$pool, q)$user
   checkmate::expect_set_equal(ret, c(g$test_users, "x_consensus"))
-  testthat::expect_true(file.exists(g$sqlite_path))
+  # testthat::expect_true(file.exists(g$sqlite_path)) (not used when :memory:)
   expect_setequal(dir(g$record_cache_dir),
                c("test1_1.rds", "test2_1.rds"))
   expect_files = c("bhhv_100_1.png", "fdvt_100_1.png", "nse9_100_1.png",

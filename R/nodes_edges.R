@@ -11,7 +11,6 @@ nodes_edges = function(con) {
   if (nodes_exists) dbExecute(con, "DROP TABLE nodes")
   if (edges_exists) dbExecute(con, "DROP TABLE edges")
   nodes_file = rprojroot::find_package_root_file("data-raw", "nodes_edges.xlsx")
-  print(nodes_file)
   stopifnot(file.exists(nodes_file))
   nodes = read_xlsx(nodes_file, "nodes") %>%
     mutate(
