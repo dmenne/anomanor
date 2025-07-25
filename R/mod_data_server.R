@@ -15,7 +15,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
 
       # ----------- classification_method --------------------------------
       classification_method = reactive({
-        if_else(input$classification_method, 'l', 'h')
+        if_else(input$classification_method, "l", "h")
       })
 
       # ----------- Data on record change -----------------------------------------
@@ -59,12 +59,12 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       })
 
       # ----------- Record dropdown items --------------------------
-      observeEvent(records(),{
+      observeEvent(records(), {
         update_record_icons()
       })
 
       # ----------- Update record items function ---------------------
-      update_record_icons = function(){
+      update_record_icons = function() {
 
         selected_record = isolate(input$record)
         req(selected_record)
@@ -144,7 +144,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       update_classification_phase_icons = function(select_all = FALSE) {
         rec = input$record
         ps = classification_phase_summary(app_user,
-                                          str_replace(rec, '.txt', ''),
+                                          str_replace(rec, ".tx", ""),
                                           classification_method())
         selected = ifelse(select_all, "all", input$classification_phase)
         shinyWidgets::updatePickerInput(session = session,
@@ -176,7 +176,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         mk = markers_for_record(rec)
         mk = filter_markers(mk, input$classification_phase)
         # Report this to caller
-        rvalues$can_classify = input$classification_phase != 'all'
+        rvalues$can_classify = input$classification_phase != "all"
         req(nrow(mk) > 0)
         # When there are markers
         marker_choices = setNames(mk$index, mk$annotation)
@@ -224,7 +224,7 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       output$todo = reactive( {
         if (rvalues$finalized)
           return('Finalized<br><img src = "www/finalized.png"/>')
-        if (!is.null(input$classification_phase) && input$classification_phase == 'all')
+        if (!is.null(input$classification_phase) && input$classification_phase == "all")
           return('<img src = "www/arrow.png"><br>Select phase')
         if (rvalues$classification == 0)
           return('Select classification<br><img src = "www/classification.png"/>')
@@ -236,7 +236,9 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
         'Add section<br><img src = "www/section.png"><br>'
       })
 
-      observeEvent(input$help, {ano_modal("readout")})
+      observeEvent(input$help, {
+        ano_modal("readout")
+        })
 
       observeEvent(input$london_classification, {
         cp = input$classification_phase
@@ -265,4 +267,3 @@ mod_data_server = function(id,  app_user, max_p, time_zoom, rvalues) {
       )
     })
 }
-

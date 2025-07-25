@@ -1,6 +1,6 @@
 classification_to_database = function(user, record, method, finalized, protocol_phase,
               classification, classification_phase, section_pars, comment) {
-  stopifnot( !is.null(classification) && classification != 0 )
+  stopifnot(!is.null(classification) && classification != 0)
   stopifnot(method %in% c("l", "h"))
   if (is.null(record) || is.null(classification_phase))
     return(NULL)

@@ -15,4 +15,3 @@ mod_visnet_ui = function(id, ...) {
     visNetworkOutput(ns("network"), ...)
   )
 }
-

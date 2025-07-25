@@ -1,4 +1,4 @@
-render_md = function(markdown_file){
+render_md = function(markdown_file ) {
   stopifnot(is.list(g)) # globals
   markdown_md = glue("{g$md_dir}/{markdown_file}.md")
   stopifnot(file.exists(markdown_md))

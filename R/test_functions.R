@@ -8,8 +8,8 @@
 #'
 #' @return Full path to temporary directory
 #' @export
-test_database_dir = function(){
-  d = file.path(tempdir(TRUE),stringi::stri_rand_strings(1,10))
+test_database_dir = function() {
+  d = file.path(tempdir(TRUE), stringi::stri_rand_strings(1, 10))
   if (!dir.exists(d))
     dir.create(d)
   d
@@ -17,7 +17,7 @@ test_database_dir = function(){
 
 # Not used in app, only as auxiliary functions for testing
 # Callback from globals.R
-copy_test_data = function(gg){
+copy_test_data = function(gg ) {
   dd = rprojroot::find_testthat_root_file("../data/md")
   file.copy(dd, dirname(gg$md_dir), recursive = TRUE)
   dd = rprojroot::find_testthat_root_file("../data/patients")
@@ -26,15 +26,15 @@ copy_test_data = function(gg){
   file.copy(dd, dirname(gg$record_dir), recursive = TRUE)
 }
 
-cleanup_test_data = function(){
-  if (getenv_r_config_active() == 'test') {
-    ano_poolClose()
+cleanup_test_data = function() {
+  if (getenv_r_config_active() == "test") {
+    ano_pool_close()
     unlink(g$anomanor_data_base, recursive = TRUE)
   }
 }
 
 
-test_data_dir = function(basename){
+test_data_dir = function(basename ) {
   f = file.path(dirname(rprojroot::find_testthat_root_file()),
                 "data/testrecords", basename)
   if (!file.exists(f))
@@ -43,20 +43,19 @@ test_data_dir = function(basename){
   f
 }
 
-touch_offset = function(file, offset){
+touch_offset = function(file, offset ) {
   time = strftime(Sys.time() + offset, "%Y%m%d%H%M.%S")
-  return(system2("touch", c(paste("-t", time), shQuote(file))))
-  #return(shell(paste("touch -t", time, shQuote(file))))
+  system2("touch", c(paste("-t", time), shQuote(file)))
 }
 
-count_markers = function(record){
+count_markers = function(record ) {
   dbGetQuery(g$pool, glue_sql(
     "SELECT COUNT(*) as n from marker where record = {record}", .con = g$pool))$n
 }
 
 
 
-get_cmp_files = function(){
+get_cmp_files = function() {
   record_files = dir(g$record_dir, "^.*\\.txt$", full.names = TRUE)
   file_mtime = as.integer(unlist(lapply(record_files, function(x) file.info(x)$mtime)))
   record_time = dbGetQuery(g$pool,

@@ -48,5 +48,3 @@ check_valid_record = function(file, source_file = NULL) {
     invalid_channels = pm$invalid_channels
   )
 }
-
-

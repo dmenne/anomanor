@@ -1,13 +1,13 @@
-selectize_record_choices = function(record_summary){
+selectize_record_choices = function(record_summary ) {
   choices = list()
   icon = NULL
-  todo0 = record_summary[is.na(record_summary$nfinalized),]
+  todo0 = record_summary[is.na(record_summary$nfinalized), ]
   todo = setNames(paste0(todo0$record, ".txt"), todo0$anon)
   rs = na.omit(record_summary)
-  partial0 = rs[rs$nfinalized %in% 0:2,]
+  partial0 = rs[rs$nfinalized %in% 0:2, ]
   partial = setNames(paste0(partial0$record, ".txt"), partial0$anon)
 
-  finalized0 = rs[rs$nfinalized == 3,]
+  finalized0 = rs[rs$nfinalized == 3, ]
   finalized = setNames(paste0(finalized0$record, ".txt"), finalized0$anon)
 
   if (nrow(partial0) > 0) {
@@ -24,5 +24,3 @@ selectize_record_choices = function(record_summary){
   }
   list(choices = choices, icon = icon)
 }
-
-

@@ -11,4 +11,3 @@ raw_expert_classification_from_database = function(con) {
   }
   raw_ex_class
 }
-

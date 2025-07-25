@@ -32,13 +32,13 @@ mod_data_ui = function(id, ...) {
         ns("help"),  "Help", style = "bordered", size = "sm",
         color = "primary", icon = icon("question-circle")),
       height = "75px",
-      flex = c(2,1)
+      flex = c(2, 1)
     ),
     tippy(
       shinyWidgets::pickerInput(ns("classification_phase"), "Classification Phase",
                                 choices = "all", options = list(`icon-base` = "fa")),
       "Select 'All' to view the patient report and the full marker set. For classification, select one of the numbered items in sequence.<br>When 'Classification Phase' is not 'All', only relevant protocol sections are unveiled.</br>",
-      placement = 'right'
+      placement = "right"
     ),
     shinyWidgets::actionBttn(ns("back"), NULL,  size = "lg", icon = icon("caret-left")),
     shinyWidgets::actionBttn(ns("forward"), NULL, size = "lg", icon = icon("caret-right")),
@@ -50,8 +50,7 @@ mod_data_ui = function(id, ...) {
       selectizeInput(ns("protocol_phase_start"),
       "Protocol Phase", choices = NULL),
       "Phase markers relevant<br>for this classification phase",
-      placement = 'right'
+      placement = "right"
     )
   )
 }
-

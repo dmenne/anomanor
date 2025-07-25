@@ -40,9 +40,9 @@ test_that("cleaned_expert_classification cache table is created and is cleaned",
 })
 
 
-test_that("timestamp is updated when classification is saved and no data deleted",{
+test_that("timestamp is updated when classification is saved and no data deleted", {
   # This is an unsaved record
-  ret = classification_from_database("x_bertha", "test1", 'l', "tone", 0.17)
+  ret = classification_from_database("x_bertha", "test1", "l", "tone", 0.17)
   n1 = n_classifications()
   expect_type(ret, "list")
   expect_equal(length(ret), 7)
@@ -50,7 +50,7 @@ test_that("timestamp is updated when classification is saved and no data deleted
     "SELECT timestamp from classification where user = 'x_bertha' and record = 'test1' ",
     "and method = 'l' and classification_phase = 'tone'")
   ts1 = dbGetQuery(g$pool, timestamp_sql)
-  expect_equal(nrow(ts1),1)
+  expect_equal(nrow(ts1), 1)
   classification_to_database("x_bertha", "test1", "l", 1, "begin", 9, "tone",
                               NULL, "comment")
   ts2 = dbGetQuery(g$pool, timestamp_sql)
@@ -60,7 +60,7 @@ test_that("timestamp is updated when classification is saved and no data deleted
 
 
 
-test_that("selectize_record_choices returns grouped list",{
+test_that("selectize_record_choices returns grouped list", {
   record_summary = tibble(
     record = paste0("test", 1:10),
     nfinalized = sample(c(0:3, NA, NA), 10, replace = TRUE),
@@ -101,7 +101,7 @@ test_that("classification_record_all returns tibble", {
   expect_setequal(ret$anon, c('bhhv', "nse9", "ymrt", "fdvt"))
 })
 
-test_that("Without keycloak, keycloak_users returns values from database",{
+test_that("Without keycloak, keycloak_users returns values from database", {
   ret = keycloak_users()$user
   checkmate::expect_character(g$test_users)
   checkmate::expect_subset(ret, c(g$test_users, "test", "x_consensus"))
@@ -109,18 +109,19 @@ test_that("Without keycloak, keycloak_users returns values from database",{
 
 
 test_that("classification_phase_summary gives valid return for existing user", {
-  ret = classification_phase_summary("aaron", "test2" , "h")
+  ret = classification_phase_summary("aaron", "test2", "h")
   expect_s3_class(ret, "tbl_df")
   checkmate::expect_set_equal(ret$classification_phase, c("All", "rair", "tone", "coord"))
   expect_true(all(ret$icon %in% valid_fa))
   checkmate::expect_set_equal(ret$method, c(NA, "h"))
 
-  ret = classification_phase_summary("aaron", "test2" , "l")
+  ret = classification_phase_summary("aaron", "test2", "l")
   expect_s3_class(ret, "tbl_df")
   checkmate::expect_set_equal(ret$method, c(NA, "l"))
 })
 
-test_that("classification_phase_summary with invalid user/group returns question icons ", {
+test_that("classification_phase_summary with invalid user/group returns question icons ",
+          {
   ret = classification_phase_summary("notknown", "testxxx", "h" )
   expect_s3_class(ret, "tbl_df")
   checkmate::expect_set_equal(ret$classification_phase, c("All", "rair", "tone", "coord"))
@@ -128,7 +129,7 @@ test_that("classification_phase_summary with invalid user/group returns question
 })
 
 test_that("classification_statistics returns valid user stats of hrm", {
-  ret = classification_statistics(method = 'h')
+  ret = classification_statistics(method = "h")
   expect_equal(nrow(ret), 14)
   expect_s3_class(ret, "tbl_df")
   expect_equal(names(ret), c("record", "group", "phase",
@@ -142,7 +143,7 @@ test_that("classification_statistics returns valid user stats of hrm", {
 })
 
 test_that("classification_statistics with method 'l' return valid user stats of line", {
-  ret = classification_statistics(method = 'l')
+  ret = classification_statistics(method = "l")
   expect_gte(nrow(ret), 18)
   shorts = unique(na.omit(g$nodes$short))
   expect_true(all(ret$short %in% shorts))

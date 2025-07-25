@@ -123,13 +123,13 @@ mod_admin_server = function(id, app_user) {
       ext = file_ext(file$datapath)
       if (!(all(ext %in% c("txt", "md")))) {
         msg = "Only .txt and .md files permitted"
-        progress_bar(msg, '#DC3545')
+        progress_bar(msg, "#DC3545")
         req()
       }
       # Upload success
       n = length(ext)
       s = ifelse(n == 1, "", "s")
-      progress_bar(glue("Uploaded {n} file{s}"), '#DC3545')
+      progress_bar(glue("Uploaded {n} file{s}"), "#DC3545")
       destination = ifelse(
         ext == "md",
         file.path(g$patients_dir, file$name),
@@ -223,8 +223,7 @@ mod_admin_server = function(id, app_user) {
         g$checked_patients = check_patient_records()
         shinyjs::enable("accept")
         HTML(includeMarkdown(uf$datapath))
-      }
-      else {
+      } else {
         cv = check_valid_record(uf$datapath, basename(uf$name))
         g$checked_patients = check_patient_records()
         # Change this if unexpected markers are to be suppressed
@@ -408,7 +407,5 @@ mod_admin_server = function(id, app_user) {
       input$refresh_users
       plot_history()
     }, res = 96 )
-
-  })
-
+    })
 }

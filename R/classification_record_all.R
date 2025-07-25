@@ -18,4 +18,3 @@ order by anon.record, anon.method"
   dbGetQuery(g$pool, q) %>%
     as_tibble()
 }
-

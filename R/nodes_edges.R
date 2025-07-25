@@ -22,7 +22,7 @@ nodes_edges = function(con) {
   DBI::dbWriteTable(con, "nodes", nodes )
 
   edges = read_xlsx(nodes_file, "edges") %>%
-    mutate(id = 1:n(), .before = "phase" )
+    mutate(id = seq_len(n()), .before = "phase" )
   DBI::dbWriteTable(con, "edges", edges )
   list(nodes = nodes, edges = edges)
 

@@ -20,13 +20,13 @@ add_history_record_if_required = function(min_hours_since = 1) {
 latest_history_date = function() {
   h = dbGetQuery(g$pool, "SELECT max(history_date) from history as h")
   if (is.null(h)) return(NULL)
-  h[1,]
+  h[1, ]
 }
 
 first_history_date = function() {
   h = dbGetQuery(g$pool, "SELECT min(history_date) from history as h")
   if (is.null(h)) return(NULL)
-  h[1,]
+  h[1, ]
 }
 
 
@@ -44,12 +44,12 @@ add_history_record = function(history = NULL) {
       history_date = format_ISO8601(now()), hs)
   }
   # Avoid problems with unique constraints when data are too close
-  ret = try(dbAppendTable(g$pool, "history", history), silent = TRUE)
+  try(dbAppendTable(g$pool, "history", history), silent = TRUE)
   history
 }
 
 
-simulate_backward_history = function(history){
+simulate_backward_history = function(history) {
   # Only for testing
   # Remove counts backwards from records in the past until nothing left
   set.seed(4711)
@@ -57,12 +57,10 @@ simulate_backward_history = function(history){
   while (TRUE) {
     n_iter = n_iter + 1
     history$history_date = # using lubridate
-      format_ISO8601(as_datetime(history$history_date) - hours(24*sample(2:20,1)))
+      format_ISO8601(as_datetime(history$history_date) - hours(24*sample(2:20, 1)))
     history$cnt = history$cnt - sapply(history$cnt, function(x) sample(1:(x/3), 1))
-    history = history[history$cnt > 0,]
+    history = history[history$cnt > 0, ]
     if (nrow(history) == 0) return(n_iter)
     add_history_record(history)
   }
 }
-
-

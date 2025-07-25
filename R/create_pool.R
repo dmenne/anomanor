@@ -157,11 +157,11 @@ create_pool = function(sqlite_path) {
   ret
 }
 
-database_exists = function(sqlite_path){
-  sqlite_path == ':memory:' || file.exists(sqlite_path)
+database_exists = function(sqlite_path) {
+  sqlite_path == ":memory:" || file.exists(sqlite_path)
 }
 
-ano_poolClose = function(){
+ano_pool_close = function() {
   # Avoid warning by checking
   if (
       exists("g") &&
@@ -173,7 +173,7 @@ ano_poolClose = function(){
 }
 
 create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
-  if (sqlite_path != ":memory:" ) {
+  if (sqlite_path != ":memory:") {
     if (database_exists(sqlite_path)) {
       if (file.info(sqlite_path)$size == 0) {
         unlink(sqlite_path, force = TRUE)
@@ -183,9 +183,9 @@ create_tables_and_pool  = function(sqlite_path, record_cache_dir) {
       q =
       "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'"
       available_tables = dbGetQuery(pool_temp, q)$name
-      ano_poolClose()
-      required_tables = c('ano_logs', 'classification', 'history', 'marker',
-                          'marker_classification_phase', 'record', 'user')
+      ano_pool_close()
+      required_tables = c("ano_logs", "classification", "history", "marker",
+                          "marker_classification_phase", "record", "user")
       if (length(available_tables) > 0 &&
           length(setdiff(required_tables, available_tables)) == 0)
         return(pool_temp)

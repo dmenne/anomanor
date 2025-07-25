@@ -17,8 +17,8 @@ classification_record_summary = function(user, method) {
         nfinalized == 3 ~ "fa-flag-checkered"
       ),
       anon = case_when(
-        method == 'h' ~ anon_h,
-        method == 'l' ~ anon_l,
+        method == "h" ~ anon_h,
+        method == "l" ~ anon_l,
         TRUE ~ "xxx"),
       anon_l = NULL,
       anon_h = NULL
@@ -26,4 +26,3 @@ classification_record_summary = function(user, method) {
     arrange(anon) %>%
     as_tibble()
 }
-

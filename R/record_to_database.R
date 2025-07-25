@@ -1,4 +1,4 @@
-record_to_database = function(file, markers, time_step){
+record_to_database = function(file, markers, time_step ) {
   stopifnot(is.list(g)) # requires globals
   force_console = FALSE
   record = file_path_sans_ext(basename(file))
@@ -36,7 +36,7 @@ record_to_database = function(file, markers, time_step){
                      .con = g$pool)
   deleted_markers = dbExecute(g$pool, del_sql)
   #log_it(glue("{deleted_markers} markers were deleted"), force_console = force_console)
-  for (i in 1:nrow(markers)) {
+  for (i in seq_len(nrow(markers))) {
     ins_q = glue_sql(
       "INSERT INTO marker (record, sec, indx, annotation) VALUES(",
       "{record}, {markers$sec[i]},{markers$index[i]},{markers$annotation[i]})",
@@ -44,9 +44,7 @@ record_to_database = function(file, markers, time_step){
 #    log_it(ins_q)
     dbExecute(g$pool, ins_q)
   }
-  log_it(glue("Inserted {record} with {nrow(markers)} markers, deleted {deleted_markers}"),
-         force_console = force_console)
+  log_it(glue(
+    "Inserted {record} with {nrow(markers)} markers, deleted {deleted_markers}"),
+    force_console = force_console)
 }
-
-
-

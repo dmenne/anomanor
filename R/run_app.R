@@ -6,10 +6,10 @@ run_app = function() {
   shinyApp(
     ui = app_ui,
     server = app_server,
-    onStart = function(){
+    onStart = function() {
       globals() # assigns g to .GlobalEnv
       onStop(function() {
-        ano_poolClose()
+        ano_pool_close()
       })
     },
     options = list(
@@ -19,5 +19,3 @@ run_app = function() {
     uiPattern = "/"
   )
 }
-
-

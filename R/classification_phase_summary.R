@@ -30,4 +30,3 @@ classification_phase_summary = function(user, record, method) {
       finalized = NULL
     )
 }
-

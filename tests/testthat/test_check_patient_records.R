@@ -28,4 +28,3 @@ test_that("Message on missing anal manometry", {
   withr::defer(file.rename(to, from))
   expect_match(check_patient_records(), "without record")
 })
-

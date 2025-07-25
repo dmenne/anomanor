@@ -3,16 +3,16 @@ user_datatable = function(stat) {
     paging = FALSE,
     searching = FALSE,
     autoWidth = FALSE,
-    dom = 'Bfrtip',
-    buttons = c('copy', 'excel', 'pdf')
+    dom = "Bfrtip",
+    buttons = c("copy", "excel", "pdf")
   )
   DT::datatable(
     stat,
     rownames = FALSE,
-    extensions  = 'Buttons',
+    extensions  = "Buttons",
     filter = "none",
     options = ano_options
   ) %>%
-  DT::formatStyle('verified',
+  DT::formatStyle("verified",
     color = DT::styleEqual(c(FALSE, TRUE), c("red", "")))
 }

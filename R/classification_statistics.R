@@ -1,4 +1,4 @@
-classification_statistics = function(use_group = "all", method = "h" ) {
+classification_statistics = function(use_group = "all", method = "h") {
   stopifnot(is.list(g)) # requires global
   # groups: all, experts, trainees
   stopifnot(use_group %in% c("all", "experts", "trainees"))
@@ -39,14 +39,14 @@ classification_statistics = function(use_group = "all", method = "h" ) {
 }
 
 classification_statistics_wide = function(use_group = "all",
-                            method = 'h',
+                            method = "h",
                             classification_name = "short") {
   stopifnot(classification_name %in% c("short", "classification"))
   stopifnot(method %in% c("h", "l"))
   cs = classification_statistics(use_group = use_group, method = method)
   . = NULL
   map(
-    set_names(c("rair", "tone", "coord")), function(.x){
+    set_names(c("rair", "tone", "coord")), function(.x) {
       cs  %>%
       filter(phase == .x) %>%
       pivot_wider(
@@ -64,21 +64,20 @@ classification_statistics_wide = function(use_group = "all",
   )
 }
 
-alpha_text = function(alpha, classification_phase_sel){
+alpha_text = function(alpha, classification_phase_sel) {
   ap_c = alpha %>%
     filter(classification_phase == classification_phase_sel)
   if (nrow(ap_c) == 0) return(" not calculated")
   alpha_ret = "from"
   ex = ap_c %>%
     filter(group == "experts")
-  if (nrow(ex) == 1 )
+  if (nrow(ex) == 1)
     alpha_ret = glue("from {ex$n_raters} expert raters, \u3B1={ex$estimate}, ",
-                     "CI 95% ({ex$lower} to {ex$upper}); " )
+                     "CI 95% ({ex$lower} to {ex$upper}); ")
   tr = ap_c %>% filter(group == "trainees")
-  if (nrow(tr) == 1 )
+  if (nrow(tr) == 1)
     alpha_ret = glue(
      "{alpha_ret} from {tr$n_raters} participant, \u3B1={tr$estimate}, ",
      "CI 95% ({tr$lower} to {tr$upper})")
   alpha_ret
 }
-

@@ -49,4 +49,3 @@ parse_markers = function(hr_lines, annot_line = 1, file = "testfile") {
     unused_markers = unused_markers
   )
 }
-

@@ -30,7 +30,7 @@ legend_from_line_file_name = function(png_line_file) {
 
 record_start_time = function(active_begin, active_width, window_width, image_width) {
   if (active_begin == 0) return(0)
-  start_time = max(active_begin - (window_width - active_width) / 2, 0 )
+  start_time = max(active_begin - (window_width - active_width) / 2, 0)
   min(start_time, max(image_width - window_width, 0))
 }
 
@@ -49,7 +49,7 @@ get_app_user = function(session = NULL) {
   user
 }
 
-get_app_groups = function(app_user){
+get_app_groups = function(app_user ) {
   # Getting groups from keycloak under Shinyproxy does not work
   # group = Sys.getenv("SHINYPROXY_USERGROUPS")
   if (keycloak_available()) {
@@ -60,41 +60,41 @@ get_app_groups = function(app_user){
       return(g$config$app_groups)
     if (nrow(groups) == 1)
       return(as.character(groups))
-    return(paste(unlist(groups), collapse = " "))
+    paste(unlist(groups), collapse = " ")
     # nocov end
   } else {
     g$config$app_groups
   }
 }
 
-ano_modal = function(markdown_file){
+ano_modal = function(markdown_file ) {
   markdown_html = render_md(markdown_file)
   html = HTML(readr::read_file(markdown_html))
   showModal(modalDialog(size = "l", easyClose = TRUE, html))
 }
 
-safe_create_dir = function(dir){
+safe_create_dir = function(dir ) {
   # return FALSE if directory exists, otherwise TRUE
   if (dir.exists(dir)) return(FALSE)
-  ret = try(dir.create(dir, recursive = TRUE))
+  try(dir.create(dir, recursive = TRUE))
   if (!dir.exists(dir)) {
     log_stop(glue("Could not create {dir}} \n"))
   } else {
     log_it(glue("Created {file_path_as_absolute(dir)}\n"), force_console = FALSE)
   }
-  return(TRUE)
+  TRUE
 }
 
-save_file_rename = function(from, to){
+save_file_rename = function(from, to ) {
   if (!file.exists(from)) return(NULL)
   file.rename(from, to)
 }
 
-y_to_pos = function(y){
+y_to_pos = function(y ) {
   (y - 2*g$balloon_size)*g$image_y_to_position_fac
 }
 
-pos_to_y = function(pos){
+pos_to_y = function(pos ) {
   pos/g$image_y_to_position_fac + 2*g$balloon_size
 }
 
@@ -106,11 +106,12 @@ log_it = function(msg, force_console = FALSE, severity = "info") {
   msg = as.character(msg)
   tm = as.POSIXlt(Sys.time(), "UTC")
   force_console = force_console || g$config$force_console
-  if (force_console || (!is.null(g$config) && is.list(g$config) && g$config$force_console))
+  if (force_console ||
+      (!is.null(g$config) && is.list(g$config) && g$config$force_console))
     cat(file = stderr(), "\n", msg, "\n")
   if (!is.null(g$pool) && DBI::dbIsValid(g$pool)) {
-    op <- options(digits.secs = 2)
-    iso = strftime(tm , tz = "Europe/Berlin", "%Y-%m-%d %H:%M:%OS")
+    options(digits.secs = 2)
+    iso = strftime(tm, tz = "Europe/Berlin", "%Y-%m-%d %H:%M:%OS")
     q = glue_sql("INSERT into ano_logs (time, severity, message) ",
                  "values ({iso}, {severity}, {msg})", .con = g$pool)
     dbExecute(g$pool, q)
@@ -129,7 +130,7 @@ log_stop = function(...) {
   stop(msg, call. = FALSE)
 }
 
-keycloak_available = function(){
+keycloak_available = function() {
   stopifnot(exists("g") && is.list(g)) # globals
   if (!g$config$use_keycloak) return(FALSE)
   if (stringr::str_starts(g$config$keycloak_site, "keycloak"))
@@ -138,7 +139,7 @@ keycloak_available = function(){
                           count = 1, timeout = 0.1))
 }
 
-keycloak_users = function(){
+keycloak_users = function() {
   stopifnot(is.list(g)) # requires global
   # Without keycloak, get user surrogate from database
   if (is.null(g$keycloak) || !keycloak_available() || !g$keycloak$active()) {
@@ -157,7 +158,7 @@ keycloak_users = function(){
   # nocov start
   users = g$keycloak$users()
 
-  if (is.null(users) || rlang::is_empty(users) ) {
+  if (is.null(users) || rlang::is_empty(users)) {
     log_stop("Keycloak did not return users")
     return(NULL)
   }
@@ -165,9 +166,9 @@ keycloak_users = function(){
   users = users %>%
     mutate(
       group = case_when(
-        admins ~ 'admins',
-        experts ~ 'experts',
-        TRUE ~ 'trainees'
+        admins ~ "admins",
+        experts ~ "experts",
+        TRUE ~ "trainees"
       )
     ) %>%
     transmute(
@@ -184,15 +185,15 @@ keycloak_users = function(){
 
 }
 
-app_sys = function(...){
+app_sys = function(...) {
   system.file(..., package = "anomanor")
 }
 
-ano_bttn = function(inputId, icon = inputId, color = "success") {
+ano_bttn = function(input_id, icon = input_id, color = "success") {
   # https://community.rstudio.com/t/use-of-open-source-icons-in-shiny/110056/5
   # Could not get the above to work with actionButton
-  shinyWidgets::actionBttn(inputId = inputId, label = str_to_title(inputId),
-                           size = "sm", block = TRUE ,
+  shinyWidgets::actionBttn(inputId = input_id, label = str_to_title(input_id),
+                           size = "sm", block = TRUE,
                            icon = icon(icon),
                            style = "material-flat",
                            color = color
@@ -210,22 +211,10 @@ tippy_all = function() {
   invisible(apply(tippy_main_text, 1, function(x) tippyThis(x["id"], x["text"])))
 }
 
-getenv_r_config_active = function(){
+getenv_r_config_active = function() {
   stringr::str_trim(Sys.getenv("R_CONFIG_ACTIVE"))
 }
 
-
-tryCatch.W.E <- function(expr)
-{
-  W <- NULL
-  w.handler <- function(w) { # warning handler
-    W <<- w
-    invokeRestart("muffleWarning")
-  }
-  list(value = withCallingHandlers(
-    tryCatch(expr, error = function(e) e),
-    warning = w.handler), warning = W)
-}
 
 n_classifications = function() {
   q = "SELECT COUNT() as n from classification as n"
@@ -234,9 +223,7 @@ n_classifications = function() {
 
 
 check_if_table_exists = function(con, table_name) {
-  sql = "SELECT name FROM sqlite_master WHERE type='table' AND name={table_name}";
+  sql = "SELECT name FROM sqlite_master WHERE type='table' AND name={table_name}"
   tb = dbGetQuery(con, glue_sql(sql, .con = con))
   nrow(tb) > 0
 }
-
-

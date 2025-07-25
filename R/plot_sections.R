@@ -1,7 +1,7 @@
 # ---- plot_time (horizontal section) ------------------------
 plot_time = function(xy, max_p) {
   # Degenerate case
-  xy_sensor = xy[xy$where == "sensor",]
+  xy_sensor = xy[xy$where == "sensor", ]
   req(nrow(xy_sensor) > 0 )
   req(any(xy_sensor$press != 0))
   # Compute baseline
@@ -16,7 +16,7 @@ plot_time = function(xy, max_p) {
 
   plot(xy_sensor$time, xy_sensor$press, ylab = "", xlab = "",
     type = "l", bty = "n", ylim = ylim)
-  title(ylab = "p (mmHg)",  xlab = "time(s)", mgp = c(2.2,2,2))
+  title(ylab = "p (mmHg)",  xlab = "time(s)", mgp = c(2.2, 2, 2))
 
   xy_fill = xy_sensor[xy_sensor$press > baseline, ]
   max_time = max(xy_fill$time)
@@ -42,7 +42,7 @@ plot_time = function(xy, max_p) {
 # ---- plot_position (vertical section) ------------------------
 plot_position = function(xy, max_p) {
   stopifnot(is.list(g)) # requires globals
-  xy_sensor = xy[xy$where == "sensor",]
+  xy_sensor = xy[xy$where == "sensor", ]
   if (nrow(xy_sensor) == 0) return(NULL)
   xy_sensor$pos = xy_sensor$pos - min(xy_sensor$pos)
   req(nrow(xy_sensor) > 0 )
@@ -60,10 +60,10 @@ plot_position = function(xy, max_p) {
   #xlim[2] = max(xlim[2], balloon_press)
   plot(xy_sensor$press,  xy_sensor$pos, ylim = ylim,  xlim = xlim,
        xlab = "",  ylab = "", type = "l", bty = "n")
-  title(ylab = "sensor position (mm)",  xlab = "p (mmHg)", mgp = c(2.2,2,2))
+  title(ylab = "sensor position (mm)",  xlab = "p (mmHg)", mgp = c(2.2, 2, 2))
   balloon_press = attr(xy, "balloon_press")
   balloon_color = g$color_lookup[
-    (min(max(balloon_press, g$min_p), max_p) - g$min_p)*100/(max_p - g$min_p)]
+    (min(max(balloon_press, g$min_p), max_p) - g$min_p)*100/ (max_p - g$min_p)]
   yrect = ylim[2] - (ylim[2] - ylim[1])*.1
   rect(0, yrect, balloon_press, ylim[2], col = balloon_color)
   text(xlim[1], yrect, glue("balloon {balloon_press} mmHg"), adj = c(0, -.7))
@@ -105,4 +105,3 @@ section_data = function(xy_sensor, above_base) {
   dt$value = round(dt$value, 1)
   dt
 }
-

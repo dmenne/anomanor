@@ -47,9 +47,9 @@ phase_cache = function(file, method, max_p, active_begin, phase_label,
     image_composite(screen_right,
         offset = geometry_area(x_off = window_width - screen_right_width),
         operator = operator )
-  for (i in 1:nrow(annot)) {
-    a = annot[i,]
-    color = ifelse(method == 'h' & i != 4, "white", "black")
+  for (i in seq_len(nrow(annot))) {
+    a = annot[i, ]
+    color = ifelse(method == "h" & i != 4, "white", "black")
     boxcolor = if (i <= 3) NULL else
                if (color == "white") "black" else "white"
     img = img %>%
@@ -63,7 +63,7 @@ phase_cache = function(file, method, max_p, active_begin, phase_label,
          boxcolor = boxcolor,
          size = 14)
   }
-  legend_file = ifelse(method == 'h', legend_file_name(max_p),
+  legend_file = ifelse(method == "h", legend_file_name(max_p),
                        legend_from_line_file_name(png_file))
   scale_img = image_read(legend_file)
   img = image_append(c(scale_img, img))
@@ -72,4 +72,3 @@ phase_cache = function(file, method, max_p, active_begin, phase_label,
   #log_it(glue("image_write {basename(png_phase_file)}"))
   png_phase_file
 }
-

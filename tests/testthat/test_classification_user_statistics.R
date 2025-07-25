@@ -3,11 +3,11 @@ globals()
 withr::defer(cleanup_test_data())
 options(warn = 2)
 
-test_that("classification_user_statistics returns valid data",{
+test_that("classification_user_statistics returns valid data", {
   ret = classification_user_statistics()
   expect_setequal(ret$user, c(g$test_users, "x_consensus"))
   expect_equal(names(ret), c(
-    'user','email','name','verified','group','method','saved','finalized' ))
+    "user", "email", "name", "verified", "group", "method", "saved", "finalized" ))
   ut = user_datatable(ret)
   expect_s3_class(ut, c("datatables", "htmlwidget"))
   expect_equal(as_tibble(ut$x$data), ret)

@@ -46,9 +46,9 @@ app_server = function(input, output, session) {
   # ----------- Allow display of results -----------
   # Display introductory help text in production mode at first starts
   if (g$active_config == "keycloak_production" &&
-      !g$config$show_testbuttons &&
-      !is_admin &&
-      n_classified < 10 )
+        !g$config$show_testbuttons &&
+        !is_admin &&
+        n_classified < 10)
     delay(2000, ano_modal("readout"))
 
 
@@ -87,7 +87,7 @@ app_server = function(input, output, session) {
   # ----------- Data Module  ------------------------------
   dm = mod_data_server("dm", app_user, reactive(input$max_p),
                        reactive(input$time_zoom),
-                       rvalues )
+                       rvalues)
 
   # ----------- reactive value window_width ----------------------------
   observe({
@@ -147,25 +147,25 @@ app_server = function(input, output, session) {
   })
 
   # ----------- update_classification_phase_icons  --------------------------
-  update_classification_phase_icons = function(select_all = FALSE){
+  update_classification_phase_icons = function(select_all = FALSE) {
     dm$update_classification_phase_icons(select_all)
   }
 
   # ----------- update_classification_phase_icons  --------------------------
-  update_record_icons = function(){
+  update_record_icons = function() {
     dm$update_record_icons()
   }
 
   # -------- Enable/disable controls by can_classify
   observe({
     toggleElement("classification", condition = rvalues$can_classify)
-    toggleElement( ns_ano("network"), condition = rvalues$can_classify)
+    toggleElement(ns_ano("network"), condition = rvalues$can_classify)
     toggleElement("save_panel", condition = rvalues$can_classify)
   })
 
 
   # ----------- Save classification --------------------------------
-  save_classification = function(finalized = FALSE){
+  save_classification = function(finalized = FALSE) {
     mk = markers()
     req(mk)
     classification = rvalues$classification
@@ -199,7 +199,7 @@ app_server = function(input, output, session) {
   observeEvent(input$save, {
     req(rvalues$classification != 0) # Should be Ok anyway
     # TODO "isolate" was added - observe
-    if (isolate(classification_method()) == 'l' || !is.null(rvalues$section_pars)) {
+    if (isolate(classification_method()) == "l" || !is.null(rvalues$section_pars)) {
       save_classification() # Save without asking
     } else {
       shinyWidgets::ask_confirmation("confirm_save",
@@ -211,7 +211,7 @@ app_server = function(input, output, session) {
   })
 
   # ----------- confirm of save action --------------------------------
-  observeEvent(input$confirm_save,{
+  observeEvent(input$confirm_save, {
     if (input$confirm_save) {
       save_classification()
     } else {
@@ -231,7 +231,7 @@ app_server = function(input, output, session) {
   })
 
   # ------------------- show_expulsion_query ------------------------------
-  show_expulsion_query = function(){
+  show_expulsion_query = function() {
     cls_phase = isolate(classification_phase())
     if (cls_phase == "rair") return(FALSE) # no restrictions for rair
     if (cls_phase == "tone") return(FALSE) # no restrictions for tone
@@ -252,8 +252,8 @@ app_server = function(input, output, session) {
       return(cls %in% c(4, 5, 7, 8))
 
     # Expulsion not successful
-    return(cls %in% c(10,11))
-  }
+    cls %in% c(10, 11)
+}
 
 
 
@@ -263,11 +263,12 @@ app_server = function(input, output, session) {
     ex_txt = ""
     title = "Confirm Finalization"
     if (show_expulsion_query()) {
-      ex_txt = "<p style='color:red'>Considering the balloon expansion status, are you  sure this is the best choice?</p>"
+      ex_txt = paste0("<p style='color:red'>Considering the balloon expansion status, ",
+        "are you  sure this is the best choice?</p>")
       title = "Ooops..."
     }
     if (ex_txt == "" &&
-        classification_method() == 'h' &&
+        classification_method() == "h" &&
         is.null(rvalues$section_pars))
       no_profile =
         "<p style='color:red'>It would be nice if you could provide a section view.</p>"
@@ -275,8 +276,8 @@ app_server = function(input, output, session) {
      title = title,
      text = HTML(paste0(ex_txt, no_profile,
     "After finalization you can no longer change your selection. ")),
-                     btn_labels = c( "I will think it over", "Finalize!"),
-                     btn_colors = c( "#e08e0b", "#000000"),
+                     btn_labels = c("I will think it over", "Finalize!"),
+                     btn_colors = c("#e08e0b", "#000000"),
                      html = TRUE
     )
   })
@@ -301,13 +302,13 @@ app_server = function(input, output, session) {
     ix = mc$x + 1 + start_time()
     iy = min(max(mc$y, 1), nrow(dt))
     dm = dim(dt)
-    if (ix <= 0 || ix > dm[1] || iy <= 0 || iy > dm[2] )
-      return('--')
+    if (ix <= 0 || ix > dm[1] || iy <= 0 || iy > dm[2])
+      return("--")
     y = round(y_to_pos(mc$y))
     p = round(dt[ix, iy]/10.0)
     if (y >= 0)
       return(glue(" {p} mmHg {y} mm")) else
-    return('--')
+    return("--")
   })
 
 
@@ -319,12 +320,12 @@ app_server = function(input, output, session) {
     dt = as.matrix(data()$data)
     channels = line_channels()
     ix = mc$x + 1 + start_time()
-    from_x = max(ix - mc$fill_range ,1)
-    to_x = min(ix + mc$fill_range , nrow(dt))
+    from_x = max(ix - mc$fill_range, 1)
+    to_x = min(ix + mc$fill_range, nrow(dt))
     mx = map_int(channels, ~ as.integer(round((max(dt[from_x:to_x, .])/10))))
     pos = round(y_to_pos(channels))
     pos[1] = "balloon"
-    tibble(pos = pos , p = as.integer(round(dt[ix, channels]/10)),
+    tibble(pos = pos, p = as.integer(round(dt[ix, channels]/10)),
            max = mx)
   },
     striped = TRUE,
@@ -335,11 +336,13 @@ app_server = function(input, output, session) {
 
   # ----------- js event handlers ----------------------------
   onclick("canvas1", function(event) js$image_clicked(event))
-  onevent("mousemove", "canvas1", function(event) {js$mouse_move(event)},
-          properties = c("offsetX", "offsetY"))
-  onevent("mousemove", "canvas2", function(event) {js$mouse_move2(event)},
-          properties = c("offsetX", "offsetY"))
-  onevent("dblclick", "canvas1", function(event) clear_all(TRUE) )
+  onevent("mousemove", "canvas1", function(event) {
+    js$mouse_move(event)
+  }, properties = c("offsetX", "offsetY"))
+  onevent("mousemove", "canvas2", function(event) {
+    js$mouse_move2(event)
+  }, properties = c("offsetX", "offsetY"))
+  onevent("dblclick", "canvas1", function(event) clear_all(TRUE))
 
   # ------------- Key handler -------------------------------
   observeEvent(input$keys, {
@@ -358,7 +361,7 @@ app_server = function(input, output, session) {
         tz == 2 ~ 4
       )
       shinyWidgets::updateSliderTextInput(session, "time_zoom", selected = tz_next)
-    } else if (ck == '-') {
+    } else if (ck == "-") {
       tz = input$time_zoom
       req(tz != 1)
       tz_next = case_when(
@@ -376,7 +379,7 @@ app_server = function(input, output, session) {
   })
 
   # ------------ Show section panel -------------------------------
-  observeEvent(rvalues$section_pars,{
+  observeEvent(rvalues$section_pars, {
     showElement("section_value")
   })
 
@@ -392,18 +395,17 @@ app_server = function(input, output, session) {
   # ----------- Section line output ------------------------
   output$section_value = renderTable({
     req(rvalues$section_pars)
-    rv = rvalues$section_pars[1:5,]
+    rv = rvalues$section_pars[1:5, ]
     # Only show most important parameters in table
     req(rv)
     if (rv[rv$name == "duration", "value"] == 0) {
       use = 2:5
-    }
-    else if (rv[rv$name == "length", "value"] == 0) {
-      use = c(1,3:5)
+    } else if (rv[rv$name == "length", "value"] == 0) {
+      use = c(1, 3:5)
     } else {
       use = 1:5
     }
-    xtable::xtable(rv[use,])
+    xtable::xtable(rv[use, ])
   }, striped = TRUE, spacing = "s", colnames = FALSE, digits = 0
   )
 
@@ -413,7 +415,7 @@ app_server = function(input, output, session) {
     p = input$section
     if (is.null(p) ||
         is.null(p$x1) ||
-        with(p, abs(x1 - x2) < 10 && abs(y1 - y2) < 10 )) {
+        with(p, abs(x1 - x2) < 10 && abs(y1 - y2) < 10)) {
       hide("section_value")
       return(invisible(NULL))
     }
@@ -426,11 +428,11 @@ app_server = function(input, output, session) {
     p = input$section
     req(p$x1 > 0 && p$x2 > 0)
     # Check whether time or position plot to be shown
-    view = ifelse((with(p, abs((y2 - y1)/(x2 - x1)))) > 4, 2, 1)
+    view = ifelse((with(p, abs((y2 - y1) / (x2 - x1)))) > 4, 2, 1)
     xy = with(p, get_line_xy(
       data()$data,
       start_time(),
-      x1,y1, x2, y2, view,
+      x1, y1, x2, y2, view,
       time_step(),
       input$time_zoom
       )
@@ -511,7 +513,11 @@ app_server = function(input, output, session) {
   }
 
   observe({
-    if (rvalues$finalized) {disable_main_image()}  else {enable_main_image()}
+    if (rvalues$finalized) {
+      disable_main_image()
+    }  else {
+      enable_main_image()
+    }
     toggleState("comment", !rvalues$finalized)
   })
 
@@ -524,7 +530,7 @@ app_server = function(input, output, session) {
   }
 
   # ----------- toggle_button_state ------------------------------
-  toggle_button_state = function(vs){
+  toggle_button_state = function(vs) {
     vs = as.logical(vs)
     rvalues$can_save = vs
     toggleState("save", vs)
@@ -537,7 +543,7 @@ app_server = function(input, output, session) {
   # ----------- Finalize button -----------------------------
   observe({
     toggleState("finalize",
-                !rvalues$finalized && rvalues$classification != 0 )
+                !rvalues$finalized && rvalues$classification != 0)
   })
 
   # ----------- Manually added section ------------------------------
@@ -564,7 +570,7 @@ app_server = function(input, output, session) {
     vis_selected = g$nodes %>%
       filter(phase == cp)  %>%
       filter(id == node) %>%
-      filter(group != 'a')  # only terminal nodes
+      filter(group != "a")  # only terminal nodes
     ifelse(nrow(vis_selected) == 0, 0, vis_selected$id[1])
   })
 
@@ -576,8 +582,8 @@ app_server = function(input, output, session) {
     req(rvalues$expert_classification)
     req(
       (app_groups %in% c("experts", "admins") && g$config$show_results_to_experts) ||
-       app_user == 'x_consensus' ||
-       (app_groups == "trainees" && rvalues$finalized )
+       app_user == "x_consensus" ||
+       (app_groups == "trainees" && rvalues$finalized)
     )
     req(input[[ns_ano("network_initialized")]])
     up = list(
@@ -598,10 +604,10 @@ app_server = function(input, output, session) {
       filter(phase == cp)
     ec = rvalues$expert_classification %>%
       filter(classification_phase == cp) %>%
-      filter(record == str_replace(record(), '.txt', '')) %>%
+      filter(record == str_replace(record(), ".txt", "")) %>%
       filter(method == cm)
     ec = ec |>
-      select( classification, percent, majority_classification, clinical_classification) |>
+      select(classification, percent, majority_classification, clinical_classification) |>
       left_join(ed, by = c("classification" = "to"))
     req(nrow(ec) > 0)
     ec_labs = edge_labels(ec, g$edges)
@@ -613,7 +619,7 @@ app_server = function(input, output, session) {
   })
 
   observeEvent(rvalues$classification, {
-    sel = if (rvalues$classification == 0) list() else rvalues$classification;
+    sel = if (rvalues$classification == 0) list() else rvalues$classification
     # There was a 2 ms delay required in earlier versions.
     visNetworkProxy(ns_ano("network")) %>%
       visSelectNodes(sel, clickEvent = TRUE)
@@ -640,7 +646,10 @@ app_server = function(input, output, session) {
   # ----------- Legend text --------------------
   output$legend_text = renderUI({
     req(update_network())
-    HTML('<small>Arrows<small> Percentages: expert classifications. <span style="color:green">Green: </span>majority vote. <span style="color:red">Red: </span> clinical diagnosis if different from majority vote.</small></small>')
+    HTML(paste0('<small>Arrows<small> Percentages: expert classifications. ',
+      '<span style="color:green">Green: </span>majority vote. ',
+      '<span style="color:red">Red: </span> ',
+      'clinical diagnosis if different from majority vote.</small></small>'))
   })
 
   # ----------- Patient text --------------------
@@ -710,14 +719,16 @@ app_server = function(input, output, session) {
     # Renamed to avoid that someone is offended
     # Name is changed only here, not in variable names
     ag = str_replace(ag, "trainee", "participant")
-    indocker = ifelse(g$in_docker, 'D', 'ND')
-    use_keycloak = ifelse(keycloak_available(), 'K', 'NK')
+    indocker = ifelse(g$in_docker, "D", "ND")
+    use_keycloak = ifelse(keycloak_available(), "K", "NK")
     if (g$active_config == "keycloak_production" && !is_admin) {
       glue("User: {app_user}/{ag}")
     } else {
-      xr = if (complete_expert_ratings)
-        {"Expert ratings complete"} else
+      xr = if (complete_expert_ratings) {
+        "Expert ratings complete"
+      } else {
         "Expert ratings not complete"
+      }
       glue("User: {app_user}/{ag} {indocker} {g$active_config}/{use_keycloak}; {xr}")
     }
   })
@@ -725,12 +736,16 @@ app_server = function(input, output, session) {
   # classification_method() with ignoreInit
   observeEvent(classification_method(), {
     is_example = is_example(isolate(record()))
-    msg = if (is_example)
-      {"For example records starting with <b>$ex</b>, switching between methods shows the same patient's data."} else {
-      "Switching between methods displays <b>a different</b> random record." }
+    msg = if (is_example) {
+      paste0("For example records starting with <b>$ex</b>, switching between ",
+       "methods shows the same patient's data.")
+      } else {
+        "Switching between methods displays <b>a different</b> random record."
+      }
     shiny::showNotification(type = "warning", duration = 4, HTML(msg)
-    )},
-    ignoreInit = TRUE
+    )
+  },
+  ignoreInit = TRUE
   )
 
   # Second listener for classification_method() does not ignoreInit
@@ -738,7 +753,7 @@ app_server = function(input, output, session) {
     mp = isolate(input$max_p)
     # TODO: Remove update_classification_phase_icons export if so
     update_classification_phase_icons()
-    if (classification_method() == 'l') { # conventional
+    if (classification_method() == "l") { # conventional
       hideElement("section_value")
       hideElement("readout_section_value")
       hideElement("readout_hrm_value")
@@ -770,7 +785,7 @@ app_server = function(input, output, session) {
   output$canvas = renderUI({
     cm = classification_method()
     req(cm)
-    cv = ifelse(cm == 'l', 2, 1)
+    cv = ifelse(cm == "l", 2, 1)
     ww = isolate(rvalues$window_width)
     HTML(glue('<canvas id="canvas{cv}" width="{ww}px",
               " height="{g$image_height}px"></canvas>'))

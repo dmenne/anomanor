@@ -36,7 +36,7 @@ Keycloak = R6::R6Class("Keycloak", list(
     self$authenticate() # First login
   },
 
-  authenticate = function(){
+  authenticate = function() {
     # Authentication get bearer
     url = glue("{self$base_url}/realms/{self$realm}/protocol/openid-connect/token")
     # Error missing grant_type in Postman:  Must send in body, not in params
@@ -64,7 +64,7 @@ Keycloak = R6::R6Class("Keycloak", list(
     # use is.null(self$bearer) to test for valid
   },
 
-  post = function(url, body, encode = 'json') {
+  post = function(url, body, encode = "json") {
     pst = httr::POST(url, self$headers, body = body, encode = encode)
     if (self$valid_status(pst))  return(pst)
 #    if (httr::status_code(pst) == 401)
@@ -106,15 +106,15 @@ Keycloak = R6::R6Class("Keycloak", list(
   },
 
   add_user = function(new_user_email, group, force_confirm = TRUE,
-                      emailVerified = FALSE) {
+                      email_verified = FALSE) {
     # Add user
-    if (is.null(new_user_email) || new_user_email == "") return(NULL);
+    if (is.null(new_user_email) || new_user_email == "") return(NULL)
     new_user_name = str_extract(new_user_email, "([^@]*)")
     url = glue("{self$admin_url}/users")
     stopifnot(length(group) == 1) # Only one group allowed
     stopifnot(group %in% c("experts", "admins", "trainees"))
     body = list(email = new_user_email, username = new_user_name,
-                emailVerified = emailVerified,
+                emailVerified = email_verified,
                 enabled = TRUE, groups = list(group))
     new_user_post = self$post(url, body = body, encode = "json")
     if (self$valid_status(new_user_post)) {
@@ -125,10 +125,12 @@ Keycloak = R6::R6Class("Keycloak", list(
           attr(user_id, "email") = "Email confirmation requested"
       }
       user_id
-    } else NULL
+    } else {
+      NULL
+    }
   },
 
-  logout_user_by_name = function(name){
+  logout_user_by_name = function(name ) {
     user_id = self$get_userid_from_name(name)
     if (is.null(user_id)) return(NULL)
     url = glue("{self$admin_url}/users/{user_id}/logout")
@@ -185,10 +187,11 @@ Keycloak = R6::R6Class("Keycloak", list(
     groups = self$get(url)
     if (!(self$valid_status(groups)))
       return(NULL)
-    groups %>% httr::content() %>% { tibble(
-      id = map_chr(., "id"),
-      name = map_chr(., "name")
-    )}
+    groups %>% httr::content() %>%
+      { tibble(
+          id = map_chr(., "id"),
+          name = map_chr(., "name"))
+      }
   },
 
   userId_from_name = function(user_id_or_name){
@@ -235,7 +238,7 @@ Keycloak = R6::R6Class("Keycloak", list(
     )}
   },
 
-  all_group_members = function(){
+  all_group_members = function() {
     map_dfr(self$groups$id, self$group_members ) %>%
       left_join(self$groups, by = c("groupId" = "id"))
   },

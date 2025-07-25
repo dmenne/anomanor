@@ -24,15 +24,14 @@ version 2.0 of the London classification.
 
 * Version: `r desc::desc_get_version()`
 ```{r, echo = FALSE, results = 'asis'}
-desc::description$new()$get_authors() |> 
-purrr::walk(
-  \(x) {
-   cat("* ",x$given, x$family, "(") 
-   cat( x$role, sep = ", ")
-   cat(")\n")
-  }
-) 
-
+desc::description$new()$get_authors() |>
+  purrr::walk(
+    \(x) {
+      cat("* ", x$given, x$family, "(")
+      cat(x$role, sep = ", ")
+      cat(")\n")
+    }
+  )
 ```
 
 _aut, cre, cph, ..._ see [Library of Congress Code List for Relators](https://www.loc.gov/marc/relators/relaterm.html) 

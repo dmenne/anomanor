@@ -18,4 +18,3 @@ test_that("copy_from_test_data can handle multiple cases", {
   ret = copy_from_data_store(dest_dir, if_empty_only = FALSE)
   expect_equal(ret, 2)
 })
-

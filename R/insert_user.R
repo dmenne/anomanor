@@ -8,4 +8,3 @@ insert_user = function(user, group) {
   if (ret == 1)
     log_it(glue("Inserted or updated user {user}/{group}"))
 }
-

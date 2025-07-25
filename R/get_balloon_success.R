@@ -1,7 +1,7 @@
-get_balloon_success = function(con= g$pool){
+get_balloon_success = function(con= g$pool) {
   exists_sql =
     "SELECT name FROM sqlite_master WHERE type='table' AND name='balloon_success'"
-  exists = nrow(dbGetQuery(con, exists_sql )) > 0
+  exists = nrow(dbGetQuery(con, exists_sql)) > 0
   if (exists)
     return(DBI::dbReadTable(con, "balloon_success"))
   # Table does not yet exist or was deleted

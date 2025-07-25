@@ -1,3 +1,4 @@
+options(lintr.exclude = "helpText")
 mod_admin_ui = function(id, ...) {
   ns = NS(id)
   col_width = 800
@@ -52,7 +53,7 @@ mod_admin_ui = function(id, ...) {
         id = ns("upload_panel"),
         "Upload",
         #https://stackoverflow.com/a/54423662/229794
-        uiOutput(ns('upload_ui')),
+        uiOutput(ns("upload_ui")),
         helpText(
           "To see uploaded records in the record dropdown, refresh the browser(F5)",
           id = "upload_help"),
@@ -74,25 +75,25 @@ mod_admin_ui = function(id, ...) {
         fillPage(
           h2("Maintenance"),
           fillRow(
-            flex = c(1,3),
+            flex = c(1, 3),
             downloadButton(ns("download_database"), "Download Database"),
             helpText("Download the zipped SQLite database file. Use this before performing any risky operations on this page. Restoring data from an existing SQLite backup must currently be done by the system administrator."),
             width = col_width,  height = 70
           ),
           fillRow(
-            flex = c(1,3),
+            flex = c(1, 3),
             shinyWidgets::actionBttn(ns("clear_cache"), "Clear cache"),
             helpText("HRM and conventional displays are created on the fly the first time they are requested and stored in a cache for faster future retrieval. Use this button when old style images appear and you want to force a cache refresh. Classification data is not deleted."),
             width = col_width,  height = 70
           ),
           fillRow(
-            flex = c(1,3),
+            flex = c(1, 3),
             shinyWidgets::actionBttn(ns("clear_classifications"), "Classifications"),
             helpText("Drops tables raw_expert_classification and cleaned_expert_classification. This will recompute the expert classification summaries on the next run."),
             width = col_width,  height = 70
           ),
           fillRow(
-            flex = c(1,3),
+            flex = c(1, 3),
             shinyWidgets::actionBttn(ns("reset_me"), "Reset me"),
             helpText(HTML("This will delete all classifications for the currently logged in Admin user. No relevant information will be destroyed, because classifications entered by admin users are only stored, but discarded in the statistics. Use this if you want to reset your classification for a demonstration, so that your and only your ratings are back to <b>?</b>-status.")),
             width = col_width,  height = 70
@@ -119,13 +120,13 @@ mod_admin_ui = function(id, ...) {
             ),
             hr(),
             fillRow(
-              flex = c(1,3),
+              flex = c(1, 3),
               shinyWidgets::actionBttn(ns("clear"), "Clear", color = "danger"),
               helpText(HTML("<b>Danger</b>: This will delete all classifications, without creating randomized new data. Use his if you want to start a test run from scratch. The log file will also be cleared.")),
               width = col_width, height = 60
             ),
             fillRow(
-              flex = c(1,3),
+              flex = c(1, 3),
               shinyWidgets::actionBttn(ns("generate"), "Test data",
                                        color = "danger"),
               helpText(HTML("<b>Danger:</b> This will delete all classifications and create a new set of simulated random data. Use this in test mode only!")),

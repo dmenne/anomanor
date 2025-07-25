@@ -65,6 +65,7 @@ utils::globalVariables(c(
   "emailVerified",
   "finalized",
   "firstName",
+  "from_x",
   "group",
   "history_date",
   "id",
@@ -94,6 +95,7 @@ utils::globalVariables(c(
   "short",
   "sum_n",
   "sum_n.x",
+  "to_x",
   "user",
   "username",
   "verified",
@@ -101,4 +103,3 @@ utils::globalVariables(c(
   "x",
   "y"
 ))
-

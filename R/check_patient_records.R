@@ -1,4 +1,4 @@
-check_patient_records = function(){
+check_patient_records = function() {
   stopifnot(is.list(g)) # globals
   p_files = file_path_sans_ext(dir(g$patients_dir, "^.*\\.md$"))
   r_files = file_path_sans_ext(dir(g$record_dir, "^.*\\.txt$"))
@@ -10,19 +10,19 @@ check_patient_records = function(){
     filter(is.na(patient.x)) %>%
     select(patient.y) %>%
     unlist(),
-    collapse = "</li><li>\n" )
+    collapse = "</li><li>\n")
   no_patient = paste0(
     mt %>%
     filter(is.na(patient.y)) %>%
     select(patient.x) %>%
     unlist(),
-   collapse = ", " )
+   collapse = ", ")
   msg = ""
   if (no_record != "")
     msg = paste0("<b>Records without patient report:</b><ul><li>",
-                 no_record, "</li></ul>" )
+                 no_record, "</li></ul>")
   if (no_patient != "")
     msg = paste0(msg, "<b>Patient reports without record:</b><ul><li>",
-                 no_patient, "</li></ul>" )
+                 no_patient, "</li></ul>")
   msg
 }

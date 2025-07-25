@@ -21,19 +21,19 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
     return(NULL)
   }
   cache_file = cache_file_name(base_file, time_zoom)
-  png_hrm_file = png_file_name(base_file, method = 'h', max_p, time_zoom)
-  png_line_file = png_file_name(base_file, method = 'l', max_p, time_zoom)
+  png_hrm_file = png_file_name(base_file, method = "h", max_p, time_zoom)
+  png_line_file = png_file_name(base_file, method = "l", max_p, time_zoom)
   files = list(png_hrm_file = png_hrm_file, png_line_file = png_line_file,
                cache_file = cache_file)
   # When all files are present, and database entry exists,
   # return immediately when there is no test hook
   sql = glue_sql("SELECT file_mtime FROM record WHERE record={record}",
                  .con = g$pool)
-  file_mtime = dbGetQuery(g$pool,sql)
+  file_mtime = dbGetQuery(g$pool, sql)
   file_mtime1 = as.integer(file.info(records_file)$mtime)
   in_db = ifelse(
-    nrow(file_mtime) == 0 || is.na(file_mtime1) || is.na(file_mtime[1,1]),
-    FALSE,  abs(file_mtime[1,1] - file_mtime1) < 2)
+    nrow(file_mtime) == 0 || is.na(file_mtime1) || is.na(file_mtime[1, 1]),
+    FALSE,  abs(file_mtime[1, 1] - file_mtime1) < 2)
   if (in_db &&
       is.null(test_hook) &&
       file.exists(png_hrm_file) &&
@@ -61,7 +61,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   close(zz)
   check_record(hr, records_file)
   names(hr)[1] = "TIME" # this may be "TIEMPO"
-  time_step = round(stats::median(diff(hr$TIME)),2)
+  time_step = round(stats::median(diff(hr$TIME)), 2)
   stretch_time = max(as.integer(round(time_step/0.17)), 1L)
   stretch_time = stretch_time * time_zoom
   time_step_stretched = time_step/stretch_time
@@ -69,7 +69,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
   markers = p_markers$markers
   invalid_channels = p_markers$invalid_channels
   # Correct markers for offset and convert to index
-  markers$sec = pmax(markers$sec - hr$TIME[1],0)
+  markers$sec = pmax(markers$sec - hr$TIME[1], 0)
   markers$index = as.integer(round(markers$sec/time_step_stretched))
 
   # Save to database (only if it does not yet exists, no overwrite)
@@ -92,7 +92,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
     msg = glue("{basename(file)} has interpolated channels {ic}")
     log_it(msg)
   }
-  ss = apply(t(as.matrix(hr[,-1])), 2,
+  ss = apply(t(as.matrix(hr[, -1])), 2,
                function(y) {
                  # Remove Balloon, Append smoothing zeroes
                  balloon = (y[1] + y[2])/2
@@ -100,7 +100,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
                  if (has_invalid)
                    y = stinepack::na.stinterp(y)
 #                 y_int = stinepack::stinterp(1:length(y), y, new_y)$y  # mm
-                 y_int = stats::spline(1:length(y), y, xout = new_y)$y
+                 y_int = stats::spline(seq_along(y), y, xout = new_y)$y
                  # Re-append balloon, not interpolated
                  c( rep(balloon, g$balloon_size), rep(0, g$balloon_size), y_int )
                }
@@ -110,7 +110,7 @@ record_cache = function(file, max_p, time_zoom,  test_hook = NULL) {
     new_p = seq(1, ncol(ss), by = 1/stretch_time)
     ss = apply(ss, 1, function(p) {
       #y_int = stinepack::stinterp(1:length(p), p, new_p)$y
-      y_int = stats::spline(1:length(p), p, xout = new_p)$y
+      y_int = stats::spline(seq_along(p), p, xout = new_p)$y
     })
   } else {
     ss = t(ss)
@@ -138,5 +138,3 @@ check_record = function(hr, records_file) {
   if (nrow(hr) < 100)
     log_stop(paste("Only", nrow(hr), "rows in", records_file))
 }
-
-

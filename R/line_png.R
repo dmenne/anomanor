@@ -1,19 +1,19 @@
 line_png = function(ss, png_line_file, max_p, time_step_stretched) {
   stopifnot(is.list(g)) # requires globals
   channels = line_channels()
-  sct = ss[,channels]
-  offset_step = round(g$image_height/(g$n_line_channels + 1))
+  sct = ss[, channels]
+  offset_step = round(g$image_height/ (g$n_line_channels + 1))
   scale = offset_step/max_p
   png(png_line_file, width = nrow(sct), height = g$image_height)
-  par(mar = c(0,0,0,0), oma = c(0,0,0,0), xaxs = "i", yaxs = "i")
+  par(mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0), xaxs = "i", yaxs = "i")
   plot.new()
   plot.window(xlim = c(0, nrow(sct)), ylim = c(0, g$image_height))
   offsets = rev(as.integer(seq(0, g$image_height, by = offset_step)))
   stopifnot(length(offsets) == g$n_line_channels + 1)
-  for (channel in 1:length(offsets)) {
+  for (channel in seq_along(offsets)) {
     off = offsets[channel]
     abline(h = off, col = "lightgray")
-    lines(scale*sct[,channel] + off, type = "l",
+    lines(scale*sct[, channel] + off, type = "l",
           col = channel,
           lwd = 2)
   }
@@ -28,9 +28,8 @@ line_png = function(ss, png_line_file, max_p, time_step_stretched) {
   invisible(NULL)
 }
 
-line_channels = function(){
+line_channels = function() {
   first_channel = as.integer(2*g$balloon_size) + 1
   c(1L, as.integer(seq.int(first_channel, g$image_height,
                            length.out = g$n_line_channels)))
 }
-

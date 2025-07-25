@@ -20,7 +20,7 @@
 #'}
 #' @export
 
-copy_from_data_store = function(dest_dir, if_empty_only = TRUE){
+copy_from_data_store = function(dest_dir, if_empty_only = TRUE) {
   safe_create_dir(dest_dir)
   store_dir = file.path(app_sys(), "data_store", basename(dest_dir))
   dest_info = file.info(dir(dest_dir, full.names = TRUE)) %>%
@@ -44,7 +44,3 @@ copy_from_data_store = function(dest_dir, if_empty_only = TRUE){
   file.copy(to_copy, dest_dir, recursive = TRUE)
   length(to_copy)
 }
-
-
-
-

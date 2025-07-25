@@ -20,7 +20,7 @@ plot_history = function() {
              group = interaction(method, finalized))) +
     geom_hline(yintercept = 99, linetype = "dashed", color = "green") +
     geom_step(alpha = 0.5) +
-    ylim(0,120) +
+    ylim(0, 120) +
     #geom_point(alpha = 0.5, aes(shape = method)) +
     scale_x_date(guide = guide_axis(check.overlap = TRUE)) +
     facet_wrap(~user, ncol = 5) +
@@ -29,4 +29,3 @@ plot_history = function() {
     ggtitle(glue("History - last updated {max_history_date}")) +
     theme(panel.spacing = unit(1, "lines"))
 }
-

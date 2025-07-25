@@ -19,4 +19,3 @@ delete_record = function(record, delete_classifications = FALSE) {
     dbExecute(g$pool, glue_sql("DELETE FROM record WHERE record={record}",
                              .con = g$pool))
 }
-

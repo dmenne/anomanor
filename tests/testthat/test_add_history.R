@@ -12,6 +12,3 @@ test_that("Can add history", {
   # Will run into exception because of UNIQUE constraint that is skipped
   expect_equal(later_added, 0)
 })
-
-
-

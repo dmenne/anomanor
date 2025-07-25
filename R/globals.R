@@ -5,7 +5,7 @@
 # Warning: globals: no visible binding for global variable g
 utils::globalVariables("g")
 
-globals = function(){
+globals = function() {
 #  options(warn = 2)
   conflicts_prefer(dplyr::filter, dplyr::lag, .quiet = TRUE)
   conflicts_prefer(dplyr::intersect, dplyr::setdiff, dplyr::setequal, dplyr::union,
@@ -25,11 +25,11 @@ globals = function(){
                    "test_expert", "keycloak_devel",
                    "keycloak_test",
                    "sa_consensus",
-                   "keycloak_production", "sa_random_trainee" )
+                   "keycloak_production", "sa_random_trainee")
   stopifnot(active_config %in% valid_config)
 
   # Renviron_production is not saved in git
-  is_windows = Sys.info()['sysname'] == 'Windows'
+  is_windows = Sys.info()["sysname"] == "Windows"
   env_file_base =  case_when(
       active_config == "keycloak_devel" ~ "Renviron_devel",
       active_config == "keycloak_production" ~ "Renviron_production",
@@ -42,8 +42,8 @@ globals = function(){
     stop(paste(dir(root_dir), collapse  = "\n"), call. = FALSE)
 #    stop("Environment file ", env_file, " does not exist", call. = FALSE)
   readRenviron(env_file)
-  if (getenv_r_config_active() != active_config){
-    cat("R_CONFIG_ACTIVE --", getenv_r_config_active(), "--  ", active_config,"\n")
+  if (getenv_r_config_active() != active_config) {
+    cat("R_CONFIG_ACTIVE --", getenv_r_config_active(), "--  ", active_config, "\n")
     stop("The value of R_CONFIG_ACTIVE must not be changed in environment files",
          call. = FALSE)
 
@@ -96,8 +96,7 @@ globals = function(){
     gg = mget(ls())
     copy_test_data(gg) # Does nothing if not overridden
     sqlite_path = ":memory:"
-  } else
-  {
+  } else {
     # Database will be created if it does not exist
     # Does nothing if database exists
     # Deletes the record cache folder when a new database is created
@@ -165,24 +164,25 @@ globals = function(){
   mm_resolution = 0.1
   time_ticks = 10 # number of seconds for a tick
   n_line_channels = 5 # Number of line channels excluding balloon
-  time_zoom_levels = c(1,2,4)
+  time_zoom_levels = c(1, 2, 4)
   # For app_ui, package keys
   hotkeys <- c("esc", "left", "right", "+", "-")
   pressure_choices = c(60, 80, 100, 120, 150, 200, 300)
 
 
   # Conversion from image y coordinates to cm on sensor
-  image_y_to_position_fac = sensor_step/((image_height - 2*balloon_size)*mm_resolution)
+  image_y_to_position_fac = sensor_step/ ((image_height - 2*balloon_size)*mm_resolution)
 
   classification_phase_choices =
-    c("All" = "all",
+    c( "All" = "all",
     "1. RAIR" = "rair",
     "2. Tone & contractility" = "tone",
     "3. Anorectal Coordination" = "coord")
 
   # Required and optional markers
   mcp = dbGetQuery(g$pool,
-     "SELECT marker, classification_phase, mtype from marker_classification_phase order by marker")
+     "SELECT marker, classification_phase, mtype from marker_classification_phase
+     order by marker")
 
   tippy_global_theme("translucent")
 
@@ -228,6 +228,6 @@ globals = function(){
   # Check if all patients have records and reports. Returns a
   # string to display in toast on inconsistency
   cp = check_patient_records()
-  log_it(paste("Startup time (s):" , round((proc.time() - ptm)[3],2)))
+  log_it(paste("Startup time (s):", round((proc.time() - ptm)[3], 2)))
   cp
 }

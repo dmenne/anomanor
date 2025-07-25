@@ -43,8 +43,8 @@ test_that("Can connect to keycloak, add and delete users", {
   expect_equal(ug$name, "admins")
   users = keycloak$users()
   expect_equal(names(users),
-        c('id','username','email','firstName','lastName',
-          'emailVerified','enabled','experts','admins','trainees'))
+        c("id", "username", "email" "firstName", "lastName",
+          "emailVerified", "enabled", "experts", "admins", "trainees"))
   expect_gte(nrow(users), 1)
 
   # Logout
