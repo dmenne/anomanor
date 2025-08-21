@@ -1,6 +1,6 @@
 Sys.setenv("R_CONFIG_ACTIVE" = "test")
 globals()
-ano_poolClose() # Not used
+ano_pool_close() # Not used
 
 test_that("Can create vis network", {
   args = list(
